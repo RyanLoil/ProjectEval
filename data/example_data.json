@@ -1,0 +1,50 @@
+[
+  {
+    "project_id": 1,
+    "project_type": "website",
+    "nl_prompt": "Create a web page for a BMI calculator.",
+    "nl_checklist": [
+      {
+        "page": "BMI Calculator",
+        "function": [
+          {
+            "function": "Calculate BMI",
+            "description": "Users can input their height and weight to calculate their BMI.",
+            "required": true
+          },
+          {
+            "function": "Display BMI Result",
+            "description": "The calculated BMI value should be displayed to the user.",
+            "required": true
+          },
+          {
+            "function": "Interpret BMI",
+            "description": "Provide an interpretation of the BMI value (e.g., underweight, normal, overweight, obese).",
+            "required": true
+          },
+          {
+            "function": "Input Validation",
+            "description": "Validate user inputs to ensure they are numerical values and within reasonable ranges.",
+            "required": true
+          },
+          {
+            "function": "Units Selection",
+            "description": "Allow users to choose between metric (centimeters, kilograms) and imperial (inches, pounds) units.",
+            "required": true
+          },
+          {
+            "function": "Clear Inputs",
+            "description": "Provide an option to clear/reset the input fields.",
+            "required": false
+          },
+          {
+            "function": "BMI Formula Information",
+            "description": "Include information about the formula used to calculate BMI.",
+            "required": false
+          }
+        ],
+        "required": true
+      }
+    ]
+  }
+]

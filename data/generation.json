@@ -1,0 +1,10 @@
+[
+  {
+    "project_id": 1,
+    "project_type": "website",
+    "framework_technical_stack": [
+      "Django"
+    ],
+    "nl_prompt": "Create a web page for a BMI calculator."
+  }
+]
