@@ -1,2 +1,11 @@
 /config.py
 /.venv/
+/.env
+/test/project_1/
+/tools.py
+/test.py
+/chromedriver.exe
+/geckodriver.exe
+/msedgedriver.exe
+/inspect.exe
+/log/

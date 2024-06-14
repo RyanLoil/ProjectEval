@@ -45,6 +45,8 @@
         ],
         "required": true
       }
-    ]
+    ],
+    "framework": {},
+    "testcode": {}
   }
 ]
