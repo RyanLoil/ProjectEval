@@ -83,6 +83,7 @@ class DataGenerator:
                 self.logger.warning(
                     "Project id {project_id}: test generation error {e}".format(
                         project_id=data["project_id"], e=str(e)))
+                continue
 
             generated_data["nl_checklist"] = nl_checklist
             generated_data["framework"] = framework_list
