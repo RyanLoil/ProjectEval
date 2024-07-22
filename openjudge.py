@@ -9,6 +9,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from datetime import datetime
 
+from llm import LLMTest
+
 DRIVER_DICT = {
     'chrome': 'webdriver.Chrome()',
     'edge': 'webdriver.Edge()',
@@ -17,8 +19,7 @@ DRIVER_DICT = {
 
 
 class BaseJudge:
-    def __init__(self, project_answer_list, requirements: list[str],
-                 generation_list_path: str = 'data/generation_list.json'):
+    def __init__(self, requirements: list[str], ):
         '''
 
         :param project_answer_list: Required. The list that llm provided according to the code and checklist
@@ -39,14 +40,13 @@ class BaseJudge:
         self.logger.addHandler(console)
 
         self.requirements = requirements
-        self.project_answer_list = project_answer_list
 
-        self.logger.info("Loading generation list...")
-        try:
-            self.generation_list = json.load(open(generation_list_path, 'r', encoding='utf-8'))
-        except Exception as e:
-            self.logger.critical("Loading generation list failed with error {}".format(e))
-            raise Exception("Loading generation list failed with error {}".format(e))
+        # self.logger.info("Loading generation list...")
+        # try:
+        #     self.generation_list = json.load(open(generation_list_path, 'r', encoding='utf-8'))
+        # except Exception as e:
+        #     self.logger.critical("Loading generation list failed with error {}".format(e))
+        #     raise Exception("Loading generation list failed with error {}".format(e))
 
     def environment_initiate(self):
         if not self.requirements:
@@ -64,6 +64,8 @@ class BaseJudge:
 
     def preprocess(self, *args, **kwargs):
         # 启动测试环境
+        if not self.environment_initiate():
+            raise Exception("Environment installation failed.")
         pass
 
     def clean(self):
@@ -74,60 +76,32 @@ class BaseJudge:
         # 测试核心函数
         pass
 
-    def get_kwargs(self, project_id, page_name, function_name):
-        return self.project_answer_list[project_id][page_name][function_name]
+    def get_parameters(self, model: LLMTest, answer, parameter_request):
+        '''
+        :param model: LLMTest object,
+        :param answer:
+        :param parameter_request:
+        :return:
+        '''
+        self.logger.info("Requesting parameters from LLM to adapt question.")
+        parameter = model.get_parameter(answer,
+                                        parameter_request, )  # In GPTTest, the parameter asking is a full answer list of all pages.
+        return json.load(parameter)
 
     # 为测试准备参数
 
-    def evaluate(self):
-        if not self.environment_initiate():
-            raise Exception("Environment installation failed.")
-        total_status = {'total': 0, 'pass': 0, 'failed': 0}
-        for project in self.generation_list:
-            project_id = project['project_id']
-            self.logger.info("Evaluating project id {}".format(project_id))
-            if not self.preprocess(project_id):
-                self.logger.info("{} scored 0.".format(project_id))
-                continue
-            pass_count = 0
-            n = 0
-            index = 0
-            for page in project['testcode']:
-                n += len(page['function'])
-                total_status['total'] += len(page['function'])
-                for function in page['function']:
-                    self.logger.info("Evaluating function {}".format(str(project_id) + "_" + str(index)))
-                    index += 1
-                    try:
-                        kwargs = self.get_kwargs(project_id, page['page'], function['function'])
-                    except Exception as e:
-                        self.logger.info(
-                            "Parameter(s) finding was failed in the project_answer_list. Exception {}".format(e))
-                        continue
-                    if self.check(str(project_id) + "_" + str(index), function['test'], **kwargs):
-                        pass_count += 1
-                        self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
-                    else:
-                        self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
-            project_score = pass_count / n
-            self.logger.info(f"Project id {project_id} scored {project_score}")
-            self.clean()
-        return total_status, total_status['pass'] / total_status['total']
-
 
 class WebsiteJudge(BaseJudge):
-    def __init__(self, project_answer_list, requirements, browser_type, website_initiate_command: dict,
-                 website_home="http://localhost:8000/", generation_list_path: str = 'data/generation_list.json'):
+    def __init__(self, requirements, browser_type, website_initiate_command, website_home="http://localhost:8000/"):
         '''
 
         :param project_answer_list: A parameter list for all the project that is going to be evaluated
         :param requirements: Packages that is required to evaluate(python only).
         :param browser_type: Choose the type of web browser, support chrome, firefox and edge.
-        :param website_initiate_command: A dictionary with project_id as key to initiate the
+        :param website_initiate_command:
         :param website_home:
-        :param generation_list_path:
         '''
-        super().__init__(project_answer_list, requirements, generation_list_path)
+        super().__init__(requirements)
 
         if browser_type not in ['chrome', 'firefox', 'edge']:
             raise Exception('Not a valid browser type')
@@ -151,21 +125,20 @@ class WebsiteJudge(BaseJudge):
         def set_website_initiate_command(self, website_initiate_command):
             self.website_initiate_command = website_initiate_command
 
-        def django_shutdown(self): # TODO 不够优雅，还是通过subprocess来关闭会更好
-            result = os.popen('netstat -ano|findstr "8000" ').read().split("\n") # TODO Django默认8000
+        def django_shutdown(self):  # TODO 不够优雅，还是通过subprocess来关闭会更好
+            result = os.popen('netstat -ano|findstr "8000" ').read().split("\n")  # TODO Django默认8000
             for i in range(len(result)):
                 result[i] = result[i].split()
                 if len(result[i]) == 5 and result[i][3] == "LISTENING":
                     os.popen("taskkill -pid %s -f" % result[i][4])
                     break
 
-
-
-    def preprocess(self, project_id):
+    def preprocess(self):
         self.logger.info("Preprocessing Website Project Test.")
+        super().preprocess()
         try:
             os.system("chcp 65001")
-            self.website_project_process.set_website_initiate_command(self.website_initiate_command[project_id])
+            self.website_project_process.set_website_initiate_command(self.website_initiate_command)
             self.website_project_process.start()
             self.website_project_process.join(timeout=1)
         except Exception as e:
@@ -188,6 +161,7 @@ class WebsiteJudge(BaseJudge):
 
     def check(self, test_no, testcode, *args, **kwargs):
         self.logger.info(f"{test_no} starting.")
+        super().check(test_no, testcode, *args, **kwargs)
         try:
             namespace = {}
             exec(testcode, namespace)

@@ -41,6 +41,14 @@ class LLMTest:
         pass
 
     def get_parameter(self, answer, technical_stack, parameter_required):
+        '''
+        Get parameters for the testcode.
+        You can override this function to manually provide parameters which are required by the testcode.
+        :param answer:
+        :param technical_stack:
+        :param parameter_required:
+        :return: 
+        '''
         pass
 
     def json_to_file(self, answer):

@@ -1,10 +1,11 @@
 import copy
 import json
 import logging
+import os
 from datetime import datetime
 
 from llm import GPTTest, LLMTest
-from openjudge import WebsiteJudge
+from openjudge import WebsiteJudge, BaseJudge
 
 PROJECT_TYPE = {
     'website': WebsiteJudge,
@@ -115,11 +116,12 @@ class JudgeController:
         except Exception as e:
             self.logger.critical("Loading question list failed with error {}".format(e))
             raise Exception("Loading question list failed with error {}".format(e))
-        self.testcode = []
+        self.testcode = {}
         for t in self.testcode_list:
             temp = copy.deepcopy(t)
-            del temp['nl_prompt'], temp['nl_checklist'], temp['framework']
-            self.testcode.append(temp)
+            self.testcode[temp['project_id']] = temp['testcode']  # Save the testcode for each project
+        del self.testcode_list
+        # testcode = {<pid>:[<testcode list>]
 
         try:
             self.answer_dict = json.load(open(answer_path, 'r', encoding='utf-8'))
@@ -128,42 +130,93 @@ class JudgeController:
             raise Exception("Loading answer list failed with error {}".format(e))
 
         self.model = model_class()
-        self.project_parameter_request_list = {
-            'website': {},
-            'software': {},
-            'batch': {},
-        }
-        self.project_answer_list = {
-            'website': {},
-            'software': {},
-            'batch': {},
-        }
+        self.question_list = {}
+        # question_list = {<pid>:{<page>:{<function>:{'function':<function name>, 'parameter':{'name':<parameter name>, 'description': <parameter discription>}, ...}, ...}, ...}
+        # in batch project, there is only one page.
 
     def preprocess(self):
         # For getting parameter and classifying different type of project.
         self.logger.info("Preprocessing.")
+        for pid in self.testcode:
+            self.question_list[pid] = {}
+            for page in self.testcode[pid]:
+                self.question_list[pid][page['page']] = {}
+                for function in page["function"]:
+                    temp = copy.deepcopy(function)
+                    del temp['test']
+                    self.question_list[pid][page['page']][function['function']] = temp
 
-        for t in self.testcode:
-            for page in t:
-                for function in page:
-                    del function['test']
-            self.project_parameter_request_list[t['project_type']][t['project_id']] = t
+    # def run(self):
+    #     for k in self.project_answer_list:
+    #         judge = PROJECT_TYPE[k](self.question_list[k], requirements=["django", ],
+    #                                 browser_type="edge", website_initiate_command=None,
+    #                                 generation_list_path="data/generation_test.json")
+    #         judge.evaluate()
+    #
+    #         self.logger.info("Evaluating question {}.".format(t['project_id']))
+    #         self.logger.debug("Evaluating question {} page {}.".format(t['project_id'], page['page']))
 
-        self.logger.info("Requesting parameters from LLM to adapt question.")
-        for k in self.project_parameter_request_list:
-            for pid in self.project_parameter_request_list[k]:
-                parameter = self.model.get_parameter(self.answer_dict[pid],
-                                                     self.project_parameter_request_list[k][pid], )
-                self.project_answer_list[k][pid] = parameter
+    def write_answer_to_file(self, project_id):
+        base_dir = "test/" + datetime.now().strftime("%Y%m%d-%H%M%S") + "/" + project_id + "/"
+        os.makedirs(base_dir, exist_ok=True)
+        for file in self.answer_dict[project_id]:
+            file_name = file['path']
+            content = file['code']
+            last_slash = file_name.rfind("/")
+            if last_slash != -1:
+                dirpath = base_dir + file_name[:last_slash]
+                if not os.path.isdir(dirpath):
+                    os.makedirs(dirpath)
+            with open(file_name, 'w', encoding="utf-8") as f:
+                f.write(content)
+                f.close()
 
-    def run(self):
-        for k in self.project_answer_list:
-            judge = PROJECT_TYPE[k](self.project_parameter_request_list[k], requirements=["django", ],
-                                    browser_type="edge", website_initiate_command=None,
-                                    generation_list_path="data/generation_test.json")
-            judge.evaluate()
-
-            self.logger.info("Evaluating question {}.".format(t['project_id']))
-            self.logger.debug("Evaluating question {} page {}.".format(t['project_id'], page['page']))
-
-
+    def evaluate(self):
+        total_status = {'total': 0, 'pass': 0, 'failed': 0}
+        for project_id in self.question_list:
+            self.logger.info("Evaluating project id {}".format(project_id))
+            project = self.question_list[project_id]
+            self.write_answer_to_file(project_id)
+            judge: BaseJudge = PROJECT_TYPE[project['project_type']]()
+            if not judge.preprocess(project_id):
+                self.logger.info("{} scored 0.".format(project_id))
+                continue
+            try:
+                parameter_list = judge.get_parameters(self.model, self.answer_dict[project_id],
+                                                      self.question_list[project_id])
+                # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
+                parameter = {}
+                for page in parameter_list:
+                    parameter[page['page']] = {}
+                    for function in page["function"]:
+                        temp = {p['name']: p['answer'] for p in function['parameter']}
+                        parameter[page['page']][function['function']] = function["parameter"]
+                del parameter_list
+            except Exception as e:
+                self.logger.info(f"Get parameters for project id {project_id} failed with exception {e}.")
+                self.logger.info("{} scored 0.".format(project_id))
+                continue
+            pass_count = 0
+            n = 0
+            index = 0
+            for page in self.testcode[project_id]:
+                n += len(page['function'])
+                total_status['total'] += len(page['function'])
+                for function in page['function']:
+                    self.logger.info("Evaluating function {}".format(str(project_id) + "_" + str(index)))
+                    index += 1
+                    try:
+                        kwargs = parameter[page['page']][function['function']]
+                    except Exception as e:
+                        self.logger.info(
+                            "Parameter(s) finding was failed in the project_answer_list. Exception {}".format(e))
+                        continue
+                    if judge.check(str(project_id) + "_" + str(index), function['test'], **kwargs):
+                        pass_count += 1
+                        self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
+                    else:
+                        self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
+            project_score = pass_count / n
+            self.logger.info(f"Project id {project_id} scored {project_score}")
+            judge.clean()
+        return total_status, total_status['pass'] / total_status['total']
