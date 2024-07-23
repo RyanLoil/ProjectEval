@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import re
 from datetime import datetime
 
 from openai import OpenAI
@@ -9,8 +11,9 @@ from config import OPEN_AI_KEY
 prompt = {
     "generate_checklist": '{nl_prompt}.Give a natural language function checklist from the users\' views using JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "description"; "YYYY"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content.',
     "python_generate_framework": 'Based on this checklist {nl_checklist}, give a framework of {technical_stack} also used JSON format of [{{"file":"/example_app/xxx.py","import":["a","b",...], "class":{{"name":"c", "parameter":[{{"name":"XXX", "type":"XXX"}}, {{...}}, ...], "description":"XXXX", "function": [{{"name":"d","parameter":[{{"name":"XXX", "type":"XXX"}}, "variable":[{{"name":"e", "type":"xxx", "description":"xxx"}}, {{...}}, ...], {{...}}, ...], "description":"XXXX", "return_type":"XXX"}}, {{...}}, ...]}}, {{...}}, ...]. If the file is not a python file, the json format should be {{"file": "/example_app/xxx.xx", "description":"XXXX"}}. DO NOT CONTAIN ANY OTHER CONTENTS.',
-    "generate_answer": 'Based on this {prompt}, give a {technical_stack} Project to meet the requirement in JSON format of [{"file":"XXX","path":"XXX/XXX", "code":"the_code_in_the_file"},{…},…] with NO other content.',
-    "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the parameters of the django project for each test in the {parameter_required}. Return in Json format of [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]}, {...}, ...], {...}, ...] with NO other content'
+    "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files to meet the requirement in JSON format of [{{"file":"XXX","path":"XXX/XXX", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
+    "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the parameters of the django project for each test in the {parameter_required}. Return in Json format of [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]}, {...}, ...], {...}, ...] with NO other content',
+    "generate_initial_command": '',  # TODO 初始指令，requirements等
 }
 
 
@@ -47,7 +50,7 @@ class LLMTest:
         :param answer:
         :param technical_stack:
         :param parameter_required:
-        :return: 
+        :return:
         '''
         pass
 
@@ -69,14 +72,23 @@ class LLMTest:
                 f.write(file["code"])
                 f.close()
 
+    @staticmethod
+    def parse(rsp, pattern: str = r"```json(.*)```"):
+        match = re.search(pattern, rsp, re.DOTALL)
+        code_text = match.group(1) if match else rsp
+        return code_text
+
+    @staticmethod
+    def completion_to_dict(answer):
+        return json.loads(LLMTest.parse(answer.choices[0].message.content))
+
 
 class GPTTest(LLMTest):
     def __init__(self, llm="gpt-4o"):
         super(GPTTest, self).__init__(llm)
         self.client = OpenAI(api_key=OPEN_AI_KEY)
 
-    def generate_checklist(self, nl_prompt):
-        message = prompt['generate_checklist'].format(nl_prompt=nl_prompt)
+    def send_message(self, message):
         self.logger.debug("Sending:" + message)
         completion = self.client.chat.completions.create(
             model=self.llm,
@@ -90,42 +102,27 @@ class GPTTest(LLMTest):
         self.logger.debug("Received:" + completion.choices[0].message.content)
         return completion
 
+    def generate_checklist(self, nl_prompt):
+        message = prompt['generate_checklist'].format(nl_prompt=nl_prompt)
+        completion = self.send_message(message)
+        return self.completion_to_dict(completion)
+
     def generate_framework(self, language, technical_stack, nl_checklist):
         message = prompt[language.lower() + '_generate_framework'].format(nl_checklist=nl_checklist,
                                                                           technical_stack=technical_stack)
-        self.logger.debug("Sending:" + message)
-        completion = self.client.chat.completions.create(
-            model=self.llm,
-            messages=[
-                {"role": "system",
-                 "content": "You are a professional computer framework engineering."},
-                {"role": "user",
-                 "content": message}
-            ]
-        )
-        self.logger.debug("Received:" + completion.choices[0].message.content)
-        return completion
+        completion = self.send_message(message)
+        return self.completion_to_dict(completion)
 
-    def generate_answer(self, prompt, technical_stack):
+    def generate_answer(self, description, technical_stack):
         """
         Generate the answer by using GPT.
-        :param prompt: depends on the level chose by user, the prompt can be natural language description, natural language checklist or programming language framework
+        :param description: depends on the level chose by user, the prompt can be natural language description, natural language checklist or programming language framework
         :param technical_stack: decided by user
         :return: generated answer in json format
         """
-        message = prompt['generate_answer'].format(prompt=prompt, technical_stack=technical_stack)
-        self.logger.debug("Sending:" + message)
-        completion = self.client.chat.completions.create(
-            model=self.llm,
-            messages=[
-                {"role": "system",
-                 "content": "You are a professional computer programmer."},
-                {"role": "user",
-                 "content": message}
-            ]
-        )
-        self.logger.debug("Received:" + completion.choices[0].message.content)
-        return completion
+        message = prompt['generate_answer'].format(description=description, technical_stack=technical_stack)
+        completion = self.send_message(message)
+        return self.completion_to_dict(completion)
 
     def get_parameter(self, answer, technical_stack, parameter_required):
         """
@@ -137,15 +134,17 @@ class GPTTest(LLMTest):
         """
         message = prompt["generate_parameter"].format(answer=answer, technical_stack=technical_stack,
                                                       parameter_required=parameter_required)
-        self.logger.debug("Sending:" + message)
-        completion = self.client.chat.completions.create(
-            model=self.llm,
-            messages=[
-                {"role": "system",
-                 "content": "You are a professional computer programmer."},
-                {"role": "user",
-                 "content": message}
-            ]
-        )
-        self.logger.debug("Received:" + completion.choices[0].message.content)
-        return completion
+        completion = self.send_message(message)
+        return self.completion_to_dict(completion)
+
+    def get_initial_command(self, answer, technical_stack, project_root):
+        """
+        GPT can automatically recognize the initial command, requirements and other necessary information.
+        :param answer:
+        :param techincal_stack:
+        :return:
+        """
+        message = prompt["generate_initial_command"].format(answer=answer, technical_stack=technical_stack,
+                                                            )
+        completion = self.send_message(message)
+        return self.completion_to_dict(completion)

@@ -26,7 +26,7 @@ class LLMController:
         :param technical_stack: Restrict format with {"website": "django", "software": "pygame", "batch": "any"}
         '''
 
-        self.logger = logging.getLogger('Controller')
+        self.logger = logging.getLogger('LLMController')
         self.logger.setLevel(level=logging.DEBUG)
         handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
@@ -81,14 +81,13 @@ class LLMController:
                 raise Exception("Invalid level number.")
             answer = self.model.generate_answer(framework, technical_stack)
             try:
-                answer = eval(answer)  # In the example, LLM will return a python dictionary as answer.
-                if type(answer) != dict:
+                if not isinstance(answer, list):  # In the example, LLM will return a python list as answer.
                     raise Exception("Invalid answer format in project {}.".format(q["project_id"]))
-                answer['project_id'] = q['project_id']
+                # answer['project_id'] = q['project_id']
             except Exception as e:
                 self.logger.warning(str(e))
                 continue
-            answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
+            # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
             answer_dict[q['project_id']] = answer
         output_file_path = self.output_path + self.model.llm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".json"
         with open(output_file_path, "w", encoding="utf-8") as output_file:
@@ -99,7 +98,7 @@ class LLMController:
 class JudgeController:
     def __init__(self, question_path: str, answer_path: str, model_class: LLMTest, ):
 
-        self.logger = logging.getLogger('Controller')
+        self.logger = logging.getLogger('JudgeController')
         self.logger.setLevel(level=logging.DEBUG)
         handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
@@ -112,17 +111,17 @@ class JudgeController:
         self.logger.addHandler(console)
 
         try:
-            self.testcode_list = json.load(open(question_path, 'r', encoding='utf-8'))
+            question_list = json.load(open(question_path, 'r', encoding='utf-8'))
+            self.question_dict = {q['project_id']: q for q in question_list}
         except Exception as e:
             self.logger.critical("Loading question list failed with error {}".format(e))
             raise Exception("Loading question list failed with error {}".format(e))
         self.testcode = {}
-        for t in self.testcode_list:
+        for t in question_list:
             temp = copy.deepcopy(t)
             self.testcode[temp['project_id']] = temp['testcode']  # Save the testcode for each project
-        del self.testcode_list
         # testcode = {<pid>:[<testcode list>]
-
+        del question_list
         try:
             self.answer_dict = json.load(open(answer_path, 'r', encoding='utf-8'))
         except Exception as e:
@@ -130,7 +129,6 @@ class JudgeController:
             raise Exception("Loading answer list failed with error {}".format(e))
 
         self.model = model_class()
-        self.question_list = {}
         # question_list = {<pid>:{<page>:{<function>:{'function':<function name>, 'parameter':{'name':<parameter name>, 'description': <parameter discription>}, ...}, ...}, ...}
         # in batch project, there is only one page.
 
@@ -138,13 +136,13 @@ class JudgeController:
         # For getting parameter and classifying different type of project.
         self.logger.info("Preprocessing.")
         for pid in self.testcode:
-            self.question_list[pid] = {}
+            self.question_dict[pid] = {}
             for page in self.testcode[pid]:
-                self.question_list[pid][page['page']] = {}
+                self.question_dict[pid][page['page']] = {}
                 for function in page["function"]:
                     temp = copy.deepcopy(function)
                     del temp['test']
-                    self.question_list[pid][page['page']][function['function']] = temp
+                    self.question_dict[pid][page['page']][function['function']] = temp
 
     # def run(self):
     #     for k in self.project_answer_list:
@@ -157,14 +155,14 @@ class JudgeController:
     #         self.logger.debug("Evaluating question {} page {}.".format(t['project_id'], page['page']))
 
     def write_answer_to_file(self, project_id):
-        base_dir = "test/" + datetime.now().strftime("%Y%m%d-%H%M%S") + "/" + project_id + "/"
+        base_dir = "test/" + datetime.now().strftime("%Y%m%d-%H%M%S") + "/" + str(project_id) + "/"
         os.makedirs(base_dir, exist_ok=True)
-        for file in self.answer_dict[project_id]:
-            file_name = file['path']
+        for file in self.answer_dict[str(project_id)]:
+            file_name =  base_dir + file['path']
             content = file['code']
             last_slash = file_name.rfind("/")
             if last_slash != -1:
-                dirpath = base_dir + file_name[:last_slash]
+                dirpath = file_name[:last_slash]
                 if not os.path.isdir(dirpath):
                     os.makedirs(dirpath)
             with open(file_name, 'w', encoding="utf-8") as f:
@@ -173,9 +171,9 @@ class JudgeController:
 
     def evaluate(self):
         total_status = {'total': 0, 'pass': 0, 'failed': 0}
-        for project_id in self.question_list:
+        for project_id in self.question_dict:
             self.logger.info("Evaluating project id {}".format(project_id))
-            project = self.question_list[project_id]
+            project = self.question_dict[project_id]
             self.write_answer_to_file(project_id)
             judge: BaseJudge = PROJECT_TYPE[project['project_type']]()
             if not judge.preprocess(project_id):
@@ -183,7 +181,7 @@ class JudgeController:
                 continue
             try:
                 parameter_list = judge.get_parameters(self.model, self.answer_dict[project_id],
-                                                      self.question_list[project_id])
+                                                      self.question_dict[project_id])
                 # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
                 parameter = {}
                 for page in parameter_list:
@@ -219,4 +217,5 @@ class JudgeController:
             project_score = pass_count / n
             self.logger.info(f"Project id {project_id} scored {project_score}")
             judge.clean()
+        self.logger.info("Finished. Report: {}".format(total_status))
         return total_status, total_status['pass'] / total_status['total']

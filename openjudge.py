@@ -135,6 +135,7 @@ class WebsiteJudge(BaseJudge):
 
     def preprocess(self):
         self.logger.info("Preprocessing Website Project Test.")
+        # TODO Django一般不自动创建Manage.py
         super().preprocess()
         try:
             os.system("chcp 65001")
