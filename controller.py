@@ -2,10 +2,13 @@ import copy
 import json
 import logging
 import os
+import shutil
+import traceback
 from datetime import datetime
 
 from llm import GPTTest, LLMTest
 from openjudge import WebsiteJudge, BaseJudge
+from config import DEFAULT_BROWSER_TYPE
 
 PROJECT_TYPE = {
     'website': WebsiteJudge,
@@ -16,7 +19,7 @@ PROJECT_TYPE = {
 
 class LLMController:
     def __init__(self, question_path: str, model_class: LLMTest, language: dict = None, technical_stack: dict = None,
-                 output_path: str = "data/", ):
+                 output_path: str = "data/", crush_save_path: str = "data/crash_save/", crush_load_path: str = None):
         '''
         A Example to show how to use LLM answer the question of Project Eval.
         :param question_path: The source data
@@ -24,11 +27,14 @@ class LLMController:
         :param output_path: The answer from LLM.
         :param language:Restrict format with {"website": "python", "software": "c++", "batch": "basic"}.
         :param technical_stack: Restrict format with {"website": "django", "software": "pygame", "batch": "any"}
+        :param crush_save_path: The path to save the dump of answer dict
+        :param crush_load_path: if this parameter is NOT None, LLMController will load the give file to continue the task
         '''
 
         self.logger = logging.getLogger('LLMController')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        handler = logging.FileHandler("log/{0}-LLMController.log".format(initiate_time))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
@@ -37,6 +43,8 @@ class LLMController:
         console.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.addHandler(console)
+        self.crash_save = crush_save_path + "/{0}-AnswerCrashSave.py".format(initiate_time)
+        self.crash_load = crush_load_path
 
         try:
             self.question_list = json.load(open(question_path, 'r', encoding='utf-8'))
@@ -59,48 +67,74 @@ class LLMController:
         :param level: 1 for natural language description, 2 for natural language checklist, 3 for programming language framework
         :return: A file which is saved in the given directory
         """
-        answer_dict = {}
-        for q in self.question:
-            self.logger.info("Answer question {}.".format(q['project_id']))
-            language = self.language[q['project_type']] if self.language else q['framework_technical_stack']['language']
-            technical_stack = self.technical_stack[q['project_type']] if self.technical_stack else \
-                q['framework_technical_stack']['technical_stack']
-            if level == 1:
-                # Level 1 uses nl_prompt
-                nl_checklist = self.model.generate_checklist(q['nl_prompt'])
-                framework = self.model.generate_framework(language, technical_stack, nl_checklist)
-            elif level == 2:
-                # Level 2 uses nl_checklist
-                nl_checklist = q['nl_checklist']
-                framework = self.model.generate_framework(language, technical_stack, nl_checklist)
-            elif level == 3:
-                # Level 3 directly uses framework
-                framework = q['framework']
-            else:
-                self.logger.critical("Invalid level number.")
-                raise Exception("Invalid level number.")
-            answer = self.model.generate_answer(framework, technical_stack)
-            try:
-                if not isinstance(answer, list):  # In the example, LLM will return a python list as answer.
-                    raise Exception("Invalid answer format in project {}.".format(q["project_id"]))
-                # answer['project_id'] = q['project_id']
-            except Exception as e:
-                self.logger.warning(str(e))
-                continue
-            # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
-            answer_dict[q['project_id']] = answer
-        output_file_path = self.output_path + self.model.llm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".json"
-        with open(output_file_path, "w", encoding="utf-8") as output_file:
-            self.logger.info("Writing to " + output_file_path)
-            json.dump(answer_dict, output_file)
+        crash_mark = False
+        if self.crash_load:
+            with open(self.crash_load, "r", encoding="utf-8") as input_file:
+                self.logger.info("Loading given crash saved.")
+                answer_dict = eval(input_file.read())
+                crash_mark = True
+                crash_project_id = answer_dict['error_project_id']
+                del answer_dict['error_project_id']
+            input_file.close()
+        else:
+            answer_dict = {}
+        try:
+            for q in self.question:
+                if crash_mark:
+                    if crash_project_id != q['project_id']:
+                        continue
+                    else:
+                        crash_mark = False
+                self.logger.info("Answer question {}.".format(q['project_id']))
+                language = self.language[q['project_type']] if self.language else q['framework_technical_stack'][
+                    'language']
+                technical_stack = self.technical_stack[q['project_type']] if self.technical_stack else \
+                    q['framework_technical_stack']['technical_stack']
+                if level == 1:
+                    # Level 1 uses nl_prompt
+                    nl_checklist = self.model.generate_checklist(q['nl_prompt'])
+                    framework = self.model.generate_framework(language, technical_stack, nl_checklist)
+                elif level == 2:
+                    # Level 2 uses nl_checklist
+                    nl_checklist = q['nl_checklist']
+                    framework = self.model.generate_framework(language, technical_stack, nl_checklist)
+                elif level == 3:
+                    # Level 3 directly uses framework
+                    framework = q['framework']
+                else:
+                    self.logger.critical("Invalid level number.")
+                    raise Exception("Invalid level number.")
+                answer = self.model.generate_answer(framework, technical_stack)
+                try:
+                    if not isinstance(answer, list):  # In the example, LLM will return a python list as answer.
+                        raise Exception("Invalid answer format in project {}.".format(q["project_id"]))
+                    # answer['project_id'] = q['project_id']
+                except Exception as e:
+                    self.logger.warning(str(e))
+                    continue
+                # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
+                answer_dict[q['project_id']] = answer
+            output_file_path = self.output_path + self.model.llm + "_" + datetime.now().strftime(
+                "%Y%m%d-%H%M%S") + ".json"
+            with open(output_file_path, "w", encoding="utf-8") as output_file:
+                self.logger.info("Writing to " + output_file_path)
+                json.dump(answer_dict, output_file)
+        except Exception as e:
+            print(traceback.format_exc())
+            answer_dict["error_project_id"] = q['project_id']
+            with open(self.crash_save, "w", encoding="utf-8") as output_file:
+                output_file.write(str(answer_dict))
+            output_file.close()
 
 
 class JudgeController:
-    def __init__(self, question_path: str, answer_path: str, model_class: LLMTest, ):
+    def __init__(self, question_path: str, answer_path: str, model_class: LLMTest,
+                 parameter_answer_save: str = "data/parameter_answer_save"):
 
         self.logger = logging.getLogger('JudgeController')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        handler = logging.FileHandler("log/{0}-JudgeController.log".format(initiate_time))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
@@ -109,6 +143,8 @@ class JudgeController:
         console.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.addHandler(console)
+        self.parameter_answer_save = open(parameter_answer_save + "/{0}-ParameterAnswerSave.py".format(initiate_time),
+                                          "w", encoding="utf-8")
 
         try:
             question_list = json.load(open(question_path, 'r', encoding='utf-8'))
@@ -117,9 +153,15 @@ class JudgeController:
             self.logger.critical("Loading question list failed with error {}".format(e))
             raise Exception("Loading question list failed with error {}".format(e))
         self.testcode = {}
+        self.requested_parameter = {}
         for t in question_list:
             temp = copy.deepcopy(t)
             self.testcode[temp['project_id']] = temp['testcode']  # Save the testcode for each project
+            temp_2 = copy.deepcopy(t)
+            self.requested_parameter[temp['project_id']] = temp_2['testcode']
+            for page in self.requested_parameter[temp['project_id']]:
+                for function in page['function']:
+                    del function['test']
         # testcode = {<pid>:[<testcode list>]
         del question_list
         try:
@@ -155,10 +197,12 @@ class JudgeController:
     #         self.logger.debug("Evaluating question {} page {}.".format(t['project_id'], page['page']))
 
     def write_answer_to_file(self, project_id):
-        base_dir = "test/" + datetime.now().strftime("%Y%m%d-%H%M%S") + "/" + str(project_id) + "/"
-        os.makedirs(base_dir, exist_ok=True)
+        base_dir = "test/" + datetime.now().strftime("%Y%m%d") + "/" + str(project_id) + "/"
+        if os.path.exists(base_dir):
+            shutil.rmtree(base_dir)
+        os.makedirs(base_dir)
         for file in self.answer_dict[str(project_id)]:
-            file_name =  base_dir + file['path']
+            file_name = base_dir + file['path'].replace("./", "")
             content = file['code']
             last_slash = file_name.rfind("/")
             if last_slash != -1:
@@ -168,27 +212,72 @@ class JudgeController:
             with open(file_name, 'w', encoding="utf-8") as f:
                 f.write(content)
                 f.close()
+        return base_dir
 
-    def evaluate(self):
-        total_status = {'total': 0, 'pass': 0, 'failed': 0}
+    def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None):
+        '''
+
+        :param initiate_command:
+        :param requirements:
+        :return:
+        '''
+        # TODO 增加自动保存功能
+        total_status = {'total': 0, 'pass': 0, 'failed': 0, 'score': 0}
+        auto_parameter_save_dict = {}
         for project_id in self.question_dict:
             self.logger.info("Evaluating project id {}".format(project_id))
             project = self.question_dict[project_id]
-            self.write_answer_to_file(project_id)
-            judge: BaseJudge = PROJECT_TYPE[project['project_type']]()
-            if not judge.preprocess(project_id):
-                self.logger.info("{} scored 0.".format(project_id))
-                continue
+            project_root = self.write_answer_to_file(project_id)
+            if project['project_type'] == "website":
+                if initiate_command and project_id in initiate_command:
+                    project_initiate_command = initiate_command[project_id]
+                else:
+                    project_initiate_command = None
+                if requirements and project_id in requirements:
+                    project_requirements = requirements[project_id]
+                else:
+                    project_requirements = None
+                if not project_requirements or not project_initiate_command:
+                    competition = self.model.get_information(self.answer_dict[project_id],
+                                                             self.question_dict[project_id][
+                                                                 "framework_technical_stack"][0][
+                                                                 "technical_stack"] if not technical_stack else
+                                                             technical_stack[project_id],
+                                                             project_root)
+                    project_initiate_command = competition[
+                        "initiate_commands"] if not project_initiate_command else project_initiate_command
+                    project_requirements = competition[
+                        "requirements"] if not project_requirements else project_requirements
+
+                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_requirements, DEFAULT_BROWSER_TYPE,
+                                                                         project_initiate_command,
+                                                                         website_home="http://localhost:8000/")
+                try:
+                    if not judge.preprocess():
+                        self.logger.info("{} scored 0.".format(project_id))
+                        continue
+                except Exception as e:
+                    self.logger.warning("Preprocessing failed with {}".format(str(e)))
+                    self.logger.info("{} scored 0.".format(project_id))
+                    continue
             try:
-                parameter_list = judge.get_parameters(self.model, self.answer_dict[project_id],
-                                                      self.question_dict[project_id])
+                parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
+                                                      technical_stack=
+                                                      self.question_dict[project_id]["framework_technical_stack"][0][
+                                                          "technical_stack"] if not technical_stack else
+                                                      technical_stack[project_id],
+                                                      parameter_request=self.requested_parameter[project_id])
                 # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
-                parameter = {}
+                parameters = {}
                 for page in parameter_list:
-                    parameter[page['page']] = {}
+                    parameters[page['page']] = {}
                     for function in page["function"]:
                         temp = {p['name']: p['answer'] for p in function['parameter']}
-                        parameter[page['page']][function['function']] = function["parameter"]
+                        parameters[page['page']][function['function']] = function["parameter"]
+                auto_parameter_save_dict[project_id] = parameters
+                self.parameter_answer_save.seek(0)
+                self.parameter_answer_save.truncate(0)
+                self.parameter_answer_save.write(str(auto_parameter_save_dict))
                 del parameter_list
             except Exception as e:
                 self.logger.info(f"Get parameters for project id {project_id} failed with exception {e}.")
@@ -204,7 +293,10 @@ class JudgeController:
                     self.logger.info("Evaluating function {}".format(str(project_id) + "_" + str(index)))
                     index += 1
                     try:
-                        kwargs = parameter[page['page']][function['function']]
+                        kwargs = {}
+                        for parameter in parameters[page['page']][function['function']]:
+                            kwargs[parameter['name']] = parameter['answer']
+
                     except Exception as e:
                         self.logger.info(
                             "Parameter(s) finding was failed in the project_answer_list. Exception {}".format(e))
@@ -215,6 +307,9 @@ class JudgeController:
                     else:
                         self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
             project_score = pass_count / n
+            total_status['score'] += project_score
+            total_status['pass'] += pass_count
+            total_status['failed'] += n - pass_count
             self.logger.info(f"Project id {project_id} scored {project_score}")
             judge.clean()
         self.logger.info("Finished. Report: {}".format(total_status))

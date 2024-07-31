@@ -9,7 +9,7 @@ import logging
 prompt = {
     "check_list_generation": '{nl_prompt}.Just give a natural language function checklist from the users\' views using JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "description"; "YYYY", "required":true / false}}, {{...}}, ...], "required": true / false}}, {{...}}, ...}} with NO other content.',
     "python_framework_generation": 'Based on this checklist {nl_checklist}, give a framework of {technical_stack} also used JSON format of [{{"file":"/example_app/xxx.py","import":["a","b",...], "class":{{"name":"c", "parameter":[{{"name":"XXX", "type":"XXX"}}, {{...}}, ...], "description":"XXXX", "function": [{{"name":"d","parameter":[{{"name":"XXX", "type":"XXX"}}, "variable":[{{"name":"e", "type":"xxx", "description":"xxx"}}, {{...}}, ...], {{...}}, ...], "description":"XXXX", "return_type":"XXX"}}, {{...}}, ...]}}, {{...}}, ...] include the unnecessary functions. If the file is not a python file, the json format should be {{"file": "/example_app/xxx.xx", "description":"XXXX"}}. DO NOT CONTAIN ANY OTHER CONTENTS.',
-    "website_test_generation": 'Based on this checklist {nl_checklist}, give a selenium test code for each functions in JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "test": "your_test_code", "parameter": [{{"name":"test_url", "description": "the url for test"}}, {{"name":"weight_input_box_id", "description":"the input box component id of the weight"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content.',
+    "website_test_generation": 'Based on this checklist {nl_checklist}, give a selenium test code for each functions in JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "test": "def your_function_name(driver, your_parameter):\n\tyour_test_code", "parameter": [{{"name":"test_url", "description": "the url for test"}}, {{"name":"weight_input_box_id", "description":"the input box component id of the weight"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content.',
 }
 
 
@@ -31,7 +31,7 @@ class DataGenerator:
         # logger
         self.logger = logging.getLogger('DataGenerator')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        handler = logging.FileHandler("log/{0}-DataGenerator.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
@@ -140,5 +140,6 @@ class DataGenerator:
         return completion
 
 
-dg = DataGenerator(input_file="data/generation.json", output_file="data/generation_test.json", llm='gpt-4o')
+file = "data/generation-20240730-185448.json"
+dg = DataGenerator(input_file=file, output_file=file[:-5] + "-test.json", llm='gpt-4o')
 dg.generate()

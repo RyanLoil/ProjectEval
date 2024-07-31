@@ -11,9 +11,9 @@ from config import OPEN_AI_KEY
 prompt = {
     "generate_checklist": '{nl_prompt}.Give a natural language function checklist from the users\' views using JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "description"; "YYYY"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content.',
     "python_generate_framework": 'Based on this checklist {nl_checklist}, give a framework of {technical_stack} also used JSON format of [{{"file":"/example_app/xxx.py","import":["a","b",...], "class":{{"name":"c", "parameter":[{{"name":"XXX", "type":"XXX"}}, {{...}}, ...], "description":"XXXX", "function": [{{"name":"d","parameter":[{{"name":"XXX", "type":"XXX"}}, "variable":[{{"name":"e", "type":"xxx", "description":"xxx"}}, {{...}}, ...], {{...}}, ...], "description":"XXXX", "return_type":"XXX"}}, {{...}}, ...]}}, {{...}}, ...]. If the file is not a python file, the json format should be {{"file": "/example_app/xxx.xx", "description":"XXXX"}}. DO NOT CONTAIN ANY OTHER CONTENTS.',
-    "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files to meet the requirement in JSON format of [{{"file":"XXX","path":"XXX/XXX", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
-    "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the parameters of the django project for each test in the {parameter_required}. Return in Json format of [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]}, {...}, ...], {...}, ...] with NO other content',
-    "generate_initial_command": '',  # TODO 初始指令，requirements等
+    "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files (including the essential files to run the project) to meet the requirement in JSON format of [{{"file":"answer.something","path":"somepath/somedir/answer.something", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
+    "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the required parameters\' values of the django project for each test in the {parameter_required}. Return in Json format of [{{"page":"XXX", "function":"[{{"function":"XXX", "parameter": [{{"name":"XXX", "answer": "your_answer_parameter"}}, {{...}}, ...]}}, {{...}}, ...], {{...}}, ...] with NO other content and DO NOT CHANGE THE KEYS OF JSON. For example, the requested parameter name is \'test_url\' and the answer may be \'http://localhost:8000/\'',
+    "generate_information": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environment requirements have been created in root {project_root}, all packages have been installed, and projects and apps have been created, give the run commands, homepage\'s url and requirements of the django project, return in JSON format of {{"initiate_commands": [XXXX,  YYY] ,"homepage":"http://XXX.YYY/", "requirements": [XXXX, YYYY]}} with NO other content',
 }
 
 
@@ -24,7 +24,7 @@ class LLMTest:
         # logger
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
@@ -50,6 +50,18 @@ class LLMTest:
         :param answer:
         :param technical_stack:
         :param parameter_required:
+        :return:
+        '''
+        pass
+
+    def get_information(self, answer, technical_stack, project_root):
+        '''
+        Get any information that may use for the project judge.
+        NOTE: initiate command will always be requested in this function. However, we do recommend that give the initiate command manually as most of the LLM can't do it correctly
+        You can override this function to manually provide parameters which are required by the testcode.
+        :param answer:
+        :param technical_stack:
+        :param project_root:
         :return:
         '''
         pass
@@ -80,7 +92,14 @@ class LLMTest:
 
     @staticmethod
     def completion_to_dict(answer):
-        return json.loads(LLMTest.parse(answer.choices[0].message.content))
+        s = answer.choices[0].message.content
+        try:
+            return json.loads(LLMTest.parse(s))
+        except Exception as e:
+            print(e)
+            print("try replace \\")
+            s = s.replace("\\", "\\\\")
+            return s
 
 
 class GPTTest(LLMTest):
@@ -137,14 +156,14 @@ class GPTTest(LLMTest):
         completion = self.send_message(message)
         return self.completion_to_dict(completion)
 
-    def get_initial_command(self, answer, technical_stack, project_root):
+    def get_information(self, answer, technical_stack, project_root):
         """
         GPT can automatically recognize the initial command, requirements and other necessary information.
         :param answer:
         :param techincal_stack:
         :return:
         """
-        message = prompt["generate_initial_command"].format(answer=answer, technical_stack=technical_stack,
-                                                            )
+        message = prompt["generate_information"].format(answer=answer, technical_stack=technical_stack,
+                                                        project_root=project_root)
         completion = self.send_message(message)
         return self.completion_to_dict(completion)

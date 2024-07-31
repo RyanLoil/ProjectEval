@@ -5,6 +5,7 @@
     "framework_technical_stack": [
       {"language": "Python", "technical_stack": "Django"}
     ],
-    "nl_prompt": "Create a web page for a BMI calculator."
+    "nl_prompt": "Create a website for a BMI calculator.",
+    "difficulty": "easy"
   }
 ]

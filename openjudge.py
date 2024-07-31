@@ -2,8 +2,10 @@ import json
 import logging
 import os
 import signal
+import traceback
 
 from multiprocessing import Process
+from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -29,7 +31,7 @@ class BaseJudge:
         # logger
         self.logger = logging.getLogger('Judge')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        handler = logging.FileHandler("log/{0}-Judge.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
@@ -76,7 +78,7 @@ class BaseJudge:
         # 测试核心函数
         pass
 
-    def get_parameters(self, model: LLMTest, answer, parameter_request):
+    def get_parameters(self, model: LLMTest, answer, technical_stack, parameter_request):
         '''
         :param model: LLMTest object,
         :param answer:
@@ -84,9 +86,9 @@ class BaseJudge:
         :return:
         '''
         self.logger.info("Requesting parameters from LLM to adapt question.")
-        parameter = model.get_parameter(answer,
-                                        parameter_request, )  # In GPTTest, the parameter asking is a full answer list of all pages.
-        return json.load(parameter)
+        parameters = model.get_parameter(answer, technical_stack,
+                                         parameter_request)  # In GPTTest, the parameter asking is a full answer list of all pages.
+        return parameters
 
     # 为测试准备参数
 
@@ -164,7 +166,7 @@ class WebsiteJudge(BaseJudge):
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
-            namespace = {}
+            namespace = {"By": By()}
             exec(testcode, namespace)
             function_name = [name for name, value in namespace.items() if callable(value)][0]
             test = namespace[function_name]
@@ -172,8 +174,11 @@ class WebsiteJudge(BaseJudge):
             if result is not None:
                 # Test code will return nothing unless something goes wrong.
                 raise Exception(str(test_no) + ': Wrong Answer of ' + str(result))
+            sleep(0.1)
         except Exception as e:
-            self.logger.warning(e)
+            self.logger.warning(str(e))
+            if not str(e).strip():
+                self.logger.warning(traceback.format_exc())
             return False
         self.logger.info(f"{test_no} passed.")
         return True
