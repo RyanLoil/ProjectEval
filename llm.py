@@ -13,7 +13,7 @@ prompt = {
     "python_generate_framework": 'Based on this checklist {nl_checklist}, give a framework of {technical_stack} also used JSON format of [{{"file":"/example_app/xxx.py","import":["a","b",...], "class":{{"name":"c", "parameter":[{{"name":"XXX", "type":"XXX"}}, {{...}}, ...], "description":"XXXX", "function": [{{"name":"d","parameter":[{{"name":"XXX", "type":"XXX"}}, "variable":[{{"name":"e", "type":"xxx", "description":"xxx"}}, {{...}}, ...], {{...}}, ...], "description":"XXXX", "return_type":"XXX"}}, {{...}}, ...]}}, {{...}}, ...]. If the file is not a python file, the json format should be {{"file": "/example_app/xxx.xx", "description":"XXXX"}}. DO NOT CONTAIN ANY OTHER CONTENTS.',
     "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files (including the essential files to run the project) to meet the requirement in JSON format of [{{"file":"answer.something","path":"somepath/somedir/answer.something", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
     "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the required parameters\' values of the django project for each test in the {parameter_required}. Return in Json format of [{{"page":"XXX", "function":"[{{"function":"XXX", "parameter": [{{"name":"XXX", "answer": "your_answer_parameter"}}, {{...}}, ...]}}, {{...}}, ...], {{...}}, ...] with NO other content and DO NOT CHANGE THE KEYS OF JSON. For example, the requested parameter name is \'test_url\' and the answer may be \'http://localhost:8000/\'',
-    "generate_information": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environment requirements have been created in root {project_root}, all packages have been installed, and projects and apps have been created, give the run commands, homepage\'s url and requirements of the django project, return in JSON format of {{"initiate_commands": [XXXX,  YYY] ,"homepage":"http://XXX.YYY/", "requirements": [XXXX, YYYY]}} with NO other content',
+    "generate_information": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environments have been created in root {project_root}, and projects and apps have been created, give the run commands, homepage\'s url and requirements of the {technical_stack} project, return in JSON format of {{"initiate_commands": [["manage.py","makemigrations"],["manage.py","migrate"],[XXX,YYY],...] ,"homepage":"http://XXX.YYY/", "requirements": [XXXX, YYYY]}} with NO other content.',
 }
 
 
@@ -24,15 +24,16 @@ class LLMTest:
         # logger
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        console.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.addHandler(console)
+        if not self.logger.handlers:
+            handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
 
     def generate_checklist(self, nl_prompt):
         pass
@@ -107,13 +108,13 @@ class GPTTest(LLMTest):
         super(GPTTest, self).__init__(llm)
         self.client = OpenAI(api_key=OPEN_AI_KEY)
 
-    def send_message(self, message):
+    def send_message(self, message, role_message):
         self.logger.debug("Sending:" + message)
         completion = self.client.chat.completions.create(
             model=self.llm,
             messages=[
                 {"role": "system",
-                 "content": "You are a professional project manager (PM)."},
+                 "content": role_message},
                 {"role": "user",
                  "content": message}
             ]
@@ -123,13 +124,13 @@ class GPTTest(LLMTest):
 
     def generate_checklist(self, nl_prompt):
         message = prompt['generate_checklist'].format(nl_prompt=nl_prompt)
-        completion = self.send_message(message)
+        completion = self.send_message(message, "You are a professional project manager (PM).")
         return self.completion_to_dict(completion)
 
     def generate_framework(self, language, technical_stack, nl_checklist):
         message = prompt[language.lower() + '_generate_framework'].format(nl_checklist=nl_checklist,
                                                                           technical_stack=technical_stack)
-        completion = self.send_message(message)
+        completion = self.send_message(message, "You are a professional computer program architect.")
         return self.completion_to_dict(completion)
 
     def generate_answer(self, description, technical_stack):
@@ -140,7 +141,7 @@ class GPTTest(LLMTest):
         :return: generated answer in json format
         """
         message = prompt['generate_answer'].format(description=description, technical_stack=technical_stack)
-        completion = self.send_message(message)
+        completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
     def get_parameter(self, answer, technical_stack, parameter_required):
@@ -153,7 +154,7 @@ class GPTTest(LLMTest):
         """
         message = prompt["generate_parameter"].format(answer=answer, technical_stack=technical_stack,
                                                       parameter_required=parameter_required)
-        completion = self.send_message(message)
+        completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
     def get_information(self, answer, technical_stack, project_root):
@@ -165,5 +166,5 @@ class GPTTest(LLMTest):
         """
         message = prompt["generate_information"].format(answer=answer, technical_stack=technical_stack,
                                                         project_root=project_root)
-        completion = self.send_message(message)
+        completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)

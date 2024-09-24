@@ -2,15 +2,19 @@ import json
 import logging
 import os
 import signal
+import subprocess
+import sys
+import time
 import traceback
 
-from multiprocessing import Process
 from time import sleep
-
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from datetime import datetime
 
+from config import ENCODE_FORMAT
 from llm import LLMTest
 
 DRIVER_DICT = {
@@ -31,15 +35,16 @@ class BaseJudge:
         # logger
         self.logger = logging.getLogger('Judge')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}-Judge.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        console.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.addHandler(console)
+        if not self.logger.handlers:
+            handler = logging.FileHandler("log/{0}-Judge.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
 
         self.requirements = requirements
 
@@ -56,7 +61,7 @@ class BaseJudge:
             return True
         self.logger.info("Install required pakages.")
         try:
-            d = os.system("pip install " + ",".join(self.requirements))
+            d = os.system("pip install " + " ".join(self.requirements))
             if d != 0:
                 raise Exception("Install required pakages failed with return code: " + str(d))
         except Exception as e:
@@ -94,13 +99,11 @@ class BaseJudge:
 
 
 class WebsiteJudge(BaseJudge):
-    def __init__(self, requirements, browser_type, website_initiate_command, website_home="http://localhost:8000/"):
+    def __init__(self, requirements, browser_type, project_root,
+                 website_home="http://localhost:8000/"):
         '''
-
-        :param project_answer_list: A parameter list for all the project that is going to be evaluated
         :param requirements: Packages that is required to evaluate(python only).
         :param browser_type: Choose the type of web browser, support chrome, firefox and edge.
-        :param website_initiate_command:
         :param website_home:
         '''
         super().__init__(requirements)
@@ -113,37 +116,101 @@ class WebsiteJudge(BaseJudge):
         except Exception as e:
             self.logger.critical(e)
 
-        self.website_initiate_command = website_initiate_command
+        # self.website_initiate_command = website_initiate_command
+        self.website_project_root = project_root
         self.website_home = website_home  # Default
-        self.website_project_process = self.WebsiteProcess()
+        # self.website_project_process = self.WebsiteProcess()
 
-    class WebsiteProcess(Process):
-        def __init__(self):
-            Process.__init__(self)
+    # class WebsiteProcess(Process):
+    #     def __init__(self):
+    #         Process.__init__(self)
+    #
+    #     def run(self):
+    #         d = os.system(self.website_initiate_command)
+    #
+    #     def set_website_initiate_command(self, website_initiate_command):
+    #         self.website_initiate_command = website_initiate_command
+    #
+    #     def django_shutdown(self):  # TODO 不够优雅，还是通过subprocess来关闭会更好
+    #         result = os.popen('netstat -ano|findstr "8000" ').read().split("\n")  # TODO Django默认8000
+    #         for i in range(len(result)):
+    #             result[i] = result[i].split()
+    #             if len(result[i]) == 5 and result[i][3] == "LISTENING":
+    #                 os.popen("taskkill -pid %s -f" % result[i][4])
+    #                 break
 
-        def run(self):
-            d = os.system(self.website_initiate_command)
+    class DjangoServer:
+        def __init__(self, project_path, logger,
+                     venv_path: str = os.path.abspath(".").replace("\\", "/") + "/.venv/"):  # TODO 移除绝对路径交给用户
+            '''
+            For a python environments, the venv_path should be the ProjectEval's venv path which should be more convenient
 
-        def set_website_initiate_command(self, website_initiate_command):
-            self.website_initiate_command = website_initiate_command
+            :param project_path:
+            :param logger:
+            :param venv_path:
+            '''
+            self.venv_path = venv_path
+            self.project_path = project_path
+            self.process = None
+            self.logger = logger
 
-        def django_shutdown(self):  # TODO 不够优雅，还是通过subprocess来关闭会更好
-            result = os.popen('netstat -ano|findstr "8000" ').read().split("\n")  # TODO Django默认8000
-            for i in range(len(result)):
-                result[i] = result[i].split()
-                if len(result[i]) == 5 and result[i][3] == "LISTENING":
-                    os.popen("taskkill -pid %s -f" % result[i][4])
-                    break
+        def get_activate_script(self):
+            activate_script = os.path.join(self.venv_path, 'Scripts', 'python.exe')
+            if not os.path.exists(activate_script):
+                raise FileNotFoundError(f"Virtual environment activation script not found: {activate_script}")
+            return activate_script
 
-    def preprocess(self):
+        def initiate_command(self, initiate_command_list: [[]]):
+            '''
+            :param initiate_command_list: list for initiate command. A list for each command which is the command parameter for python. Example:[['manage.py', 'makemigrations']]
+            :return: None
+            '''
+            for initiate_command in initiate_command_list:
+                process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
+                                           shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+                process.wait(10)
+                process.terminate()
+
+        def start(self):
+            self.process = subprocess.Popen([self.get_activate_script(), "manage.py", "runserver"],
+                                            cwd=self.project_path,
+                                            shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)  # 必须要提供CREATE_NEW_PROCESS_GROUP，否则会杀掉所有进程
+            # err = self.process.stderr.read().decode(ENCODE_FORMAT)
+            # if err:
+            #     self.logger.warning(err)
+            self.logger.info("Django server started with PID:" + str(self.process.pid))
+
+        def stop(self):
+            if self.process and self.process.poll() is None:
+                self.process.send_signal(signal.CTRL_BREAK_EVENT)  # 唯一的办法解决所有问题
+            else:
+                self.logger.info("Django server is not running.")
+
+    WEBSITE_SERVER_MANAGER = {
+        'Django': DjangoServer,
+        # All other kinds of website server should be created in this way.
+    }
+
+    def preprocess(self, technical_stack, initiate_command_list, *args, **kwargs):
+        '''
+
+        :param initiate_command_list:
+        :param technical_stack:
+        :param args: For the subprocesss.
+        :param kwargs: For the subprocesss.
+        :param initiate_command_list: The command for running project. For django, "manage.py makemigrations" and "manage.py migrate" will be its initiate commands.
+        :return:
+        '''
+        os.system("chcp 65001")
         self.logger.info("Preprocessing Website Project Test.")
         # TODO Django一般不自动创建Manage.py
         super().preprocess()
         try:
-            os.system("chcp 65001")
-            self.website_project_process.set_website_initiate_command(self.website_initiate_command)
-            self.website_project_process.start()
-            self.website_project_process.join(timeout=1)
+            self.subprocess = WebsiteJudge.WEBSITE_SERVER_MANAGER[technical_stack](logger=self.logger, *args, **kwargs)
+            self.subprocess.initiate_command(initiate_command_list)
+            self.subprocess.start()
         except Exception as e:
             self.logger.critical(e)
             return False
@@ -156,17 +223,18 @@ class WebsiteJudge(BaseJudge):
         return True
 
     def clean(self):
-        self.website_project_process.django_shutdown()
-        self.website_project_process.terminate()
-        self.website_project_process.join()
-        self.website_project_process.close()
+        # self.website_project_process.django_shutdown()
+        # self.website_project_process.terminate()
+        # self.website_project_process.join()
+        # self.website_project_process.close()
+        self.subprocess.stop()
         self.driver.close()
 
     def check(self, test_no, testcode, *args, **kwargs):
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
-            namespace = {"By": By()}
+            namespace = {"By": By(), "time": time}
             exec(testcode, namespace)
             function_name = [name for name, value in namespace.items() if callable(value)][0]
             test = namespace[function_name]

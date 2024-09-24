@@ -33,17 +33,18 @@ class LLMController:
 
         self.logger = logging.getLogger('LLMController')
         self.logger.setLevel(level=logging.DEBUG)
-        initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-        handler = logging.FileHandler("log/{0}-LLMController.log".format(initiate_time))
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        console.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.addHandler(console)
-        self.crash_save = crush_save_path + "/{0}-AnswerCrashSave.py".format(initiate_time)
+        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not self.logger.handlers:
+            handler = logging.FileHandler("log/{0}-LLMController.log".format(self.initiate_time))
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
+        self.crash_save = crush_save_path + "/{0}-AnswerCrashSave.py".format(self.initiate_time)
         self.crash_load = crush_load_path
 
         try:
@@ -129,22 +130,23 @@ class LLMController:
 
 class JudgeController:
     def __init__(self, question_path: str, answer_path: str, model_class: LLMTest,
-                 parameter_answer_save: str = "data/parameter_answer_save"):
+                 parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save"):
 
         self.logger = logging.getLogger('JudgeController')
         self.logger.setLevel(level=logging.DEBUG)
-        initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-        handler = logging.FileHandler("log/{0}-JudgeController.log".format(initiate_time))
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        console.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.addHandler(console)
-        self.parameter_answer_save = open(parameter_answer_save + "/{0}-ParameterAnswerSave.py".format(initiate_time),
-                                          "w", encoding="utf-8")
+        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not self.logger.handlers:
+            handler = logging.FileHandler("log/{0}-JudgeController.log".format(self.initiate_time))
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
+        self.parameter_answer_save = parameter_answer_save
+        self.parameter_file_path = parameter_file_path
 
         try:
             question_list = json.load(open(question_path, 'r', encoding='utf-8'))
@@ -212,25 +214,49 @@ class JudgeController:
             with open(file_name, 'w', encoding="utf-8") as f:
                 f.write(content)
                 f.close()
+        if len(os.listdir(base_dir)) == 1:
+            base_dir = base_dir + os.listdir(base_dir)[0] + "/"
         return base_dir
 
-    def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None):
+    def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
+                 ):
         '''
-
         :param initiate_command:
         :param requirements:
+        :param parameter_file_path:
+        :param technical_stack:
+
         :return:
         '''
-        # TODO 增加自动保存功能
         total_status = {'total': 0, 'pass': 0, 'failed': 0, 'score': 0}
         auto_parameter_save_dict = {}
+        if self.parameter_file_path:
+            # 预加载已生成的parameter
+            try:
+                parameter_file = open(self.parameter_file_path, 'r', encoding="utf-8")
+            except Exception as e:
+                self.logger.critical("Loading parameter match failed with error {}".format(e))
+                raise Exception("Loading parameter match failed with error {}".format(e))
+            exist_parameters = json.load(parameter_file)
+        else:
+            exist_parameters = None
+
         for project_id in self.question_dict:
             self.logger.info("Evaluating project id {}".format(project_id))
             project = self.question_dict[project_id]
+            # File Writter
             project_root = self.write_answer_to_file(project_id)
-            if project['project_type'] == "website":
+            '''
+            #TODO 列表
+            1.	需要适配参数复用，即参数选择也存在标准答案，此处对应产品经理制作用户手册 √
+            2.	Django初始命令的使用，可以使用默认的，也可以使用复用的
+            3.	初始命令和requirements的询问也需要做保存
+            '''
+            if project['project_type'] == 'website':
+                # TODO 适配新类预加载
+                # Runner
                 if initiate_command and project_id in initiate_command:
-                    project_initiate_command = initiate_command[project_id]
+                    project_initiate_command: [[]] = initiate_command[project_id]
                 else:
                     project_initiate_command = None
                 if requirements and project_id in requirements:
@@ -238,13 +264,15 @@ class JudgeController:
                 else:
                     project_requirements = None
                 if not project_requirements or not project_initiate_command:
+                    # TODO 适配新版本的Judge
+                    # Request LLM for requirements and initiate command.
                     competition = self.model.get_information(self.answer_dict[project_id],
                                                              self.question_dict[project_id][
                                                                  "framework_technical_stack"][0][
                                                                  "technical_stack"] if not technical_stack else
                                                              technical_stack[project_id],
                                                              project_root)
-                    project_initiate_command = competition[
+                    project_initiate_command: [[]] = competition[
                         "initiate_commands"] if not project_initiate_command else project_initiate_command
                     project_requirements = competition[
                         "requirements"] if not project_requirements else project_requirements
@@ -252,36 +280,61 @@ class JudgeController:
                 judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_requirements, DEFAULT_BROWSER_TYPE,
                                                                          project_initiate_command,
                                                                          website_home="http://localhost:8000/")
+
+                # TODO 增加模拟数据载入，这个问题挺棘手的，因为严格意义上它不属于Project的一部分，属于测试工程师的工作，但是我们不能保证所有的框架都有自动化测试，因此可能需要要求LLM提前撰写模拟数据的导入脚本来完成此工作，这似乎是二次询问。
+
                 try:
-                    if not judge.preprocess():
+                    if not judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
+                                            self.question_dict[project_id]["framework_technical_stack"][0][
+                                                "technical_stack"], initiate_command_list=project_initiate_command,
+                                            project_path=project_root):
                         self.logger.info("{} scored 0.".format(project_id))
                         continue
                 except Exception as e:
                     self.logger.warning("Preprocessing failed with {}".format(str(e)))
                     self.logger.info("{} scored 0.".format(project_id))
                     continue
+            elif project['project_type'] == 'software':
+                # TODO software适配
+                pass
+            else:
+                # TODO batch适配
+                pass
             try:
-                parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
-                                                      technical_stack=
-                                                      self.question_dict[project_id]["framework_technical_stack"][0][
-                                                          "technical_stack"] if not technical_stack else
-                                                      technical_stack[project_id],
-                                                      parameter_request=self.requested_parameter[project_id])
-                # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
-                parameters = {}
-                for page in parameter_list:
-                    parameters[page['page']] = {}
-                    for function in page["function"]:
-                        temp = {p['name']: p['answer'] for p in function['parameter']}
-                        parameters[page['page']][function['function']] = function["parameter"]
-                auto_parameter_save_dict[project_id] = parameters
-                self.parameter_answer_save.seek(0)
-                self.parameter_answer_save.truncate(0)
-                self.parameter_answer_save.write(str(auto_parameter_save_dict))
-                del parameter_list
+                if exist_parameters and project_id in exist_parameters:
+                    # 历史Parameter清单复用
+                    parameters = exist_parameters[project_id]
+
+                else:
+                    # 清单Parameter制作
+                    parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
+                                                          technical_stack=
+                                                          self.question_dict[project_id]["framework_technical_stack"][
+                                                              0][
+                                                              "technical_stack"] if not technical_stack else
+                                                          technical_stack[project_id],
+                                                          parameter_request=self.requested_parameter[project_id])
+                    # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
+                    parameters = {}
+                    for page in parameter_list:
+                        parameters[page['page']] = {}
+                        for function in page["function"]:
+                            # temp = {p['name']: p['answer'] for p in function['parameter']}
+                            parameters[page['page']][function['function']] = function["parameter"]
+                    auto_parameter_save_dict[project_id] = parameters
+                    if type(self.parameter_answer_save) == str:
+                        self.parameter_answer_save = open(self.parameter_answer_save
+                             + "/{0}-ParameterAnswerSave.json".format(self.initiate_time),
+                            "w", encoding="utf-8")
+                    self.parameter_answer_save.seek(0)
+                    self.parameter_answer_save.truncate(0)
+                    self.parameter_answer_save.write(json.dumps(auto_parameter_save_dict))
+                    del parameter_list
+
             except Exception as e:
                 self.logger.info(f"Get parameters for project id {project_id} failed with exception {e}.")
                 self.logger.info("{} scored 0.".format(project_id))
+                judge.clean()
                 continue
             pass_count = 0
             n = 0
@@ -290,8 +343,9 @@ class JudgeController:
                 n += len(page['function'])
                 total_status['total'] += len(page['function'])
                 for function in page['function']:
-                    self.logger.info("Evaluating function {}".format(str(project_id) + "_" + str(index)))
                     index += 1
+                    self.logger.info("Evaluating function {}".format(
+                        str(project_id) + "_" + str(index) + " " + function['function']))
                     try:
                         kwargs = {}
                         for parameter in parameters[page['page']][function['function']]:
