@@ -2,12 +2,15 @@ import json
 import logging
 import os
 import signal
+import string
 import subprocess
 import sys
 import time
 import traceback
 
 from time import sleep
+
+import pyperclip
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -131,8 +134,8 @@ class WebsiteJudge(BaseJudge):
     #     def set_website_initiate_command(self, website_initiate_command):
     #         self.website_initiate_command = website_initiate_command
     #
-    #     def django_shutdown(self):  # TODO 不够优雅，还是通过subprocess来关闭会更好
-    #         result = os.popen('netstat -ano|findstr "8000" ').read().split("\n")  # TODO Django默认8000
+    #     def django_shutdown(self):  # 不够优雅，还是通过subprocess来关闭会更好
+    #         result = os.popen('netstat -ano|findstr "8000" ').read().split("\n")
     #         for i in range(len(result)):
     #             result[i] = result[i].split()
     #             if len(result[i]) == 5 and result[i][3] == "LISTENING":
@@ -169,7 +172,8 @@ class WebsiteJudge(BaseJudge):
                 process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
                                            shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
-                process.wait(10)
+
+                process.wait(15)
                 process.terminate()
 
         def start(self):
@@ -234,7 +238,7 @@ class WebsiteJudge(BaseJudge):
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
-            namespace = {"By": By(), "time": time}
+            namespace = {"By": By(), "time": time, "pyperclip":pyperclip,"string":string} # TODO Namespace中其它库文件将会是需要处理的问题
             exec(testcode, namespace)
             function_name = [name for name, value in namespace.items() if callable(value)][0]
             test = namespace[function_name]
