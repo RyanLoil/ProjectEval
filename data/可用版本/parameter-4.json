@@ -1,0 +1,158 @@
+{
+  "4": {
+    "Home": {
+      "Introduction": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "intro_text_css_selector",
+          "answer": "p.introduction"
+        }
+      ],
+      "Generate QR Code Navigate Button": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "generate_qr_button_id",
+          "answer": "generate_qr_button"
+        },
+        {
+          "name": "expected_url",
+          "answer": "http://localhost:8000/generate/"
+        },
+        {
+          "name": "generator_id",
+          "answer": "generator"
+        }
+      ]
+    },
+    "QR Code Generator": {
+      "Text Input Field": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/generate/"
+        },
+        {
+          "name": "text_input_id",
+          "answer": "text"
+        }
+      ],
+      "Enter Box Size": [
+        {
+          "name": "box_size_input_id",
+          "answer": "box_size"
+        }
+      ],
+      "Enter Border Size": [
+        {
+          "name": "border_size_input_id",
+          "answer": "border_size"
+        }
+      ],
+      "Select Fill Color": [
+        {
+          "name": "fill_color_select_id",
+          "answer": "fill_color"
+        }
+      ],
+      "Select Back Color": [
+        {
+          "name": "back_color_select_id",
+          "answer": "back_color"
+        }
+      ],
+      "Select Error Correction Rate": [
+        {
+          "name": "correction_rate_select_id",
+          "answer": "correction_rate"
+        }
+      ],
+      "Generate Button": [
+        {
+          "name": "generate_button_id",
+          "answer": "submit"
+        }
+      ],
+      "QR Code Display Area": [
+        {
+          "name": "qr_code_display_id",
+          "answer": "qr_code"
+        }
+      ],
+      "Download QR Code Button": [
+        {
+          "name": "download_button_id",
+          "answer": "download"
+        },
+        {
+          "name": "default_download_path",
+          "answer": "%USERPROFILE%\\Downloads\\qr_code.png"
+        }
+      ],
+      "Error Handling": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/generate/"
+        },
+        {
+          "name": "text_input_id",
+          "answer": "text"
+        },
+        {
+          "name": "generate_button_id",
+          "answer": "submit"
+        },
+        {
+          "name": "error_message_css_selector",
+          "answer": ".error-message"
+        }
+      ]
+    },
+    "About": {
+      "Description": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/about/"
+        },
+        {
+          "name": "about_description_css_selector",
+          "answer": "p.description"
+        }
+      ],
+      "Common Questions": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/about/"
+        },
+        {
+          "name": "faq_id",
+          "answer": "common_questions"
+        }
+      ],
+      "Privacy Policy": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/about/"
+        },
+        {
+          "name": "privacy_policy_id",
+          "answer": "privacy_policy"
+        }
+      ],
+      "Terms of Service": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/about/"
+        },
+        {
+          "name": "terms_of_service_id",
+          "answer": "terms_of_service"
+        }
+      ]
+    }
+  }
+}

@@ -70,10 +70,12 @@ def save_json(data, output_file):
 
 if __name__ == "__main__":
     all_project_directory = "test/20240925-人工修正/"  # Set your project directory here
-    output_file = "data/操作版本/answer-3.json"
+    output_file = "data/操作版本/answer-4.json"
     json_data = {}
-    index = 3
+    index = 4
     for directory in os.listdir(all_project_directory):
+        if int(directory) < index:
+            continue
         if len(os.listdir(os.path.join(all_project_directory, directory))) == 1:
             project_directory = os.path.join(all_project_directory, directory) + "/" + \
                                 os.listdir(os.path.join(all_project_directory, directory))[0]

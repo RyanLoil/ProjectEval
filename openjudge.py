@@ -12,8 +12,7 @@ from time import sleep
 
 import pyperclip
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import ui
 from selenium.webdriver.common.by import By
 from datetime import datetime
 
@@ -238,7 +237,9 @@ class WebsiteJudge(BaseJudge):
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
-            namespace = {"By": By(), "time": time, "pyperclip":pyperclip,"string":string} # TODO Namespace中其它库文件将会是需要处理的问题
+            namespace = {"By": By(), "time": time, "pyperclip": pyperclip, "string": string,
+                         'ui': ui,  'os':os}  # TODO Namespace中其它库文件将会是需要处理的问题
+            # TODO 超时终止
             exec(testcode, namespace)
             function_name = [name for name, value in namespace.items() if callable(value)][0]
             test = namespace[function_name]
