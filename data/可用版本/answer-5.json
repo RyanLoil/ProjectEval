@@ -1,0 +1,99 @@
+{
+    "5": [
+        {
+            "file": "manage.py",
+            "path": "manage.py",
+            "code": "import os\nimport sys\n\nif __name__ == '__main__':\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n"
+        },
+        {
+            "file": "apps.py",
+            "path": "example_app/apps.py",
+            "code": "from django.apps import AppConfig\nclass ExampleAppConfig(AppConfig):\n    name = 'example_app'\n"
+        },
+        {
+            "file": "urls.py",
+            "path": "example_app/urls.py",
+            "code": "from django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path('', views.home, name='home'),\n    path('convert/', views.convert, name='convert'),\n    path('about/', views.about, name='about'),\n]"
+        },
+        {
+            "file": "views.py",
+            "path": "example_app/views.py",
+            "code": "import markdown\nimport os\nfrom django.conf import settings\nfrom django.shortcuts import render\nfrom django.http import HttpResponse\nfrom django.core.files.storage import FileSystemStorage\ndef home(request):\n    return render(request, 'home.html')\n\n\ndef convert(request):\n    html_output = \"\"\n    markdown_input = \"\"\n    file_name = \"\"\n\n    if request.method == \"POST\":\n        if 'upload_file' in request.FILES:\n            # Handle file upload\n            uploaded_file = request.FILES['upload_file']\n            fs = FileSystemStorage()\n            file_name = fs.save(uploaded_file.name, uploaded_file)\n            file_path = fs.path(file_name)\n            # Read the uploaded Markdown file and convert its content\n            with open(file_path, 'r', encoding='utf-8') as f:\n                markdown_input = f.read()\n                html_output = markdown.markdown(markdown_input)\n        elif 'markdown' in request.POST and request.POST.get('markdown', ''):\n            # Convert Markdown text to HTML\n            markdown_input = request.POST.get('markdown', '')\n            if markdown_input:\n                html_output = markdown.markdown(markdown_input)\n    # Handle file download\n    if request.GET.get('download') == 'true':\n        with open(settings.MEDIA_ROOT+\"\\\\\"+request.GET.get('last_file_name'), 'r', encoding='utf-8') as f:\n            markdown_input = f.read()\n            html_output = markdown.markdown(markdown_input)\n        response = HttpResponse(html_output, content_type='text/html')\n        response['Content-Disposition'] = 'attachment; filename=\"converted.html\"'\n        return response\n\n    return render(request, 'convert.html', {\n        'markdown_input': markdown_input,\n        'html_output': html_output,\n        'file_name': file_name if file_name else None\n    })\n\ndef about(request):\n    return render(request, 'about.html')\n"
+        },
+        {
+            "file": "about.html",
+            "path": "example_app/templates/about.html",
+            "code": "<h1>About the Markdown to HTML Converter</h1>\n\n<!-- Team Information Section -->\n<section id=\"team\">\n  <h2>Team Information</h2>\n  <p>This Markdown to HTML converter was developed by a passionate team of web developers.</p>\n  <ul>\n    <li><strong>AI</strong> - Lead Developer</li>\n    <li><strong>AI</strong> - Frontend Specialist</li>\n    <li><strong>AI</strong> - Backend Developer</li>\n  </ul>\n</section>\n\n<!-- FAQ Section -->\n<section id=\"faq\">\n  <h2>FAQ (Frequently Asked Questions)</h2>\n  <h3>1. What is this converter for?</h3>\n  <p>This tool allows users to convert Markdown text into HTML format, making it easier to publish styled content on the web.</p>\n\n  <h3>2. How do I upload a Markdown file for conversion?</h3>\n  <p>Navigate to the \"Convert\" page, where you can either paste Markdown text or upload a file for conversion.</p>\n\n  <h3>3. Can I download the converted HTML?</h3>\n  <p>Yes, after converting your Markdown text to HTML, you have the option to download the resulting HTML file.</p>\n</section>\n"
+        },
+        {
+            "file": "convert.html",
+            "path": "example_app/templates/convert.html",
+            "code": "<h1>Convert Markdown to HTML</h1>\n\n<form method=\"post\" enctype=\"multipart/form-data\">\n    {% csrf_token %}\n\n    <!-- Markdown Text Input Area -->\n    <label for=\"markdown_input\">Enter Markdown:</label>\n    <textarea id=\"markdown_input\" name=\"markdown\">{{ markdown_input }}</textarea>\n\n    <!-- Convert Button -->\n    <button id=\"convert_button\" type=\"submit\">Convert</button>\n\n    <hr/>\n\n    <!-- File Upload Input -->\n    <label for=\"upload_file\">Or upload a Markdown file:</label>\n    <input type=\"file\" id=\"upload_file\" name=\"upload_file\">\n    <button type=\"submit\" id=\"upload_file_btn\">Upload and Convert</button>\n</form>\n\n{% if html_output %}\n<!-- HTML Output Area -->\n<div id=\"html_output\">\n    <h2>HTML Output</h2>\n    {{ html_output|safe }}\n</div>\n\n<!-- Download HTML Button -->\n<a href=\"?download=true&last_file_name={{ file_name }}\">\n    <button id=\"download_html\">Download HTML</button>\n</a>\n{% endif %}\n"
+        },
+        {
+            "file": "home.html",
+            "path": "example_app/templates/home.html",
+            "code": "<h1>Welcome</h1>\n<p id=\"introduction\">This is the Markdown to HTML converter.</p>\n<nav>\n  <a href='/convert/' id=\"convert_link\">Convert</a>\n  <a href='/about/' id=\"about_link\">About</a>\n</nav>\n"
+        },
+        {
+            "file": "5-markdown-test.md",
+            "path": "media/5-markdown-test.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_ByxD5dP.md",
+            "path": "media/5-markdown-test_ByxD5dP.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_dBokJwE.md",
+            "path": "media/5-markdown-test_dBokJwE.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_hUW0yom.md",
+            "path": "media/5-markdown-test_hUW0yom.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_mSZyVOC.md",
+            "path": "media/5-markdown-test_mSZyVOC.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_nZagLHT.md",
+            "path": "media/5-markdown-test_nZagLHT.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_QdFCBeq.md",
+            "path": "media/5-markdown-test_QdFCBeq.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_UqTf6Mw.md",
+            "path": "media/5-markdown-test_UqTf6Mw.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "5-markdown-test_xgn6rg0.md",
+            "path": "media/5-markdown-test_xgn6rg0.md",
+            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+        },
+        {
+            "file": "settings.py",
+            "path": "project/settings.py",
+            "code": "import os\n\nBASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\nSECRET_KEY = 'your_secret_key'\nDEBUG = True\nALLOWED_HOSTS = []\n\nINSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'example_app',\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'project.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'project.wsgi.application'\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),\n    }\n}\n\nLANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_L10N = True\nUSE_TZ = True\n\nSTATIC_URL = '/static/'\n\n# File upload settings\nMEDIA_URL = '/media/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'media')\n"
+        },
+        {
+            "file": "urls.py",
+            "path": "project/urls.py",
+            "code": "from django.urls import path, include\nfrom django.contrib import admin\nfrom django.conf import settings\nfrom django.conf.urls.static import static\n\nurlpatterns = [\n                  path('admin/', admin.site.urls),\n                  path('', include('example_app.urls')),\n              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n"
+        },
+        {
+            "file": "wsgi.py",
+            "path": "project/wsgi.py",
+            "code": "import os\nfrom django.core.wsgi import get_wsgi_application\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')\napplication = get_wsgi_application()\n"
+        }
+    ]
+}

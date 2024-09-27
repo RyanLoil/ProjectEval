@@ -4,19 +4,31 @@ import json
 
 def get_files(directory):
     """
-    Get all files in the given directory recursively.
+    Get all files in the given directory recursively and add empty directories.
     :param directory: The root directory to start from.
-    :return: List of file paths.
+    :return: List of file paths and empty directories.
     """
     files_list = []
-    for root, _, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory):
+        # Skip migrations directories
         if root.split("/")[-1] == "migrations":
             continue
+
+        # Add files to the list
         for file in files:
             if file.split('.')[-1] == 'sqlite3':
                 continue
             file_path = os.path.join(root, file)
             files_list.append(file_path)
+
+        # Check if the directory is empty and add it if so
+        if not files and not dirs:  # Check if both files and subdirectories are empty
+            files_list.append({
+                "file": None,
+                "path": os.path.relpath(root, directory),
+                "code": ""
+            })
+
     return files_list
 
 
@@ -52,9 +64,13 @@ def project_to_json(directory):
     files = get_files(directory)
     result = []
     for file in files:
-        json_str = file_to_json(file, directory)
-        if json_str:
-            result.append(json_str)
+        if isinstance(file, str):  # Check if it's a file path (string)
+            json_str = file_to_json(file, directory)
+            if json_str:
+                result.append(json_str)
+        elif isinstance(file, dict) and file['file'] is None:  # Check if it's an empty directory
+            result.append(file)  # Add the empty directory directly
+
     return result
 
 
@@ -69,10 +85,10 @@ def save_json(data, output_file):
 
 
 if __name__ == "__main__":
-    all_project_directory = "test/20240925-人工修正/"  # Set your project directory here
-    output_file = "data/操作版本/answer-4.json"
+    all_project_directory = "test/20240927-人工修正/"  # Set your project directory here
+    output_file = "data/操作版本/answer-5.json"
     json_data = {}
-    index = 4
+    index = 5
     for directory in os.listdir(all_project_directory):
         if int(directory) < index:
             continue

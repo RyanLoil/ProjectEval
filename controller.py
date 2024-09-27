@@ -200,22 +200,41 @@ class JudgeController:
 
     def write_answer_to_file(self, project_id):
         base_dir = "test/" + datetime.now().strftime("%Y%m%d") + "/" + str(project_id) + "/"
+
+        # Remove the directory if it already exists
         if os.path.exists(base_dir):
             shutil.rmtree(base_dir)
+
+        # Create the base directory
         os.makedirs(base_dir)
+
+        # Iterate over files in answer_dict
         for file in self.answer_dict[str(project_id)]:
+            # Check if 'file' is None, and create an empty directory if so
+            if file['file'] is None:
+                empty_dir_path = base_dir + file['path'].replace("./", "")
+                os.makedirs(empty_dir_path, exist_ok=True)
+                continue
+
+            # Process and write the file
             file_name = base_dir + file['path'].replace("./", "")
             content = file['code']
             last_slash = file_name.rfind("/")
+
+            # Create the directory if it doesn't exist
             if last_slash != -1:
                 dirpath = file_name[:last_slash]
                 if not os.path.isdir(dirpath):
                     os.makedirs(dirpath)
+
+            # Write the content to the file
             with open(file_name, 'w', encoding="utf-8") as f:
                 f.write(content)
-                f.close()
+
+        # Handle directory structure if there is only one subdirectory
         if len(os.listdir(base_dir)) == 1:
             base_dir = base_dir + os.listdir(base_dir)[0] + "/"
+
         return base_dir
 
     def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
@@ -324,8 +343,8 @@ class JudgeController:
                     auto_parameter_save_dict[project_id] = parameters
                     if type(self.parameter_answer_save) == str:
                         self.parameter_answer_save = open(self.parameter_answer_save
-                             + "/{0}-ParameterAnswerSave.json".format(self.initiate_time),
-                            "w", encoding="utf-8")
+                                                          + "/{0}-ParameterAnswerSave.json".format(self.initiate_time),
+                                                          "w", encoding="utf-8")
                     self.parameter_answer_save.seek(0)
                     self.parameter_answer_save.truncate(0)
                     self.parameter_answer_save.write(json.dumps(auto_parameter_save_dict))
