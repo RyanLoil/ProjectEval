@@ -1,0 +1,7 @@
+Django
+Markdown
+matplotlib
+openai
+pyperclip
+qrcode
+selenium
