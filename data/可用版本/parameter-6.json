@@ -1,0 +1,182 @@
+{
+  "6": {
+    "Home": {
+      "View Dashboard": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "navigate_dashboard_id",
+          "answer": "dashboard-link"
+        }
+      ],
+      "Navigate to Todo Lists": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "navigate_todo_lists_id",
+          "answer": "navigate-todo-lists"
+        }
+      ]
+    },
+    "Todo List": {
+      "Create New List": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/todos/"
+        },
+        {
+          "name": "list_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "create_button_id",
+          "answer": "submit"
+        }
+      ],
+      "View Tasks": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/todos/"
+        },
+        {
+          "name": "todo_list_selector_class_name",
+          "answer": "todo-list-selector"
+        }
+      ]
+    },
+    "Task": {
+      "Add New Task": [
+        {
+          "name": "task_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "add_button_id",
+          "answer": "submit"
+        }
+      ],
+      "Edit Task": [
+        {
+          "name": "task_selector_class",
+          "answer": "edit-todo-item"
+        },
+        {
+          "name": "edit_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "save_button_id",
+          "answer": "submit"
+        }
+      ],
+      "Mark Task as Completed": [
+        {
+          "name": "complete_button_class",
+          "answer": "complete-todo-item"
+        }
+      ],
+      "Delete Task": [
+        {
+          "name": "task_selector_class",
+          "answer": "delete-todo-item"
+        },
+        {
+          "name": "delete_button_id",
+          "answer": "delete-todo-item"
+        }
+      ],
+      "Add New Task 2": [
+        {
+          "name": "task_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "add_button_id",
+          "answer": "submit"
+        }
+      ],
+      "Add New Task 3": [
+        {
+          "name": "task_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "add_button_id",
+          "answer": "submit"
+        }
+      ],
+      "View Task 2": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/todos/view_task/1/"
+        },
+        {
+          "name": "task_class",
+          "answer": "task"
+        }
+      ],
+      "Mark Task as Completed 2": [
+        {
+          "name": "complete_button_class",
+          "answer": "complete-todo-item"
+        }
+      ]
+    },
+    "Analysis": {
+      "View Task Completion Chart": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/analysis/"
+        },
+        {
+          "name": "chart_id",
+          "answer": "taskCompletionChart"
+        }
+      ],
+      "View Task Distribution Chart": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/analysis/"
+        },
+        {
+          "name": "chart_id",
+          "answer": "taskDistributionChart"
+        }
+      ]
+    },
+    "Todo List 2": {
+      "Edit List": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/todos/"
+        },
+        {
+          "name": "edit_button_xpath",
+          "answer": "//li[contains(text(),'New List')]/a/button[contains(@class,'todo-list-edit')]"
+        },
+        {
+          "name": "list_input_box_id",
+          "answer": "title"
+        },
+        {
+          "name": "save_button_id",
+          "answer": "submit"
+        }
+      ],
+      "Delete List": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/todos/"
+        },
+        {
+          "name": "delete_button_xpath",
+          "answer": "//li[contains(text(),'Edited List')]/a/button[contains(@class,'todo-list-delete')]"
+        }
+      ]
+    }
+  }
+}

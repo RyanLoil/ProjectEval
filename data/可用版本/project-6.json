@@ -1,0 +1,348 @@
+[
+    {
+        "project_id": "6",
+        "project_type": "website",
+        "nl_prompt": "Create a website for a Todo application, additional chart for analysis will be better.",
+        "framework_technical_stack": [
+            {
+                "language": "Python",
+                "technical_stack": "Django"
+            }
+        ],
+        "nl_checklist": [
+            {
+                "page": "Home",
+                "required": true,
+                "function": [
+                    {
+                        "function": "View Dashboard",
+                        "description": "Displays an overview of all Todo lists and tasks",
+                        "required": true
+                    },
+                    {
+                        "function": "Navigate to Todo Lists",
+                        "description": "Provides navigation to different Todo lists",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Todo List",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Create New List",
+                        "description": "Allows users to create a new Todo list",
+                        "required": true
+                    },
+                    {
+                        "function": "View Tasks",
+                        "description": "Displays all tasks under a selected list",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Task",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Add New Task",
+                        "description": "Allows users to add a new task to a Todo list",
+                        "required": true
+                    },
+                    {
+                        "function": "Edit Task",
+                        "description": "Enables users to edit an existing task",
+                        "required": true
+                    },
+                    {
+                        "function": "Delete Task",
+                        "description": "Enables users to delete an existing task",
+                        "required": true
+                    },
+                    {
+                        "function": "Mark Task as Completed",
+                        "description": "Allows users to mark a task as completed",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Analysis",
+                "required": false,
+                "function": [
+                    {
+                        "function": "View Task Completion Chart",
+                        "description": "Displays a chart showing the completion status of tasks",
+                        "required": false
+                    },
+                    {
+                        "function": "View Task Distribution Chart",
+                        "description": "Displays a chart showing the distribution of tasks across different lists",
+                        "required": false
+                    }
+                ]
+            }
+        ],
+        "testcode": [
+            {
+                "page": "Home",
+                "function": [
+                    {
+                        "function": "View Dashboard",
+                        "test": "def test_view_dashboard(driver, test_url, navigate_dashboard_id):\r\n\tdriver.get(test_url)\r\n\tnavigate_to_dashboard = driver.find_element(By.ID, navigate_dashboard_id)\r\n\tassert navigate_to_dashboard.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "navigate_dashboard_id",
+                                "description": "the element id that navigate to the dashboard"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Navigate to Todo Lists",
+                        "test": "def test_navigate_to_todo_lists(driver, test_url, navigate_todo_lists_id):\r\n\tdriver.get(test_url)\r\n\tnavigate_button = driver.find_element(By.ID, navigate_todo_lists_id)\r\n\tnavigate_button.click()\r\n\tassert 'Todo' in driver.title",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "navigate_todo_lists_id",
+                                "description": "the element id that navigate to the todo lists"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Todo List",
+                "function": [
+                    {
+                        "function": "Create New List",
+                        "test": "def test_create_new_list(driver, test_url, list_input_box_id, create_button_id):\r\n\tdriver.get(test_url)\r\n\tlist_input_box = driver.find_element(By.ID,list_input_box_id)\r\n\tlist_input_box.send_keys('New List')\r\n\tcreate_button = driver.find_element(By.ID,create_button_id)\r\n\tcreate_button.click()\r\n\tnew_list = driver.find_element(By.XPATH,(\"//li[contains(text(),'New List')]\"))\r\n\tassert new_list.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "list_input_box_id",
+                                "description": "the input box component id for the new list name"
+                            },
+                            {
+                                "name": "create_button_id",
+                                "description": "the id for the create button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "View Tasks",
+                        "test": "def test_view_tasks(driver, test_url, todo_list_selector_class_name):\r\n\tdriver.get(test_url)\r\n\ttodo_list_selector = driver.find_element(By.CLASS_NAME, todo_list_selector_class_name)\r\n\ttodo_list_selector.click()\r\n\ttime.sleep(0.5)\r\n\tassert 'New List' in driver.title",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "todo_list_selector_class_name",
+                                "description": "the class name for a todo list selector"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Task",
+                "function": [
+                    {
+                        "function": "Add New Task",
+                        "test": "def test_add_new_task(driver, task_input_box_id, add_button_id):\r\n\ttask_input_box = driver.find_element(By.ID,task_input_box_id)\r\n\ttask_input_box.send_keys('New Task')\r\n\tadd_button = driver.find_element(By.ID,add_button_id)\r\n\tadd_button.click()\r\n\tnew_task = driver.find_element(By.XPATH,(\"//li[contains(text(),'New Task')]\"))\r\n\tassert new_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "task_input_box_id",
+                                "description": "the input box component id for the new task name"
+                            },
+                            {
+                                "name": "add_button_id",
+                                "description": "the id for the add button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Edit Task",
+                        "test": "def test_edit_task(driver, task_selector_class, edit_input_box_id, save_button_id):\r\n\ttask_selector = driver.find_elements(By.CLASS_NAME, task_selector_class)[0]\r\n\ttask_selector.click()\r\n\tedit_input_box = driver.find_element(By.ID,edit_input_box_id)\r\n\tedit_input_box.clear()\r\n\tedit_input_box.send_keys('Edited Task')\r\n\tsave_button = driver.find_element(By.ID,save_button_id)\r\n\tsave_button.click()\r\n\tedited_task = driver.find_element(By.XPATH,(\"//li[contains(text(),'Edited Task')]\"))\r\n\tassert edited_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "task_selector_class",
+                                "description": "the class for selecting the task to be edited"
+                            },
+                            {
+                                "name": "edit_input_box_id",
+                                "description": "the input box component id for editing the task name"
+                            },
+                            {
+                                "name": "save_button_id",
+                                "description": "the id for the save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Mark Task as Completed",
+                        "test": "def test_mark_task_as_completed(driver, complete_button_class):\r\n\tcomplete_button = driver.find_elements(By.CLASS_NAME,complete_button_class)[0]\r\n\tcomplete_button.click()\r\n\tcompleted_task = driver.find_element(By.XPATH, (\"//li[contains(@class, 'completed') and contains(., 'Edited Task')]\"))\r\n\tassert completed_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "complete_button_class",
+                                "description": "the class for the complete button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete Task",
+                        "test": "def test_delete_task(driver, task_selector_class, delete_button_id):\r\n\tdelete_button = driver.find_elements(By.CLASS_NAME,task_selector_class)[0]\r\n\tdelete_button.click()\r\n\tdeleted_task = driver.find_elements(By.XPATH, (\"//li[contains(text(),'Edited Task')]\"))\r\n\tassert len(deleted_task) == 0",
+                        "parameter": [
+                            {
+                                "name": "task_selector_class",
+                                "description": "the class for selecting the task to be deleted"
+                            },
+                            {
+                                "name": "delete_button_id",
+                                "description": "the id for the delete button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add New Task 2",
+                        "test": "def test_add_new_task(driver, task_input_box_id, add_button_id):\r\n\ttask_input_box = driver.find_element(By.ID,task_input_box_id)\r\n\ttask_input_box.send_keys('New Task 2')\r\n\tadd_button = driver.find_element(By.ID,add_button_id)\r\n\tadd_button.click()\r\n\tnew_task = driver.find_element(By.XPATH,(\"//li[contains(text(),'New Task 2')]\"))\r\n\tassert new_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "task_input_box_id",
+                                "description": "the input box component id for the new task"
+                            },
+                            {
+                                "name": "add_button_id",
+                                "description": "the id for the add button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add New Task 3",
+                        "test": "def test_add_new_task(driver, task_input_box_id, add_button_id):\r\n\ttask_input_box = driver.find_element(By.ID,task_input_box_id)\r\n\ttask_input_box.send_keys('New Task 3')\r\n\tadd_button = driver.find_element(By.ID,add_button_id)\r\n\tadd_button.click()\r\n\tnew_task = driver.find_element(By.XPATH,(\"//li[contains(text(),'New Task 3')]\"))\r\n\tassert new_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "task_input_box_id",
+                                "description": "the input box component id for the new task"
+                            },
+                            {
+                                "name": "add_button_id",
+                                "description": "the id for the add button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "View Task 2",
+                        "test": "def test_view_tasks(driver, test_url, task_class):\r\n\tdriver.get(test_url)\r\n\ttasks = driver.find_elements(By.CLASS_NAME, task_class)\r\n\tassert len(tasks) > 0",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "task_class",
+                                "description": "the class of task element"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Mark Task as Completed 2",
+                        "test": "def test_mark_task_as_completed(driver, complete_button_class):\r\n\tcomplete_button = driver.find_elements(By.CLASS_NAME,complete_button_class)[0]\r\n\tcomplete_button.click()\r\n\tcompleted_task = driver.find_element(By.XPATH, (\"//li[contains(@class, 'completed') and contains(., 'New Task 2')]\"))\r\n\tassert completed_task.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "complete_button_class",
+                                "description": "the class for selecting the task to be marked as completed"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Analysis",
+                "function": [
+                    {
+                        "function": "View Task Completion Chart",
+                        "test": "def test_view_task_completion_chart(driver, test_url, chart_id):\n\tdriver.get(test_url)\n\tchart = driver.find_element(By.ID,chart_id)\n\tassert chart.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "chart_id",
+                                "description": "the id for the task completion chart"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "View Task Distribution Chart",
+                        "test": "def test_view_task_distribution_chart(driver, test_url, chart_id):\n\tdriver.get(test_url)\n\tchart = driver.find_element(By.ID,chart_id)\n\tassert chart.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "chart_id",
+                                "description": "the id for the task distribution chart"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Todo List 2",
+                "function": [
+                    {
+                        "function": "Edit List",
+                        "test": "def test_edit_list(driver, test_url, edit_button_xpath, list_input_box_id, save_button_id):\r\n\tdriver.get(test_url)\r\n\tlist_item = driver.find_element(By.XPATH, (\"//li[contains(text(),'New List')]\"))\r\n\tedit_button = driver.find_element(By.XPATH, edit_button_xpath)\r\n\tedit_button.click()\r\n\tlist_input_box = driver.find_element(By.ID, list_input_box_id)\r\n\tlist_input_box.clear()\r\n\tlist_input_box.send_keys('Edited List')\r\n\tsave_button = driver.find_element(By.ID, save_button_id)\r\n\tsave_button.click()\r\n\tedited_list = driver.find_element(By.XPATH, \"//li[contains(text(),'Edited List')]\")\r\n\tassert edited_list.is_displayed()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "edit_button_xpath",
+                                "description": "the XPath for the edit button, hint: the existed todolist's name is \"New List\""
+                            },
+                            {
+                                "name": "list_input_box_id",
+                                "description": "the id for the list input box"
+                            },
+                            {
+                                "name": "save_button_id",
+                                "description": "the id for the save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete List",
+                        "test": "def test_delete_list(driver, test_url, delete_button_xpath):\r\n\tdriver.get(test_url)\r\n\tdelete_button = driver.find_element(By.XPATH, delete_button_xpath)\r\n\tdelete_button.click()\r\n\t# alert = driver.switch_to.alert\r\n\t# alert.accept()  # confirm deletion\r\n\tdeleted_list = driver.find_elements(By.XPATH, delete_button_xpath)\r\n\tassert len(deleted_list) == 0",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "delete_button_xpath",
+                                "description": "the XPath for the delete button, hint: the existed todolist's name is \"Edited List\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
