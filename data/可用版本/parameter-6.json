@@ -127,6 +127,18 @@
       ]
     },
     "Analysis": {
+      "Return to Todolists": [
+        {
+          "name": "return_link_id",
+          "answer": "return"
+        }
+      ],
+      "Return to Homepage": [
+        {
+          "name": "return_link_id",
+          "answer": "return"
+        }
+      ],
       "View Task Completion Chart": [
         {
           "name": "test_url",
@@ -145,6 +157,12 @@
         {
           "name": "chart_id",
           "answer": "taskDistributionChart"
+        }
+      ],
+      "Return to Homepage 2": [
+        {
+          "name": "return_link_id",
+          "answer": "return"
         }
       ]
     },

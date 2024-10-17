@@ -273,6 +273,26 @@
                 "page": "Analysis",
                 "function": [
                     {
+                        "function": "Return to Todolists",
+                        "test": "def return_to_todolists(driver, return_link_id):\r\n\treturn_link = driver.find_element(By.ID, return_link_id)\r\n\treturn_link.click()\r\n\tassert 'Todo' in driver.title",
+                        "parameter": [
+                            {
+                                "name": "return_link_id",
+                                "description": "the element id in the tasks page that can be clicked to return to todolists page."
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Return to Homepage",
+                        "test": "def return_to_homepage(driver, return_link_id):\r\n\treturn_link = driver.find_element(By.ID, return_link_id)\r\n\treturn_link.click()\r\n\tassert 'Home' in driver.title",
+                        "parameter": [
+                            {
+                                "name": "return_link_id",
+                                "description": "the element id in the todolists page that can be clicked to return to homepage."
+                            }
+                        ]
+                    },
+                    {
                         "function": "View Task Completion Chart",
                         "test": "def test_view_task_completion_chart(driver, test_url, chart_id):\n\tdriver.get(test_url)\n\tchart = driver.find_element(By.ID,chart_id)\n\tassert chart.is_displayed()",
                         "parameter": [
@@ -297,6 +317,16 @@
                             {
                                 "name": "chart_id",
                                 "description": "the id for the task distribution chart"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Return to Homepage 2",
+                        "test": "def return_to_homepage(driver, return_link_id):\r\n\treturn_link = driver.find_element(By.ID, return_link_id)\r\n\treturn_link.click()\r\n\tassert 'Home' in driver.title",
+                        "parameter": [
+                            {
+                                "name": "return_link_id",
+                                "description": "the element id in the analysis page that can be clicked to return to homepage."
                             }
                         ]
                     }
