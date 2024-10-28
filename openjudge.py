@@ -1,3 +1,4 @@
+import csv
 import json
 import logging
 import os
@@ -7,6 +8,7 @@ import subprocess
 import sys
 import time
 import traceback
+import threading
 
 from time import sleep
 
@@ -16,6 +18,7 @@ from selenium.webdriver.support import ui
 from selenium.webdriver.common.by import By
 from datetime import datetime
 
+import utils
 from config import ENCODE_FORMAT
 from llm import LLMTest
 
@@ -24,6 +27,12 @@ DRIVER_DICT = {
     'edge': 'webdriver.Edge()',
     'firefox': 'webdriver.Firefox()',
 }
+
+selenium_util_function = [
+    """
+    
+    """,
+]
 
 
 class BaseJudge:
@@ -115,6 +124,7 @@ class WebsiteJudge(BaseJudge):
         try:
             self.logger.info(f"Webdriver {browser_type} Initializing")
             self.driver = eval(DRIVER_DICT[browser_type])
+            self.driver.set_page_load_timeout(3)
         except Exception as e:
             self.logger.critical(e)
 
@@ -155,6 +165,14 @@ class WebsiteJudge(BaseJudge):
             self.project_path = project_path
             self.process = None
             self.logger = logger
+            self.stdout_file = open("log/{0}-Project-Normal.log".format(
+                datetime.now().strftime("%Y%m%d-%H%M%S")), "a", encoding="utf-8")
+            self.stderr_file = open("log/{0}-Project-Error.log".format(
+                datetime.now().strftime("%Y%m%d-%H%M%S")), "a", encoding="utf-8")
+            self.project_id = project_path.split("/")[-1] if project_path.split("/")[-1] else project_path.split("\\")[
+                -1]
+            self.stdout_file.write("=============Project {}===============".format(self.project_id))
+            self.stderr_file.write("=============Project {}===============".format(self.project_id))
 
         def get_activate_script(self):
             activate_script = os.path.join(self.venv_path, 'Scripts', 'python.exe')
@@ -176,9 +194,12 @@ class WebsiteJudge(BaseJudge):
                 process.terminate()
 
         def start(self):
+
             self.process = subprocess.Popen([self.get_activate_script(), "manage.py", "runserver"],
                                             cwd=self.project_path,
-                                            shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                            shell=True,
+                                            stdout=self.stdout_file, # PIPE会被阻塞如果日志太多
+                                            stderr=self.stderr_file, # PIPE会被阻塞如果日志太多
                                             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)  # 必须要提供CREATE_NEW_PROCESS_GROUP，否则会杀掉所有进程
             # err = self.process.stderr.read().decode(ENCODE_FORMAT)
             # if err:
@@ -190,6 +211,8 @@ class WebsiteJudge(BaseJudge):
                 self.process.send_signal(signal.CTRL_BREAK_EVENT)  # 唯一的办法解决所有问题
             else:
                 self.logger.info("Django server is not running.")
+            self.stdout_file.close()
+            self.stderr_file.close()
 
     WEBSITE_SERVER_MANAGER = {
         'Django': DjangoServer,
@@ -234,25 +257,42 @@ class WebsiteJudge(BaseJudge):
         self.driver.close()
 
     def check(self, test_no, testcode, *args, **kwargs):
+        def timeout():
+            self.driver.execute_script("window.stop()")
+            raise TimeoutError("Test execution exceeded the time limit.")
+
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
             namespace = {"By": By(), "time": time, "pyperclip": pyperclip, "string": string,
-                         'ui': ui,  'os':os}  # TODO Namespace中其它库文件将会是需要处理的问题
-            # TODO 超时终止
+                         'ui': ui, 'os': os, 'csv': csv, 'utils': utils
+                         }  # TODO Namespace中其它库文件将会是需要处理的问题
+
             exec(testcode, namespace)
             function_name = [name for name, value in namespace.items() if callable(value)][0]
             test = namespace[function_name]
-            result = test(self.driver, *args, **kwargs)
+            try:
+                timer = threading.Timer(3, timeout)  # Set timeout limit (in seconds)
+                timer.start()
+                result = test(self.driver, *args, **kwargs)
+            except AssertionError as e:
+                result = e
+                self.logger.warning(f"Assertion Error: {str(e)}\nTestcase failed.")
+            except TimeoutError as e:
+                result = "time out"
+                self.logger.warning(f"Timeout Error: {str(e)}")
+            finally:
+                timer.cancel()
             if result is not None:
                 # Test code will return nothing unless something goes wrong.
                 raise Exception(str(test_no) + ': Wrong Answer of ' + str(result))
-            sleep(0.1)
+            sleep(0.3)
         except Exception as e:
             self.logger.warning(str(e))
             if not str(e).strip():
                 self.logger.warning(traceback.format_exc())
             return False
+
         self.logger.info(f"{test_no} passed.")
         return True
 
