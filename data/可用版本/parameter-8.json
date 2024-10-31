@@ -1,0 +1,197 @@
+{
+  "8": {
+    "Home": {
+      "View Current Date": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "current_date_id",
+          "answer": "today"
+        }
+      ],
+      "Quick Access to Calendar": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "calendar_id",
+          "answer": "calendar"
+        }
+      ]
+    },
+    "Calendar": {
+      "View Calendar": [],
+      "Add Event": [
+        {
+          "name": "event_input_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "add_event_id",
+          "answer": "add_event"
+        },
+        {
+          "name": "description_input_id",
+          "answer": "id_description"
+        },
+        {
+          "name": "datetime_id",
+          "answer": "id_datetime"
+        },
+        {
+          "name": "save_event_id",
+          "answer": "submit"
+        }
+      ],
+      "Switch Month": [
+        {
+          "name": "year_id",
+          "answer": "year"
+        },
+        {
+          "name": "month_id",
+          "answer": "month"
+        },
+        {
+          "name": "switch_button_id",
+          "answer": "switch_button"
+        }
+      ],
+      "Add Event Page Back Home": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/calendar/add-event/"
+        },
+        {
+          "name": "back_button_id",
+          "answer": "home"
+        }
+      ]
+    },
+    "Event Details": {
+      "List All Events": [
+        {
+          "name": "list_link_id",
+          "answer": "list_events"
+        }
+      ],
+      "Edit Event": [
+        {
+          "name": "edit_button_class_name",
+          "answer": "edit_event"
+        },
+        {
+          "name": "event_input_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "description_input_id",
+          "answer": "id_description"
+        },
+        {
+          "name": "datetime_id",
+          "answer": "id_datetime"
+        },
+        {
+          "name": "save_event_id",
+          "answer": "submit"
+        }
+      ],
+      "Delete Event": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/calendar/view-events/"
+        },
+        {
+          "name": "delete_button_class_name",
+          "answer": "delete_event"
+        }
+      ],
+      "Search Events": [
+        {
+          "name": "search_input_id",
+          "answer": "search_input"
+        },
+        {
+          "name": "search_button_id",
+          "answer": "search_button"
+        }
+      ],
+      "View Event Details 1": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/calendar/view-event-details/1/"
+        },
+        {
+          "name": "event_detail_button_class_name",
+          "answer": "event_detail_link"
+        }
+      ],
+      "View Event Details 2": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "event_detail_button_class_name",
+          "answer": "details-link"
+        }
+      ],
+      "Event Detail Page Back": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/calendar/view-event-details/1/"
+        },
+        {
+          "name": "back_button_id",
+          "answer": "back_button"
+        }
+      ]
+    },
+    "Help": {
+      "FAQ": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "faq_link_id",
+          "answer": "faq"
+        },
+        {
+          "name": "faq_id",
+          "answer": "faq"
+        }
+      ],
+      "FAQs Back Home": [
+        {
+          "name": "back_button_id",
+          "answer": "back_button"
+        }
+      ],
+      "User Guide": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "user_guide_link_id",
+          "answer": "user_guide"
+        },
+        {
+          "name": "user_guide_id",
+          "answer": "user_guide"
+        }
+      ],
+      "User Guide Back Home Test": [
+        {
+          "name": "back_button_id",
+          "answer": "back_button"
+        }
+      ]
+    }
+  }
+}

@@ -16,7 +16,7 @@ def get_files(directory):
 
         # Add files to the list
         for file in files:
-            if file.split('.')[-1] == 'sqlite3':
+            if file.split('.')[-1] in {'sqlite3', "log"}:
                 continue
             file_path = os.path.join(root, file)
             files_list.append(file_path)
@@ -85,10 +85,10 @@ def save_json(data, output_file):
 
 
 if __name__ == "__main__":
-    all_project_directory = "test/20241017-人工修正/"  # Set your project directory here
-    output_file = "data/操作版本/answer-7.json"
+    all_project_directory = "test/20241030-人工修正/"  # Set your project directory here
+    output_file = "data/操作版本/answer-8.json"
     json_data = {}
-    index = 7
+    index = 8
     for directory in os.listdir(all_project_directory):
         if int(directory) < index:
             continue

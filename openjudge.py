@@ -1,3 +1,4 @@
+import calendar
 import csv
 import json
 import logging
@@ -13,6 +14,7 @@ import threading
 from time import sleep
 
 import pyperclip
+import selenium
 from selenium import webdriver
 from selenium.webdriver.support import ui
 from selenium.webdriver.common.by import By
@@ -265,11 +267,12 @@ class WebsiteJudge(BaseJudge):
         super().check(test_no, testcode, *args, **kwargs)
         try:
             namespace = {"By": By(), "time": time, "pyperclip": pyperclip, "string": string,
-                         'ui': ui, 'os': os, 'csv': csv, 'utils': utils
+                         'ui': ui, 'os': os, 'csv': csv, 'utils': utils, 'datetime': datetime,
+                         'calendar': calendar
                          }  # TODO Namespace中其它库文件将会是需要处理的问题
-
+            callable_default_package = {name for name in namespace.keys()}
             exec(testcode, namespace)
-            function_name = [name for name, value in namespace.items() if callable(value)][0]
+            function_name = [name for name, value in namespace.items() if callable(value) and name not in callable_default_package][0]
             test = namespace[function_name]
             try:
                 timer = threading.Timer(3, timeout)  # Set timeout limit (in seconds)
