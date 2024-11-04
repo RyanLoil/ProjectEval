@@ -85,10 +85,10 @@ def save_json(data, output_file):
 
 
 if __name__ == "__main__":
-    all_project_directory = "test/20241030-人工修正/"  # Set your project directory here
-    output_file = "data/操作版本/answer-8.json"
+    all_project_directory = "test/20241101-人工修正/"  # Set your project directory here
+    output_file = "data/操作版本/answer-9.json"
     json_data = {}
-    index = 8
+    index = 9
     for directory in os.listdir(all_project_directory):
         if int(directory) < index:
             continue

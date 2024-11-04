@@ -1,0 +1,79 @@
+{
+    "9": [
+        {
+            "file": "manage.py",
+            "path": "manage.py",
+            "code": "import os\nimport sys\n\nif __name__ == \"__main__\":\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"example_project.settings\")\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n"
+        },
+        {
+            "file": "forms.py",
+            "path": "example_app/forms.py",
+            "code": "from django import forms\nfrom .models import ContactSales, SupportRequest\n\nclass ContactForm(forms.ModelForm):\n    class Meta:\n        model = ContactSales\n        fields = ['name', 'email', 'company', 'message']\n\n\nclass SupportForm(forms.ModelForm):\n    class Meta:\n        model = SupportRequest\n        fields = ['name', 'email', 'issue']"
+        },
+        {
+            "file": "models.py",
+            "path": "example_app/models.py",
+            "code": "from django.db import models\n\n\nclass ContactSales(models.Model):\n    name = models.CharField(max_length=100)\n    email = models.EmailField()\n    company = models.CharField(max_length=100, blank=True, null=True)\n    message = models.TextField()\n    created_at = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return f\"Contact Sales Inquiry from {self.name}\"\n\n\nclass SupportRequest(models.Model):\n    name = models.CharField(max_length=100)\n    email = models.EmailField()\n    issue = models.TextField()\n    created_at = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return f\"{self.name} - {self.email}\"\n"
+        },
+        {
+            "file": "urls.py",
+            "path": "example_app/urls.py",
+            "code": "from django.urls import path\nfrom .views import HomePageView, FeaturesPageView, PricingPageView, SupportView, AboutUsPageView\n\nurlpatterns = [\n    path('', HomePageView.as_view(), name='home'),\n    path('features/', FeaturesPageView.as_view(), name='features'),\n    path('pricing/', PricingPageView.as_view(), name='pricing'),\n    path('support/', SupportView.as_view(), name='support'),\n    path('about/', AboutUsPageView.as_view(), name='about'),\n]\n"
+        },
+        {
+            "file": "views.py",
+            "path": "example_app/views.py",
+            "code": "from django.contrib import messages\nfrom django.views.generic import TemplateView, FormView\nfrom .forms import ContactForm, SupportForm\nfrom .models import ContactSales, SupportRequest\n\n\nclass HomePageView(TemplateView):\n    template_name = 'home.html'\n\n\nclass FeaturesPageView(TemplateView):\n    template_name = 'features.html'\n\n\nclass PricingPageView(FormView):\n    template_name = 'pricing.html'\n    form_class = ContactForm\n    success_url = '/pricing/'\n\n    def form_valid(self, form):\n        form.save()\n        messages.success(self.request, \"Thank you for reaching out! We\u2019ll get back to you soon.\")\n        return super().form_valid(form)\n\n    def get_context_data(self, **kwargs):\n        context = super().get_context_data(**kwargs)\n        context['previous_requests'] = ContactSales.objects.all()\n        return context\n\n\nclass SupportView(FormView):\n    template_name = 'support.html'\n    form_class = SupportForm\n    success_url = '/support/'  # Redirect after form submission\n\n    def form_valid(self, form):\n        # Save the form data to the SupportRequest model\n        form.save()\n\n        # Display a success message to the user\n        messages.success(self.request, \"Your support request has been submitted successfully.\")\n\n        return super().form_valid(form)\n\n    def get_context_data(self, **kwargs):\n        context = super().get_context_data(**kwargs)\n        # Retrieve all previous support requests and add them to the context\n        context['previous_support_requests'] = SupportRequest.objects.all()\n        return context\n\n\nclass AboutUsPageView(TemplateView):\n    template_name = 'about.html'\n"
+        },
+        {
+            "file": "__init__.py",
+            "path": "example_app/migrations/__init__.py",
+            "code": ""
+        },
+        {
+            "file": "about.html",
+            "path": "example_app/templates/about.html",
+            "code": "<html>\n<head><title>About Us</title></head>\n<body>\n    <div id=\"about_us\">\n        <h1>About Us</h1>\n        <p>Learn more about our team and company.</p>\n    </div>\n    <a href=\"{% url 'home' %}\" id=\"home\">Home</a>\n</body>\n</html>\n"
+        },
+        {
+            "file": "features.html",
+            "path": "example_app/templates/features.html",
+            "code": "<html>\n<head><title>Features</title></head>\n<body>\n    <div id=\"features\">\n        <h1>Features of AI Chatbot</h1>\n        <p>Advanced NLP, Contextual Understanding, Multilingual Support, Integration Capability</p>\n    </div>\n    <a href=\"{% url 'home' %}\" id=\"home\">Home</a>\n</body>\n</html>\n"
+        },
+        {
+            "file": "home.html",
+            "path": "example_app/templates/home.html",
+            "code": "<html>\n<head><title>Home</title></head>\n<body>\n    <h1>Welcome to the AI Chatbot!</h1>\n    <p id=\"introduction\">Our AI Chatbot offers incredible capabilities.</p>\n    {% if messages %}\n        <ul class=\"messages\">\n            {% for message in messages %}\n                <li{% if message.tags %} class=\"{{ message.tags }}\"{% endif %}>{{ message }}</li>\n            {% endfor %}\n        </ul>\n    {% endif %}\n    <nav>\n        <ul>\n            <li><a href=\"{% url 'features' %}\" id=\"features\">Features</a></li>\n            <li><a href=\"{% url 'pricing' %}\" id=\"pricing\">Pricing</a></li>\n            <li><a href=\"{% url 'support' %}\" id=\"support\">Support</a></li>\n            <li><a href=\"{% url 'about' %}\" id=\"about_us\">About Us</a></li>\n        </ul>\n    </nav>\n</body>\n</html>\n"
+        },
+        {
+            "file": "pricing.html",
+            "path": "example_app/templates/pricing.html",
+            "code": "<html>\n<head><title>Pricing</title></head>\n<body>\n    {% if messages %}\n    <ul class=\"messages\">\n        {% for message in messages %}\n        <li\n        {% if message.tags %} class=\"{{ message.tags }}\"{% endif %}>{{ message }}</li>\n        {% endfor %}\n    </ul>\n    {% endif %}\n    <div id=\"plans\">\n        <h1>Pricing Plans</h1>\n        <table border=\"1\">\n            <thead>\n            <tr>\n                <th>Plan</th>\n                <th>Price</th>\n                <th>Features</th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr>\n                <td>Free Plan</td>\n                <td>$0/month</td>\n                <td>\n                    <ul>\n                        <li>Access to basic features</li>\n                        <li>Community support</li>\n                        <li>Limited storage</li>\n                    </ul>\n                </td>\n            </tr>\n            <tr>\n                <td>Basic Plan</td>\n                <td>$9.99/month</td>\n                <td>\n                    <ul>\n                        <li>Access to all standard features</li>\n                        <li>Email support</li>\n                        <li>Increased storage</li>\n                    </ul>\n                </td>\n            </tr>\n            <tr>\n                <td>Pro Plan</td>\n                <td>$29.99/month</td>\n                <td>\n                    <ul>\n                        <li>Access to all features</li>\n                        <li>Priority support</li>\n                        <li>Unlimited storage</li>\n                        <li>Advanced analytics</li>\n                    </ul>\n                </td>\n            </tr>\n            </tbody>\n        </table>\n    </div>\n    <h1>Contact Sales</h1>\n    <form method=\"post\" id=\"form\">\n        {% csrf_token %}\n        {{ form.as_p }}\n        <button type=\"submit\" id=\"submit\">Submit</button>\n    </form>\n\n    <h2>Your Previous Requests</h2>\n    {% if previous_requests %}\n    <ul>\n        {% for request in previous_requests %}\n        <li>{{ request.name }} - {{ request.email }} - {{ request.message }} ({{ request.created_at }})</li>\n        {% endfor %}\n    </ul>\n    {% else %}\n    <p>No previous requests found.</p>\n    {% endif %}\n    <a href=\"{% url 'pricing' %}\" id=\"back\">Back</a>\n    <a href=\"{% url 'home' %}\" id=\"home\">Home</a>\n</body>\n</html>\n"
+        },
+        {
+            "file": "support.html",
+            "path": "example_app/templates/support.html",
+            "code": "<!-- templates/support.html -->\n<html>\n<head><title>Support</title></head>\n<body>\n    <h1>Support</h1>\n\n    {% if messages %}\n        <ul class=\"messages\">\n            {% for message in messages %}\n                <li{% if message.tags %} class=\"{{ message.tags }}\"{% endif %}>{{ message }}</li>\n            {% endfor %}\n        </ul>\n    {% endif %}\n\n    <!-- Support Form -->\n    <form method=\"post\" id=\"form\">\n        {% csrf_token %}\n        {{ form.as_p }}\n        <button type=\"submit\" id=\"submit\">Submit</button>\n    </form>\n\n    <!-- Frequently Asked Questions -->\n    <h2>Frequently Asked Questions (FAQ)</h2>\n    <div id=\"faq\">\n        <h3>1. How do I reset my password?</h3>\n        <p>To reset your password, go to the login page and click on \"Forgot Password\". Follow the instructions to reset your password via email.</p>\n\n        <h3>2. How can I update my account information?</h3>\n        <p>To update your account information, log in and navigate to your profile settings. From there, you can edit your details and save the changes.</p>\n\n        <h3>3. What should I do if I encounter an error?</h3>\n        <p>If you encounter an error, please try refreshing the page. If the problem persists, submit a support request with details of the issue, and our team will assist you.</p>\n\n        <h3>4. How do I contact customer support?</h3>\n        <p>You can use the support form above to reach out to our support team. Fill in your details, describe your issue, and we'll get back to you as soon as possible.</p>\n\n        <h3>5. Where can I find documentation on using this service?</h3>\n        <p>Our documentation is available on the Help page, which can be accessed from the main navigation. If you have specific questions, feel free to submit a support request.</p>\n    </div>\n\n    <!-- Previous Support Requests -->\n    <h2>Previous Support Requests</h2>\n    {% if previous_support_requests %}\n        <ul>\n            {% for request in previous_support_requests %}\n                <li>{{ request.name }} - {{ request.email }} - {{ request.issue }} ({{ request.created_at }})</li>\n            {% endfor %}\n        </ul>\n    {% else %}\n        <p>No previous support requests found.</p>\n    {% endif %}\n    <a href=\"{% url 'home' %}\" id=\"home\">Home</a>\n</body>\n</html>\n"
+        },
+        {
+            "file": "asgi.py",
+            "path": "example_project/asgi.py",
+            "code": "import os\n\nfrom django.core.asgi import get_asgi_application\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'example_project.settings')\n\napplication = get_asgi_application()\n"
+        },
+        {
+            "file": "settings.py",
+            "path": "example_project/settings.py",
+            "code": "import os\n\nBASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\nSECRET_KEY = 'your-secret-key'\nDEBUG = True\nALLOWED_HOSTS = []\n\nINSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'example_app',\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'example_project.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [os.path.join(BASE_DIR, 'templates')],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'example_project.wsgi.application'\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),\n    }\n}\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\n    },\n]\n\nLANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_L10N = True\nUSE_TZ = True\nSTATIC_URL = '/static/'\n"
+        },
+        {
+            "file": "urls.py",
+            "path": "example_project/urls.py",
+            "code": "from django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('', include(\"example_app.urls\")),\n]\n"
+        },
+        {
+            "file": "wsgi.py",
+            "path": "example_project/wsgi.py",
+            "code": "import os\n\nfrom django.core.wsgi import get_wsgi_application\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'example_project.settings')\n\napplication = get_wsgi_application()\n"
+        }
+    ]
+}

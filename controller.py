@@ -379,10 +379,11 @@ class JudgeController:
                         self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
                     else:
                         self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
-            project_score = pass_count / n
+            project_score = (pass_count+1) / (n+1) # 1 for runable
+            total_status['total'] += 1
             total_status['score'] += project_score
-            total_status['pass'] += pass_count
-            total_status['failed'] += n - pass_count
+            total_status['pass'] += (pass_count + 1)
+            total_status['failed'] += (n - pass_count)
             self.logger.info(f"Project id {project_id} scored {project_score}")
             judge.clean()
         self.logger.info("Finished. Report: {}".format(total_status))
