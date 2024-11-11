@@ -60,6 +60,7 @@ class BaseJudge:
             self.logger.addHandler(console)
 
         self.requirements = requirements
+        self.status = False
 
         # self.logger.info("Loading generation list...")
         # try:
@@ -239,6 +240,7 @@ class WebsiteJudge(BaseJudge):
             self.subprocess = WebsiteJudge.WEBSITE_SERVER_MANAGER[technical_stack](logger=self.logger, *args, **kwargs)
             self.subprocess.initiate_command(initiate_command_list)
             self.subprocess.start()
+            self.status = True
         except Exception as e:
             self.logger.critical(e)
             return False
@@ -257,6 +259,7 @@ class WebsiteJudge(BaseJudge):
         # self.website_project_process.close()
         self.subprocess.stop()
         self.driver.close()
+        self.status = False
 
     def check(self, test_no, testcode, *args, **kwargs):
         def timeout():

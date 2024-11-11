@@ -387,4 +387,6 @@ class JudgeController:
             self.logger.info(f"Project id {project_id} scored {project_score}")
             judge.clean()
         self.logger.info("Finished. Report: {}".format(total_status))
+        if judge.status:
+            judge.clean()
         return total_status, total_status['pass'] / total_status['total']
