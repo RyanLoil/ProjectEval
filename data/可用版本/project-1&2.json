@@ -386,12 +386,8 @@
                     },
                     {
                         "function": "Convert Button",
-                        "test": "def test_convert_button(driver, test_url, convert_button_id):\n\tdriver.get(test_url)\n\tconvert_button = driver.find_element(By.ID,convert_button_id)\n\tconvert_button.click()",
+                        "test": "def test_convert_button(driver, convert_button_id):\n\tconvert_button = driver.find_element(By.ID,convert_button_id)\n\tconvert_button.click()",
                         "parameter": [
-                            {
-                                "name": "test_url",
-                                "description": "the url for test"
-                            },
                             {
                                 "name": "convert_button_id",
                                 "description": "the convert button component id"

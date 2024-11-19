@@ -49,7 +49,8 @@ class BaseJudge:
         self.logger = logging.getLogger('Judge')
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-Judge.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+            self.logger.start_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+            handler = logging.FileHandler("log/{0}-Judge.log".format(self.logger.start_time))
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -168,13 +169,13 @@ class WebsiteJudge(BaseJudge):
             self.project_path = project_path
             self.process = None
             self.logger = logger
-            self.project_id = project_path.split("/")[-1] if project_path.split("/")[-1] else project_path.split("\\")[
-                -1]
-            self.stdout_file = open("log/{0}-Project-{1}-Normal.log".format(
-                datetime.now().strftime("%Y%m%d-%H"), self.project_id), "a", encoding="utf-8")
-            self.stderr_file = open("log/{0}-Project-{1}-Error.log".format(
-                datetime.now().strftime("%Y%m%d-%H"), self.project_id), "a", encoding="utf-8")
 
+            self.stdout_file = open("log/{0}-Project-Normal.log".format(
+                self.logger.start_time), "a", encoding="utf-8")
+            self.stderr_file = open("log/{0}-Project-Error.log".format(
+                self.logger.start_time), "a", encoding="utf-8")
+            self.project_id = project_path.split("/")[-2] if project_path.split("/")[-2].isdigit() else project_path.split("\\")[
+                -2]
             self.stdout_file.write("=============Project {}===============".format(self.project_id))
             self.stderr_file.write("=============Project {}===============".format(self.project_id))
 

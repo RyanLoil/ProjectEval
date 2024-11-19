@@ -171,10 +171,6 @@
       ],
       "Convert Button": [
         {
-          "name": "test_url",
-          "answer": "http://localhost:8000/"
-        },
-        {
           "name": "convert_button_id",
           "answer": "submit"
         }
