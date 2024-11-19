@@ -168,12 +168,13 @@ class WebsiteJudge(BaseJudge):
             self.project_path = project_path
             self.process = None
             self.logger = logger
-            self.stdout_file = open("log/{0}-Project-Normal.log".format(
-                datetime.now().strftime("%Y%m%d-%H%M%S")), "a", encoding="utf-8")
-            self.stderr_file = open("log/{0}-Project-Error.log".format(
-                datetime.now().strftime("%Y%m%d-%H%M%S")), "a", encoding="utf-8")
             self.project_id = project_path.split("/")[-1] if project_path.split("/")[-1] else project_path.split("\\")[
                 -1]
+            self.stdout_file = open("log/{0}-Project-{1}-Normal.log".format(
+                datetime.now().strftime("%Y%m%d-%H"), self.project_id), "a", encoding="utf-8")
+            self.stderr_file = open("log/{0}-Project-{1}-Error.log".format(
+                datetime.now().strftime("%Y%m%d-%H"), self.project_id), "a", encoding="utf-8")
+
             self.stdout_file.write("=============Project {}===============".format(self.project_id))
             self.stderr_file.write("=============Project {}===============".format(self.project_id))
 

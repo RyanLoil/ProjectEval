@@ -3,7 +3,7 @@
 /.env
 /test/project_1/
 /tools.py
-/test.py
+/test_judge.py
 /chromedriver.exe
 /geckodriver.exe
 /msedgedriver.exe
@@ -14,3 +14,4 @@
 /NLPROMPT.csv
 /test/
 /project_files.json
+/test_answer.py
