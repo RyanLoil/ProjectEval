@@ -14,6 +14,7 @@ prompt = {
     "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files (including the essential files to run the project) to meet the requirement in JSON format of [{{"file":"answer.something","path":"somepath/somedir/answer.something", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
     "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the required parameters\' values of the django project for each test in the {parameter_required}. Return in Json format of [{{"page":"XXX", "function":"[{{"function":"XXX", "parameter": [{{"name":"XXX", "answer": "your_answer_parameter"}}, {{...}}, ...]}}, {{...}}, ...], {{...}}, ...] with NO other content and DO NOT CHANGE THE KEYS OF JSON. For example, the requested parameter name is \'test_url\' and the answer may be \'http://localhost:8000/\'',
     "generate_information": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environments have been created in root {project_root}, and projects and apps have been created, give the run commands, homepage\'s url and requirements of the {technical_stack} project, return in JSON format of {{"initiate_commands": [["manage.py","makemigrations"],["manage.py","migrate"],[XXX,YYY],...] ,"homepage":"http://XXX.YYY/", "requirements": [XXXX, YYYY]}} with NO other content.',
+    "generate_entry_point": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environments have been created in root {project_root}, find the entry file to run the project. ONLY return the path such as "example/run.py" with NO other content.'
 }
 
 
@@ -165,6 +166,18 @@ class GPTTest(LLMTest):
         :return:
         """
         message = prompt["generate_information"].format(answer=answer, technical_stack=technical_stack,
+                                                        project_root=project_root)
+        completion = self.send_message(message, "You are a professional computer programmer.")
+        return self.completion_to_dict(completion)
+
+    def get_start_file(self, answer, technical_stack, project_root):
+        """
+        GPT can automatically recognize the initial command, requirements and other necessary information.
+        :param answer:
+        :param techincal_stack:
+        :return:
+        """
+        message = prompt["generate_entry_point"].format(answer=answer, technical_stack=technical_stack,
                                                         project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)

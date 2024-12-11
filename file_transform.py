@@ -85,14 +85,15 @@ def save_json(data, output_file):
 
 
 if __name__ == "__main__":
-    all_project_directory = "test/20241105-人工修正/"  # Set your project directory here
-    output_file = "data/操作版本/answer-10.json"
+    all_project_directory = "test/console/"  # Set your project directory here
+    output_file = "data/操作版本/answer-console-17&18&19.json"
+    index = 17
     json_data = {}
-    index = 10
     for directory in os.listdir(all_project_directory):
         if int(directory) < index:
             continue
-        if len(os.listdir(os.path.join(all_project_directory, directory))) == 1:
+        if len(os.listdir(os.path.join(all_project_directory, directory))) == 1 and len(os.listdir(os.path.join(all_project_directory, directory))[0].split('.')) == 1:
+            # 防止套娃
             project_directory = os.path.join(all_project_directory, directory) + "/" + \
                                 os.listdir(os.path.join(all_project_directory, directory))[0]
         else:

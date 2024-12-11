@@ -7,13 +7,14 @@ import traceback
 from datetime import datetime
 
 from llm import GPTTest, LLMTest
-from openjudge import WebsiteJudge, BaseJudge
+from openjudge import WebsiteJudge, BatchJudge, BaseJudge
 from config import DEFAULT_BROWSER_TYPE
 
 PROJECT_TYPE = {
     'website': WebsiteJudge,
     'software': "",
-    'batch': "",
+    'batch': BatchJudge,
+    'console': BatchJudge,
 }
 
 
@@ -232,19 +233,20 @@ class JudgeController:
                 f.write(content)
 
         # Handle directory structure if there is only one subdirectory
-        if len(os.listdir(base_dir)) == 1:
+        if len(os.listdir(base_dir)) == 1 and len(os.listdir(base_dir)[0].split(".")) == 1:
             base_dir = base_dir + os.listdir(base_dir)[0] + "/"
 
         return base_dir
 
     def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
+                 project_id_list: list = None, start_file_list: dict = None,
                  ):
         '''
         :param initiate_command:
         :param requirements:
-        :param parameter_file_path:
         :param technical_stack:
-
+        :param project_id_list:
+        :param start_file:
         :return:
         '''
         total_status = {'total': 0, 'pass': 0, 'failed': 0, 'score': 0}
@@ -260,7 +262,7 @@ class JudgeController:
         else:
             exist_parameters = None
 
-        for project_id in self.question_dict:
+        for project_id in self.question_dict if project_id_list is None else project_id_list:
             self.logger.info("Evaluating project id {}".format(project_id))
             project = self.question_dict[project_id]
             # File Writter
@@ -271,17 +273,16 @@ class JudgeController:
             2.	Django初始命令的使用，可以使用默认的，也可以使用复用的
             3.	初始命令和requirements的询问也需要做保存
             '''
+            # Runner
+            if initiate_command and project_id in initiate_command:
+                project_initiate_command: [[]] = initiate_command[project_id]
+            else:
+                project_initiate_command = None
+            if requirements and project_id in requirements:
+                project_requirements = requirements[project_id]
+            else:
+                project_requirements = None
             if project['project_type'] == 'website':
-                # TODO 适配新类预加载
-                # Runner
-                if initiate_command and project_id in initiate_command:
-                    project_initiate_command: [[]] = initiate_command[project_id]
-                else:
-                    project_initiate_command = None
-                if requirements and project_id in requirements:
-                    project_requirements = requirements[project_id]
-                else:
-                    project_requirements = None
                 if not project_requirements or not project_initiate_command:
                     # TODO 适配新版本的Judge
                     # Request LLM for requirements and initiate command.
@@ -295,30 +296,56 @@ class JudgeController:
                         "initiate_commands"] if not project_initiate_command else project_initiate_command
                     project_requirements = competition[
                         "requirements"] if not project_requirements else project_requirements
-
-                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_requirements, DEFAULT_BROWSER_TYPE,
+                # TODO 适配新类预加载
+                # Judge Initial
+                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements, DEFAULT_BROWSER_TYPE,
                                                                          project_initiate_command,
                                                                          website_home="http://localhost:8000/")
 
                 # TODO 增加模拟数据载入，这个问题挺棘手的，因为严格意义上它不属于Project的一部分，属于测试工程师的工作，但是我们不能保证所有的框架都有自动化测试，因此可能需要要求LLM提前撰写模拟数据的导入脚本来完成此工作，这似乎是二次询问。
 
                 try:
-                    if not judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
+                    preprocess_result = judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
                                             self.question_dict[project_id]["framework_technical_stack"][0][
                                                 "technical_stack"], initiate_command_list=project_initiate_command,
-                                            project_path=project_root):
+                                            project_path=project_root)
+                    if not preprocess_result:
+                        self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
                         self.logger.info("{} scored 0.".format(project_id))
                         continue
                 except Exception as e:
-                    self.logger.warning("Preprocessing failed with {}".format(str(e)))
+                    self.logger.warning(f"Preprocessing failed with {str(e)}")
                     self.logger.info("{} scored 0.".format(project_id))
                     continue
             elif project['project_type'] == 'software':
                 # TODO software适配
                 pass
             else:
-                # TODO batch适配
-                pass
+                # Batch or Console
+                if not start_file_list or project_id not in start_file_list:
+                    start_file = self.model.get_start_file(self.answer_dict[project_id],
+                                                             self.question_dict[project_id][
+                                                                 "framework_technical_stack"][0][
+                                                                 "technical_stack"] if not technical_stack else
+                                                             technical_stack[project_id],
+                                                             project_root)
+                else:
+                    start_file = start_file_list[project_id]
+                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
+                                                                         project_root, )
+                try:
+                    preprocess_result = judge.preprocess(technical_stack[project_id]["batch"] if technical_stack else
+                                            self.question_dict[project_id]["framework_technical_stack"][0][
+                                                "technical_stack"], initiate_command_list=project_initiate_command,
+                                            project_path=project_root, start_file=start_file)
+                    if not preprocess_result:
+                        self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
+                        self.logger.info("{} scored 0.".format(project_id))
+                        continue
+                except Exception as e:
+                    self.logger.warning(f"Preprocessing failed with {str(e)}")
+                    self.logger.info("{} scored 0.".format(project_id))
+                    continue
             try:
                 if exist_parameters and project_id in exist_parameters:
                     # 历史Parameter清单复用
@@ -379,7 +406,7 @@ class JudgeController:
                         self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
                     else:
                         self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
-            project_score = (pass_count+1) / (n+1) # 1 for runable
+            project_score = (pass_count + 1) / (n + 1)  # 1 for runable
             total_status['total'] += 1
             total_status['score'] += project_score
             total_status['pass'] += (pass_count + 1)
@@ -389,4 +416,4 @@ class JudgeController:
         self.logger.info("Finished. Report: {}".format(total_status))
         if judge.status:
             judge.clean()
-        return total_status, total_status['pass'] / total_status['total']
+        return total_status, total_status['pass'] / (total_status['total'] if total_status['total'] > 0 else 1)

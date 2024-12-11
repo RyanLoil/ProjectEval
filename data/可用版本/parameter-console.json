@@ -1,0 +1,311 @@
+{
+  "16": {
+    "Input File Validation": {
+      "CheckFileExistence": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: The file 'Spring Semester Subjects.xlsx' does not exist."
+        }
+      ],
+      "ValidateHeaders": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: The input file is missing one or more required columns: ['#', 'Name', 'Weekday', 'Time']"
+        }
+      ],
+      "ValidateNullValue": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: There are missing values in the input data. Please fill in all required fields."
+        }
+      ],
+      "ValidateTimeColumn": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: Invalid time values found: [...]. Valid options are ['First period', 'Second period', 'Third period', 'Fourth period']."
+        }
+      ],
+      "ValidateDataIntegrity": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: Invalid weekday values found: [...]. Valid options are ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']."
+        }
+      ]
+    },
+    "Data Transformation and File Output": {
+      "EmptyFileRun": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        }
+      ],
+      "RunProject": [
+        {
+          "name": "entry",
+          "answer": "16-stdanswer.py"
+        }
+      ],
+      "OutputFileCheck": [
+      ]
+    }
+  },
+  "17": {
+    "Data Preparation": {
+      "CheckFileExistence": [
+        {
+          "name": "entry",
+          "answer": "17-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Error: The file 'Gamedata.xlsx' does not exist."
+        }
+      ],
+      "ValidateNullValue": [
+        {
+          "name": "entry",
+          "answer": "17-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Dataset contains missing or invalid values. Please clean the data and try again."
+        }
+      ],
+      "ValidateEmptyFile": [
+        {
+          "name": "entry",
+          "answer": "17-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Feature matrix or target vector is empty. Check your input data."
+        }
+      ]
+    },
+    "Model Creation and Output": {
+      "RunProject": [
+        {
+          "name": "entry",
+          "answer": "17-stdanswer.py"
+        }
+      ],
+      "OutputFileCheck": []
+    }
+  },
+  "18": {
+    "Main Menu": {
+      "Welcome Message": [
+        {
+          "name": "expected_output",
+          "answer": "\n=== BashCrawl Main Menu ===\n1. Start Game\n2. Help\n3. Quit\nChoose an option (1, 2, or 3):"
+        }
+      ],
+      "Help in Main Menu": [
+        {
+          "name": "help_in_main_menu_command",
+          "answer": "2"
+        },
+        {
+          "name": "expected_output",
+          "answer": "Welcome to the BashCrawl Main Menu!\nHere are your options:\n1. Start Game - Begin your adventure.\n2. Help - Learn how to play the game.\n3. Quit - Exit the program.\n"
+        }
+      ],
+      "Start Game": [
+        {
+          "name": "start_game_command",
+          "answer": "1"
+        },
+        {
+          "name": "expected_output",
+          "answer": "Welcome to BashCrawl!\nYour goal is to find the golden key and escape the cave.\nIn-game commands:\n- ls: List the contents of the current directory.\n- cd <dir>: Move into a directory.\n- inventory: Check what you're carrying.\n- help: Show this help message.\n- quit: Exit the game.\n\nYour goal is to find the golden key hidden in the cave and return to the root directory.\n\nCurrent location: \\"
+        }
+      ],
+      "Wrong Selection Check": [
+        {
+          "name": "expected_output",
+          "answer": "Invalid option. Please choose 1, 2, or 3.\nChoose an option (1, 2, or 3):"
+        }
+      ]
+    },
+    "Game": {
+      "Display Help": [
+        {
+          "name": "help_in_game",
+          "answer": "help"
+        },
+        {
+          "name": "expected_output",
+          "answer": "In-game commands:\n- ls: List the contents of the current directory.\n- cd <dir>: Move into a directory.\n- inventory: Check what you're carrying.\n- help: Show this help message.\n- quit: Exit the game.\n\nYour goal is to find the golden key hidden in the cave and return to the root directory.\n\nCurrent location: \\"
+        }
+      ],
+      "Look Around": [
+        {
+          "name": "expected_output",
+          "answer": "home\nforest\ncave\n\nCurrent location: \\"
+        }
+      ],
+      "Move Player": [
+        {
+          "name": "direction",
+          "answer": "home"
+        },
+        {
+          "name": "expected_output",
+          "answer": "You are now in \\home\n\nCurrent location: \\home"
+        }
+      ],
+      "Move Back": [
+        {
+          "name": "expected_output",
+          "answer": "You are now in \\\n\nCurrent location: \\"
+        }
+      ],
+      "Check Inventory 1": [
+        {
+          "name": "check_inventory_command",
+          "answer": "inventory"
+        },
+        {
+          "name": "expected_output",
+          "answer": "Your inventory is empty.\n\nCurrent location: \\"
+        }
+      ],
+      "Pick Item": [
+        {
+          "name": "directions",
+          "answer": "cave,treasure_room"
+        },
+        {
+          "name": "expected_output",
+          "answer": "You are now in \\cave\\treasure_room\nYou found a golden_key!\n\nCurrent location: \\cave\\treasure_room"
+        }
+      ],
+      "Check Inventory 2": [
+        {
+          "name": "check_inventory_command",
+          "answer": "inventory"
+        },
+        {
+          "name": "expected_output",
+          "answer": "You are carrying:\ngolden_key\n\nCurrent location: \\cave\\treasure_room"
+        }
+      ],
+      "Win the Game": [
+        {
+          "name": "directions",
+          "answer": "..,.."
+        },
+        {
+          "name": "expected_output",
+          "answer": "You are now in \\cave\n\nCurrent location: \\cave\n$ You are now in \\\nCongratulations! You've found the golden key and escaped!\n=== BashCrawl Main Menu ===\n1. Start Game\n2. Help\n3. Quit\nChoose an option (1, 2, or 3): "
+        }
+      ]
+    },
+    "Main Menu 2": {
+      "Exit Game": [
+        {
+          "name": "exit_command",
+          "answer": "3"
+        },
+        {
+          "name": "expected_output",
+          "answer": "Goodbye!"
+        }
+      ]
+    }
+  },
+  "19": {
+    "Batch Program": {
+      "CheckFileExistence": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "The file 'Deathlist.csv' was not found."
+        }
+      ],
+      "ValidateHeaders": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "The dataset is missing the following required columns: Date of death"
+        }
+      ],
+      "ValidateEmptyFile": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "The dataset is empty."
+        }
+      ],
+      "ValidateTimeColumn": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Warning: Found [number] non-date entries. These will be ignored.\nHistogram saved as 'weekly_deaths_histogram.png'."
+        }
+      ],
+      "ValidateNullValue": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "error_message",
+          "answer": "Warning: Found [number] non-date entries. These will be ignored.\nWarning: 2 invalid date entries were found and will be ignored.\nHistogram saved as 'weekly_deaths_histogram.png'."
+        }
+      ],
+      "RunProject1": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "image_name",
+          "answer": "weekly_deaths_histogram.png"
+        }
+      ],
+      "RunProject2": [
+        {
+          "name": "entry",
+          "answer": "19-stdanswer.py"
+        },
+        {
+          "name": "image_name",
+          "answer": "weekly_deaths_histogram.png"
+        }
+      ]
+    }
+  }
+}
