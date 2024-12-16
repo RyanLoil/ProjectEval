@@ -7,7 +7,6 @@ opencv-python~=4.10.0.84
 selenium>=4.0.0
 # pexpect; sys_platform != "win32"
 # wexpect; sys_platform == "win32"
-pexpect
 
 
 Django~=5.1.1
