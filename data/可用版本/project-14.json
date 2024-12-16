@@ -1,0 +1,93 @@
+[
+    {
+        "project_id": "14",
+        "project_type": "website",
+        "nl_prompt": "Create a website which only has a \"helloword\" page.",
+        "framework_technical_stack": [
+            {
+                "language": "Python",
+                "technical_stack": "Django"
+            }
+        ],
+        "nl_checklist": [
+            {
+                "page": "HelloWorld",
+                "required": true,
+                "function": [
+                    {
+                        "function": "DisplayText",
+                        "description": "Display the text 'Hello World' in the center of the page.",
+                        "required": true
+                    },
+                    {
+                        "function": "ResponsiveDesign",
+                        "description": "Ensure that the 'Hello World' text is displayed properly on all devices including desktop, tablet, and mobile.",
+                        "required": false
+                    },
+                    {
+                        "function": "BasicStyling",
+                        "description": "Apply basic styling for fonts and colors for the text 'Hello World'.",
+                        "required": false
+                    },
+                    {
+                        "function": "PageTitle",
+                        "description": "Set the page title to 'Hello World'.",
+                        "required": false
+                    },
+                    {
+                        "function": "MetaTags",
+                        "description": "Include basic meta tags for SEO, not mandatory as it is a single-purpose page.",
+                        "required": false
+                    }
+                ]
+            }
+        ],
+        "testcode": [
+            {
+                "page": "HelloWorld",
+                "function": [
+                    {
+                        "function": "DisplayText",
+                        "test": "def test_display_text(driver, test_url):\r\n\tdriver.get(test_url)\r\n\t# text_element = driver.find_element('body').text # \u8fd9\u4e2a\u5730\u65b9\u62a5\u9519,\u6211\u7ed9\u4f60\u8bb2\u8fc7\uff0cby\uff0c\u4f60\u6ca1\u5199\u3002\u7136\u540e\uff0c\u4f60\u8fd9\u4e2a\u5730\u65b9\u8fd8\u6709\u4e2a\u5927\u95ee\u9898\uff0c\u6bd4\u65b9\u8bf4\u5982\u679c\u6ca1\u6709body\u6807\u7b7e\uff0c\u53ea\u6709HTML\uff0c\u5199\u4e86\u4e2aHelloworld\uff0c\u4f60\u8fd9\u4e2a\u7a0b\u5e8f\u8fd8\u4f1a\u62a5\u9519\r\n\ttext_element = driver.page_source # \u8fd9\u8868\u793a\u76f4\u63a5\u628adriver\u62ff\u5230\u7684HTML\u4ee5\u6587\u672c\u5f62\u5f0f\u83b7\u53d6\r\n\tassert 'Hello World'.lower() in text_element.lower() or \"helloworld\" in text_element.lower() # \u6709\u53ef\u80fd\u662f\u4e0d\u5e26\u7a7a\u683c\u7684helloword\uff0c\u4e5f\u6709\u53ef\u80fd\u662f\u5c0f\u5199\u7684\uff0c\u6216\u5927\u5199\u7684\uff0c\u6240\u4ee5\u4e00\u8d77\u8f6c\u4e3a\u5c0f\u5199\u5b57\u6bcd\uff0c\u5373str.lower()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "BasicStyling",
+                        "test": "def test_basic_styling(driver, test_url):\n\tdriver.get(test_url)\n\ttext_element = driver.find_element(By.XPATH, \"//*[contains(text(), 'Hello World')]\")\n\tfontsize = text_element.value_of_css_property('font-size')\n\tcolor = text_element.value_of_css_property('color')\n\tassert fontsize is not None\n\tassert color is not None",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "PageTitle",
+                        "test": "def test_page_title(driver, test_url):\n\tdriver.get(test_url)\n\ttitle = driver.title\n\tassert title == 'Hello World'",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "MetaTags",
+                        "test": "def test_meta_tags(driver, test_url):\r\n\tdriver.get(test_url)\r\n\tmeta_elements = driver.find_elements(By.TAG_NAME,'meta')\r\n\tassert len(meta_elements) > 0",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -55,15 +55,16 @@ class BasePythonManager:
 
     def initiate_command(self, initiate_command_list: [[]]):
         '''
-        :param initiate_command_list: list for initiate command. A list for each command which is the command parameter for python. Example:[['manage.py', 'makemigrations']]
+        :param initiate_command_list: list for initiate command. A list for each command which is the command parameter for python. Example:[['manage.py', 'makemigrations']].
+        Or use [[['manage.py', 'createsuperuser'], ["Test","abc@example.com","abc12345","abc12345"]], ...] to run further command in a single shell.
         :return: None
         '''
         for initiate_command in initiate_command_list:
             process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
-                                       shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+                                           shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
 
-            process.wait(15)
+            process.wait(10)
             process.terminate()
 
     def start(self):
@@ -193,6 +194,36 @@ class WebsiteJudge(BaseJudge):
             super().__init__(project_id, project_path, logger)
             self.start_command = ["manage.py", "runserver"]
 
+        def initiate_command(self, initiate_command_list: [[]]):
+            '''
+            Notice: if the initiate_command_list is not set, it will automatically run the default Django command, and add superuser named "Admin" with password "abc#12345"
+            :param initiate_command_list: the initiate command list that are given by user or LLM.
+            :return: None
+            '''
+            if initiate_command_list == [[]] or not initiate_command_list:
+                initiate_command_list = [["manage.py", "makemigrations"],
+                                         ["manage.py", "migrate"],
+                                         ["manage.py", "createsuperuser", "--username", "Admin", "--email",
+                                          "abc@example.com", "--noinput"]]
+                super().initiate_command(initiate_command_list)
+                # Create Superuser
+                process = subprocess.Popen([self.get_activate_script(), "manage.py", "shell"], cwd=self.project_path,
+                                           text=True,
+                                           shell=True, stdin=subprocess.PIPE,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE,
+                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+                                           )
+                process.communicate(input="""
+                    from django.contrib.auth.models import User\n
+                    u = User.objects.get(username='Admin')\n
+                    u.set_password('abc#12345')\n
+                    u.save()\n
+                    """, timeout=10)
+                process.kill()
+            else:
+                super().initiate_command(initiate_command_list)
+
     WEBSITE_SERVER_MANAGER = {
         'Django': DjangoServer,
         # All other kinds of website server should be created in this way.
@@ -220,12 +251,14 @@ class WebsiteJudge(BaseJudge):
             self.status = True
         except Exception as e:
             self.logger.critical(f"Subprocess initiate exception:{e}")
+            self.subprocess.stop()
             return False
 
         try:
             self.driver.get(self.website_home)
         except Exception as e:
             self.logger.critical(f"Website home visit exception:{e}")
+            self.subprocess.stop()
             return False
         return True
 
@@ -283,6 +316,7 @@ class WebsiteJudge(BaseJudge):
 
 
 class SoftwareJudge(BaseJudge):
+    # TODO Software adaption
     pass
 
 
@@ -355,7 +389,7 @@ class BatchJudge(BaseJudge):
                 [self.get_activate_script(), *self.start_command],
                 cwd=self.project_path,
                 stdin=subprocess.PIPE,
-                stdout=open(self.project_path+self.stdout_file_path, "a", encoding="utf-8"),
+                stdout=open(self.project_path + self.stdout_file_path, "a", encoding="utf-8"),
                 stderr=subprocess.PIPE,
                 text=True,
                 shell=True,
@@ -394,7 +428,6 @@ class BatchJudge(BaseJudge):
             with open(self.stdout_file_path, "r", encoding="utf-8") as f:
                 # f.seek(0, 2)  # Move to the end of the file
                 current_pos = self.stdout_tell
-
 
                 # Wait for the first output
                 counter = 0
@@ -454,7 +487,6 @@ class BatchJudge(BaseJudge):
             #     self.stderr_file.flush()
 
             return "".join(output_lines)
-
 
     BATCH_MANAGER = {
         'None': ConsoleManager,

@@ -7,19 +7,11 @@ from datetime import datetime
 from openai import OpenAI
 
 from config import OPEN_AI_KEY
-
-prompt = {
-    "generate_checklist": '{nl_prompt}.Give a natural language function checklist from the users\' views using JSON format of [{{"page":"XXX", "function":[{{"function":"XXX", "description"; "YYYY"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content.',
-    "python_generate_framework": 'Based on this checklist {nl_checklist}, give a framework of {technical_stack} also used JSON format of [{{"file":"/example_app/xxx.py","import":["a","b",...], "class":{{"name":"c", "parameter":[{{"name":"XXX", "type":"XXX"}}, {{...}}, ...], "description":"XXXX", "function": [{{"name":"d","parameter":[{{"name":"XXX", "type":"XXX"}}, "variable":[{{"name":"e", "type":"xxx", "description":"xxx"}}, {{...}}, ...], {{...}}, ...], "description":"XXXX", "return_type":"XXX"}}, {{...}}, ...]}}, {{...}}, ...]. If the file is not a python file, the json format should be {{"file": "/example_app/xxx.xx", "description":"XXXX"}}. DO NOT CONTAIN ANY OTHER CONTENTS.',
-    "generate_answer": 'Based on this {description}, give a {technical_stack} Project of its all files (including the essential files to run the project) to meet the requirement in JSON format of [{{"file":"answer.something","path":"somepath/somedir/answer.something", "code":"the_code_in_the_file"}},{{…}},…] with NO other content.',
-    "generate_parameter": 'Based on the {technical_stack} project you given which is {answer}, give the required parameters\' values of the django project for each test in the {parameter_required}. Return in Json format of [{{"page":"XXX", "function":"[{{"function":"XXX", "parameter": [{{"name":"XXX", "answer": "your_answer_parameter"}}, {{...}}, ...]}}, {{...}}, ...], {{...}}, ...] with NO other content and DO NOT CHANGE THE KEYS OF JSON. For example, the requested parameter name is \'test_url\' and the answer may be \'http://localhost:8000/\'',
-    "generate_information": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environments have been created in root {project_root}, and projects and apps have been created, give the run commands, homepage\'s url and requirements of the {technical_stack} project, return in JSON format of {{"initiate_commands": [["manage.py","makemigrations"],["manage.py","migrate"],[XXX,YYY],...] ,"homepage":"http://XXX.YYY/", "requirements": [XXXX, YYYY]}} with NO other content.',
-    "generate_entry_point": 'Based on the {technical_stack} project you given which is {answer}, assume that all files and environments have been created in root {project_root}, find the entry file to run the project. ONLY return the path such as "example/run.py" with NO other content.'
-}
+from prompt import prompt
 
 
 class LLMTest:
-    def __init__(self, llm: str):
+    def __init__(self, llm: str, *args, **kwargs):
         self.llm = llm
 
         # logger
@@ -92,21 +84,28 @@ class LLMTest:
         code_text = match.group(1) if match else rsp
         return code_text
 
-    @staticmethod
-    def completion_to_dict(answer):
+    def completion_to_dict(self, answer):
         s = answer.choices[0].message.content
         try:
             return json.loads(LLMTest.parse(s))
         except Exception as e:
-            print(e)
-            print("try replace \\")
+            self.logger.debug(f"Completion to dict failed by using pattern ```json(.*)```: {e}")
+        try:
+            return json.loads(LLMTest.parse(s, pattern=r"```json\n(\[.*?\])\n\```"))
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\[.*?\])\\n\```: {e}")
+        try:
+            return json.loads(s)
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed directly: {e}")
+            self.logger.debug("Completion to dict: trying replace \\")
             s = s.replace("\\", "\\\\")
             return s
 
 
 class GPTTest(LLMTest):
-    def __init__(self, llm="gpt-4o"):
-        super(GPTTest, self).__init__(llm)
+    def __init__(self, llm="gpt-4o", *args, **kwargs):
+        super(GPTTest, self).__init__(llm, *args, **kwargs)
         self.client = OpenAI(api_key=OPEN_AI_KEY)
 
     def send_message(self, message, role_message):
@@ -124,13 +123,14 @@ class GPTTest(LLMTest):
         return completion
 
     def generate_checklist(self, nl_prompt):
-        message = prompt['generate_checklist'].format(nl_prompt=nl_prompt)
+        message = prompt[self.__class__.__name__]['generate_checklist'].format(nl_prompt=nl_prompt)
         completion = self.send_message(message, "You are a professional project manager (PM).")
         return self.completion_to_dict(completion)
 
     def generate_framework(self, language, technical_stack, nl_checklist):
-        message = prompt[language.lower() + '_generate_framework'].format(nl_checklist=nl_checklist,
-                                                                          technical_stack=technical_stack)
+        message = prompt[self.__class__.__name__][language.lower() + '_generate_framework'].format(
+            nl_checklist=nl_checklist,
+            technical_stack=technical_stack)
         completion = self.send_message(message, "You are a professional computer program architect.")
         return self.completion_to_dict(completion)
 
@@ -141,7 +141,8 @@ class GPTTest(LLMTest):
         :param technical_stack: decided by user
         :return: generated answer in json format
         """
-        message = prompt['generate_answer'].format(description=description, technical_stack=technical_stack)
+        message = prompt[self.__class__.__name__]['generate_answer'].format(description=description,
+                                                                            technical_stack=technical_stack)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
@@ -153,8 +154,9 @@ class GPTTest(LLMTest):
         :param parameter_required: request by the judge
         :return: generated parameters in json format
         """
-        message = prompt["generate_parameter"].format(answer=answer, technical_stack=technical_stack,
-                                                      parameter_required=parameter_required)
+        message = prompt[self.__class__.__name__]["generate_parameter"].format(answer=answer,
+                                                                               technical_stack=technical_stack,
+                                                                               parameter_required=parameter_required)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
@@ -165,8 +167,9 @@ class GPTTest(LLMTest):
         :param techincal_stack:
         :return:
         """
-        message = prompt["generate_information"].format(answer=answer, technical_stack=technical_stack,
-                                                        project_root=project_root)
+        message = prompt[self.__class__.__name__]["generate_information"].format(answer=answer,
+                                                                                 technical_stack=technical_stack,
+                                                                                 project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
@@ -177,7 +180,29 @@ class GPTTest(LLMTest):
         :param techincal_stack:
         :return:
         """
-        message = prompt["generate_entry_point"].format(answer=answer, technical_stack=technical_stack,
-                                                        project_root=project_root)
+        message = prompt[self.__class__.__name__]["generate_entry_point"].format(answer=answer,
+                                                                                 technical_stack=technical_stack,
+                                                                                 project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
+
+
+class LlamaTest(GPTTest):
+    def __init__(self, llm="llama3.2", device: str = "", *args, **kwargs):
+        '''
+        This llama test class is created base on Ollama. Ollama supports OpenAI pattern.
+        :param llm: any model that Ollama supports can use in this class.
+        :param device: If you want to use other GPU rather than GPU:0, set the UUID in this param. Check the UUID by using "nvidia-smi -L".
+        '''
+        super(LlamaTest, self).__init__(llm)
+        if not device:
+            os.environ['CUDA_VISIBLE_DEVICES'] = device
+        os.environ[
+            'NO_PROXY'] = "localhost,127.0.0.1"  # Ollama didn't fit the proxy settings which will lead to 502 error.
+        self.client = OpenAI(
+            base_url='http://localhost:11434/v1/',
+            api_key="llama"  # Required but ignored
+        )
+        del os.environ['NO_PROXY']
+        if not device:
+            del os.environ['CUDA_VISIBLE_DEVICES']

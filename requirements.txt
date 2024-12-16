@@ -1,12 +1,23 @@
-Django~=5.1.1
-Markdown~=3.7
-matplotlib~=3.9.2
-openai>=1.31.0
-pyperclip~=1.9.0
-qrcode~=7.4.2
-selenium>=4.0.0
-openpyxl~=3.1.5
-pandas~=2.2.3
+torch
+ollama
+sentence-transformers
 Levenshtein~=0.26.1
 scikit-image~=0.24.0
 opencv-python~=4.10.0.84
+selenium>=4.0.0
+# pexpect; sys_platform != "win32"
+# wexpect; sys_platform == "win32"
+pexpect
+
+
+Django~=5.1.1
+Markdown~=3.7
+matplotlib~=3.9.2
+openai
+pyperclip~=1.9.0
+qrcode~=7.4.2
+openpyxl~=3.1.5
+pandas~=2.2.3
+
+
+

@@ -1,0 +1,65 @@
+[
+    {
+        "project_id": "15",
+        "project_type": "website",
+        "nl_prompt": "Create a website which only has a button to jump to the \"helloword\" page.",
+        "framework_technical_stack": [
+            {
+                "language": "Python",
+                "technical_stack": "Django"
+            }
+        ],
+        "nl_checklist": [
+            {
+                "page": "Home",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Button to 'HelloWorld' page",
+                        "description": "A button that users can click to navigate to the 'HelloWorld' page.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "HelloWorld",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Display 'HelloWorld' message",
+                        "description": "A simple page displaying the 'HelloWorld' message.",
+                        "required": true
+                    }
+                ]
+            }
+        ],
+        "testcode": [
+            {
+                "page": "Home",
+                "function": [
+                    {
+                        "function": "Button to 'HelloWorld' page",
+                        "test": "def test_navigate_to_helloworld(driver, test_url):\r\n\tdriver.get(test_url)\r\n\ttry:\r\n\t\tbutton = driver.find_element(By.CLASS_NAME, 'button')\r\n\texcept:\r\n\t\ttry:\r\n\t\t\tbutton = driver.find_element(By.TAG_NAME, 'button')\r\n\t\texcept:\r\n\t\t\tbutton = driver.find_element(By.ID,'button')\r\n\tbutton.click()",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "HelloWorld",
+                "function": [
+                    {
+                        "function": "Display 'HelloWorld' message",
+                        "test": "def test_display_helloworld_message(driver):\r\n\tassert 'Hello World'.lower() in driver.page_source.lower() or \"helloworld\" in driver.page_source.lower()",
+                        "parameter": [
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

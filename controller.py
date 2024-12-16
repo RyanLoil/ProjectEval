@@ -19,7 +19,8 @@ PROJECT_TYPE = {
 
 
 class LLMController:
-    def __init__(self, question_path: str, model_class: LLMTest, language: dict = None, technical_stack: dict = None,
+    def __init__(self, question_path: str, model_class: type(LLMTest), llm:str, language: dict = None, technical_stack: dict = None,
+                 device:str="",
                  output_path: str = "data/", crush_save_path: str = "data/crash_save/", crush_load_path: str = None):
         '''
         A Example to show how to use LLM answer the question of Project Eval.
@@ -58,7 +59,7 @@ class LLMController:
             temp = copy.deepcopy(q)
             del temp['testcode']
             self.question.append(temp)
-        self.model = model_class()
+        self.model = model_class(llm=llm,device=device)
         self.output_path = output_path
         self.language = language
         self.technical_stack = technical_stack
