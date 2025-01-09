@@ -101,7 +101,7 @@ class BaseJudge:
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
             self.logger.start_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-            handler = logging.FileHandler("log/{0}-Judge.log".format(self.logger.start_time))
+            handler = logging.FileHandler("log/{0}-Judge.log".format(self.logger.start_time),encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -263,12 +263,11 @@ class WebsiteJudge(BaseJudge):
         return True
 
     def clean(self):
-        # self.website_project_process.django_shutdown()
-        # self.website_project_process.terminate()
-        # self.website_project_process.join()
-        # self.website_project_process.close()
-        self.subprocess.stop()
-        self.driver.close()
+        try:
+            self.subprocess.stop()
+            self.driver.close()
+        except Exception as e:
+            self.logger.info(f"Clean exception:{e}")
         self.status = False
 
     def check(self, test_no, testcode, *args, **kwargs):
@@ -511,7 +510,9 @@ class BatchJudge(BaseJudge):
             return False
 
     def check(self, test_no, testcode, *args, **kwargs):
-        def timeout():
+        def timeout(process):
+            if process:
+                process.poll()
             raise TimeoutError("Test execution exceeded the time limit.")
 
         self.logger.info(f"{test_no} starting.")
@@ -531,9 +532,9 @@ class BatchJudge(BaseJudge):
                 local_path = os.getcwd()
                 os.chdir(self.project_root)
                 global timer
-                timer = threading.Timer(5, timeout)  # Set timeout limit (in seconds)
+                timer = threading.Timer(5, timeout,[self.subprocess])  # Set timeout limit (in seconds)
                 timer.start()
-                result = test(*args, **kwargs)
+                result = test(*args, **kwargs) # TODO 18 会卡住
             except AssertionError as e:
                 result = e
                 self.logger.warning(f"Assertion Error: {str(e)}. Testcase failed.")

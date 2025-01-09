@@ -6,11 +6,6 @@
             "code": "\n#!/usr/bin/env python\nimport os\nimport sys\n\ndef main():\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.settings')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable? \"\n            \"Did you forget to activate a virtual environment?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n\nif __name__ == '__main__':\n    main()\n"
         },
         {
-            "file": "admin.py",
-            "path": "example_app/admin.py",
-            "code": "\nfrom django.contrib import admin\nfrom .models import Event\n\nadmin.site.register(Event)\n"
-        },
-        {
             "file": "forms.py",
             "path": "example_app/forms.py",
             "code": "from django import forms\nfrom .models import Event\n\nclass EventForm(forms.ModelForm):\n    class Meta:\n        model = Event\n        fields = ['title', 'description', 'datetime']\n\n    # Customizing the fields\n    datetime = forms.DateTimeField(\n        widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'max': '2099-12-31 23:59'}),\n    )\n"

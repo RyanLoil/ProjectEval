@@ -9,7 +9,7 @@
                 "technical_stack": "Django"
             }
         ],
-        "checklist": [
+        "nl_checklist": [
             {
                 "page": "HomePage",
                 "required": true,
@@ -256,7 +256,7 @@
                 "technical_stack": "Django"
             }
         ],
-        "checklist": [
+        "nl_checklist": [
             {
                 "page": "Home Page",
                 "required": true,

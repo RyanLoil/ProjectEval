@@ -19,11 +19,12 @@ PROJECT_TYPE = {
 
 
 class LLMController:
-    def __init__(self, question_path: str, model_class: type(LLMTest), llm:str, language: dict = None, technical_stack: dict = None,
-                 device:str="",
+    def __init__(self, question_path: str, model_class: type(LLMTest), llm: str, language: dict = None,
+                 technical_stack: dict = None,
+                 device: str = "",
                  output_path: str = "data/", crush_save_path: str = "data/crash_save/", crush_load_path: str = None):
         '''
-        A Example to show how to use LLM answer the question of Project Eval.
+        Controller to use LLM answering the question of Project Eval.
         :param question_path: The source data
         :param model_class: The LLM model that you want to use. Check LLMTest in llm.py as a template example.
         :param output_path: The answer from LLM.
@@ -37,7 +38,7 @@ class LLMController:
         self.logger.setLevel(level=logging.DEBUG)
         self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
         if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-LLMController.log".format(self.initiate_time))
+            handler = logging.FileHandler("log/{0}-LLMController.log".format(self.initiate_time), encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -59,15 +60,22 @@ class LLMController:
             temp = copy.deepcopy(q)
             del temp['testcode']
             self.question.append(temp)
-        self.model = model_class(llm=llm,device=device)
+        self.model = model_class(llm=llm, device=device)
         self.output_path = output_path
         self.language = language
         self.technical_stack = technical_stack
 
-    def run(self, level: int):
-        """
+    LEVEL_DICT = {
+        1: "nl_prompt",
+        2: "nl_checklist",
+        3: "skeleton",
+    }
 
-        :param level: 1 for natural language description, 2 for natural language checklist, 3 for programming language framework
+    def run(self, level: int, cascade: bool = False):
+        """
+        Execute the test.
+        :param level: 1 for natural language description, 2 for natural language checklist, 3 for programming language skeleton
+        :param cascade: Generated answer level by level. True for cascade, False for no cascade
         :return: A file which is saved in the given directory
         """
         crash_mark = False
@@ -81,6 +89,9 @@ class LLMController:
             input_file.close()
         else:
             answer_dict = {}
+        nl_checklist_dict = {}
+        skeleton_dict = {}
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         try:
             for q in self.question:
                 if crash_mark:
@@ -93,21 +104,39 @@ class LLMController:
                     'language']
                 technical_stack = self.technical_stack[q['project_type']] if self.technical_stack else \
                     q['framework_technical_stack']['technical_stack']
-                if level == 1:
-                    # Level 1 uses nl_prompt
-                    nl_checklist = self.model.generate_checklist(q['nl_prompt'])
-                    framework = self.model.generate_framework(language, technical_stack, nl_checklist)
-                elif level == 2:
-                    # Level 2 uses nl_checklist
-                    nl_checklist = q['nl_checklist']
-                    framework = self.model.generate_framework(language, technical_stack, nl_checklist)
-                elif level == 3:
-                    # Level 3 directly uses framework
-                    framework = q['framework']
+                if cascade:
+                    if level == 1:
+                        # Level 1 uses nl_prompt
+                        nl_checklist = self.model.generate_checklist(q['nl_prompt'])
+                        nl_checklist_dict[q['project_id']] = nl_checklist
+                        skeleton = self.model.generate_skeleton(language, technical_stack, nl_checklist)
+                        skeleton_dict[q['project_id']] = skeleton
+                    elif level == 2:
+                        # Level 2 uses nl_checklist
+                        nl_checklist = q['nl_checklist']
+                        skeleton = self.model.generate_skeleton(language, technical_stack, nl_checklist)
+                        skeleton_dict[q['project_id']] = skeleton
+                    elif level == 3:
+                        # Level 3 directly uses skeleton
+                        skeleton = q['skeleton']
+                    else:
+                        self.logger.critical("Invalid level number.")
+                        raise Exception("Invalid level number.")
+                    final_prompt = skeleton
+
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json"
+                    with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        self.logger.info("Writing to " + output_file_path)
+                        json.dump(nl_checklist_dict, output_file)
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json"
+                    with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        self.logger.info("Writing to " + output_file_path)
+                        json.dump(skeleton_dict, output_file)
+
                 else:
-                    self.logger.critical("Invalid level number.")
-                    raise Exception("Invalid level number.")
-                answer = self.model.generate_answer(framework, technical_stack)
+                    final_prompt = q[self.LEVEL_DICT[level]]
+                answer = self.model.generate_answer(final_prompt, technical_stack)
+
                 try:
                     if not isinstance(answer, list):  # In the example, LLM will return a python list as answer.
                         raise Exception("Invalid answer format in project {}.".format(q["project_id"]))
@@ -116,9 +145,10 @@ class LLMController:
                     self.logger.warning(str(e))
                     continue
                 # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
+
+
                 answer_dict[q['project_id']] = answer
-            output_file_path = self.output_path + self.model.llm + "_" + datetime.now().strftime(
-                "%Y%m%d-%H%M%S") + ".json"
+            output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json"
             with open(output_file_path, "w", encoding="utf-8") as output_file:
                 self.logger.info("Writing to " + output_file_path)
                 json.dump(answer_dict, output_file)
@@ -130,15 +160,61 @@ class LLMController:
             output_file.close()
 
 
+class MaskerController:
+    def __init__(self, answer_path: str, model_class: type(LLMTest), output_path: str, llm: str, device: str = ""):
+        self.logger = logging.getLogger('MaskerController')
+        self.logger.setLevel(level=logging.DEBUG)
+        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not self.logger.handlers:
+            handler = logging.FileHandler("log/{0}-MaskerController.log".format(self.initiate_time))
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
+        try:
+            self.answer_dict = json.load(open(answer_path, 'r', encoding='utf-8'))
+        except Exception as e:
+            self.logger.critical("Loading answer list failed with error {}".format(e))
+            raise Exception("Loading answer list failed with error {}".format(e))
+        self.model = model_class(llm=llm, device=device)
+        self.output_path = output_path
+        self.skeleton = {}
+
+    def run(self):
+        try:
+            for project_id in self.answer_dict:
+                skeleton = self.model.mask_skeleton(self.answer_dict[project_id])
+                self.skeleton[project_id] = skeleton
+            output_file_path = self.output_path + "skeleton" + self.model.llm + "_" + datetime.now().strftime(
+                "%Y%m%d-%H%M%S") + ".json"
+            with open(output_file_path, "w", encoding="utf-8") as output_file:
+                self.logger.info("Writing to " + output_file_path)
+                json.dump(self.skeleton, output_file)
+        except Exception as e:
+            self.logger.critical(str(e))
+
+
 class JudgeController:
-    def __init__(self, question_path: str, answer_path: str, model_class: LLMTest,
-                 parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save"):
+    def __init__(self, question_path: str, answer_path: str, model_class: type(LLMTest),
+                 parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save", llm:str=None,device:str=None):
+        '''
+        An
+        :param question_path:
+        :param answer_path:
+        :param model_class:
+        :param parameter_file_path:
+        :param parameter_answer_save:
+        '''
 
         self.logger = logging.getLogger('JudgeController')
         self.logger.setLevel(level=logging.DEBUG)
         self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
         if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-JudgeController.log".format(self.initiate_time))
+            handler = logging.FileHandler("log/{0}-JudgeController.log".format(self.initiate_time), encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -174,7 +250,7 @@ class JudgeController:
             self.logger.critical("Loading answer list failed with error {}".format(e))
             raise Exception("Loading answer list failed with error {}".format(e))
 
-        self.model = model_class()
+        self.model = model_class(llm=llm, device=device)
         # question_list = {<pid>:{<page>:{<function>:{'function':<function name>, 'parameter':{'name':<parameter name>, 'description': <parameter discription>}, ...}, ...}, ...}
         # in batch project, there is only one page.
 
@@ -202,42 +278,45 @@ class JudgeController:
 
     def write_answer_to_file(self, project_id):
         base_dir = "test/" + datetime.now().strftime("%Y%m%d") + "/" + str(project_id) + "/"
+        try:
+            # Remove the directory if it already exists
+            if os.path.exists(base_dir):
+                shutil.rmtree(base_dir)
 
-        # Remove the directory if it already exists
-        if os.path.exists(base_dir):
-            shutil.rmtree(base_dir)
+            # Create the base directory
+            os.makedirs(base_dir)
 
-        # Create the base directory
-        os.makedirs(base_dir)
+            # Iterate over files in answer_dict
+            for file in self.answer_dict[str(project_id)]:
+                # Check if 'file' is None, and create an empty directory if so
+                if file['file'] is None:
+                    empty_dir_path = base_dir + file['path'].replace("./", "")
+                    os.makedirs(empty_dir_path, exist_ok=True)
+                    continue
 
-        # Iterate over files in answer_dict
-        for file in self.answer_dict[str(project_id)]:
-            # Check if 'file' is None, and create an empty directory if so
-            if file['file'] is None:
-                empty_dir_path = base_dir + file['path'].replace("./", "")
-                os.makedirs(empty_dir_path, exist_ok=True)
-                continue
+                # Process and write the file
+                file_name = base_dir + file['path'].replace("./", "")
+                content = file['code']
+                last_slash = file_name.rfind("/")
 
-            # Process and write the file
-            file_name = base_dir + file['path'].replace("./", "")
-            content = file['code']
-            last_slash = file_name.rfind("/")
+                # Create the directory if it doesn't exist
+                if last_slash != -1:
+                    dirpath = file_name[:last_slash]
+                    if not os.path.isdir(dirpath):
+                        os.makedirs(dirpath)
 
-            # Create the directory if it doesn't exist
-            if last_slash != -1:
-                dirpath = file_name[:last_slash]
-                if not os.path.isdir(dirpath):
-                    os.makedirs(dirpath)
+                # Write the content to the file
+                with open(file_name, 'w', encoding="utf-8") as f:
+                    f.write(content)
 
-            # Write the content to the file
-            with open(file_name, 'w', encoding="utf-8") as f:
-                f.write(content)
+            # Handle directory structure if there is only one subdirectory
+            if len(os.listdir(base_dir)) == 1 and len(os.listdir(base_dir)[0].split(".")) == 1:
+                base_dir = base_dir + os.listdir(base_dir)[0] + "/"
 
-        # Handle directory structure if there is only one subdirectory
-        if len(os.listdir(base_dir)) == 1 and len(os.listdir(base_dir)[0].split(".")) == 1:
-            base_dir = base_dir + os.listdir(base_dir)[0] + "/"
-
-        return base_dir
+            return base_dir
+        except Exception as e:
+            self.logger.critical("Writing answer files failed with error {}".format(e))
+            return base_dir
 
     def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
                  project_id_list: list = None, start_file_list: dict = None,
@@ -299,7 +378,8 @@ class JudgeController:
                         "requirements"] if not project_requirements else project_requirements
                 # TODO 适配新类预加载
                 # Judge Initial
-                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements, DEFAULT_BROWSER_TYPE,
+                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
+                                                                         DEFAULT_BROWSER_TYPE,
                                                                          project_initiate_command,
                                                                          website_home="http://localhost:8000/")
 
@@ -307,9 +387,10 @@ class JudgeController:
 
                 try:
                     preprocess_result = judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
-                                            self.question_dict[project_id]["framework_technical_stack"][0][
-                                                "technical_stack"], initiate_command_list=project_initiate_command,
-                                            project_path=project_root)
+                                                         self.question_dict[project_id]["framework_technical_stack"][0][
+                                                             "technical_stack"],
+                                                         initiate_command_list=project_initiate_command,
+                                                         project_path=project_root)
                     if not preprocess_result:
                         self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
                         self.logger.info("{} scored 0.".format(project_id))
@@ -325,20 +406,21 @@ class JudgeController:
                 # Batch or Console
                 if not start_file_list or project_id not in start_file_list:
                     start_file = self.model.get_start_file(self.answer_dict[project_id],
-                                                             self.question_dict[project_id][
-                                                                 "framework_technical_stack"][0][
-                                                                 "technical_stack"] if not technical_stack else
-                                                             technical_stack[project_id],
-                                                             project_root)
+                                                           self.question_dict[project_id][
+                                                               "framework_technical_stack"][0][
+                                                               "technical_stack"] if not technical_stack else
+                                                           technical_stack[project_id],
+                                                           project_root)
                 else:
                     start_file = start_file_list[project_id]
                 judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
                                                                          project_root, )
                 try:
                     preprocess_result = judge.preprocess(technical_stack[project_id]["batch"] if technical_stack else
-                                            self.question_dict[project_id]["framework_technical_stack"][0][
-                                                "technical_stack"], initiate_command_list=project_initiate_command,
-                                            project_path=project_root, start_file=start_file)
+                                                         self.question_dict[project_id]["framework_technical_stack"][0][
+                                                             "technical_stack"],
+                                                         initiate_command_list=project_initiate_command,
+                                                         project_path=project_root, start_file=start_file)
                     if not preprocess_result:
                         self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
                         self.logger.info("{} scored 0.".format(project_id))
@@ -418,3 +500,10 @@ class JudgeController:
         if judge.status:
             judge.clean()
         return total_status, total_status['pass'] / (total_status['total'] if total_status['total'] > 0 else 1)
+
+
+class IndicatorController:
+    """
+    This controller is for all 4 objective indicators.
+    """
+    pass

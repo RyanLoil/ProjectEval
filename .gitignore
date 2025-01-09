@@ -20,3 +20,5 @@
 /test_ollama.py
 /test_stage.py
 /test_subprocess.py
+/test_masker.py
+/experiments/

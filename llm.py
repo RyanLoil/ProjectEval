@@ -18,7 +18,7 @@ class LLMTest:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+            handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")),encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -31,7 +31,7 @@ class LLMTest:
     def generate_checklist(self, nl_prompt):
         pass
 
-    def generate_framework(self, language, technical_stack, nl_checklist):
+    def generate_skeleton(self, language, technical_stack, nl_checklist):
         pass
 
     def generate_answer(self, prompt, technical_stack):
@@ -93,7 +93,7 @@ class LLMTest:
         try:
             return json.loads(LLMTest.parse(s, pattern=r"```json\n(\[.*?\])\n\```"))
         except Exception as e:
-            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\[.*?\])\\n\```: {e}")
+            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\\[.*?\\])\\n``` : {e}")
         try:
             return json.loads(s)
         except Exception as e:
@@ -127,7 +127,7 @@ class GPTTest(LLMTest):
         completion = self.send_message(message, "You are a professional project manager (PM).")
         return self.completion_to_dict(completion)
 
-    def generate_framework(self, language, technical_stack, nl_checklist):
+    def generate_skeleton(self, language, technical_stack, nl_checklist):
         message = prompt[self.__class__.__name__][language.lower() + '_generate_framework'].format(
             nl_checklist=nl_checklist,
             technical_stack=technical_stack)
@@ -164,8 +164,8 @@ class GPTTest(LLMTest):
         """
         GPT can automatically recognize the initial command, requirements and other necessary information.
         :param answer:
-        :param techincal_stack:
-        :return:
+        :param technical_stack:
+        :return: message
         """
         message = prompt[self.__class__.__name__]["generate_information"].format(answer=answer,
                                                                                  technical_stack=technical_stack,
@@ -175,15 +175,26 @@ class GPTTest(LLMTest):
 
     def get_start_file(self, answer, technical_stack, project_root):
         """
-        GPT can automatically recognize the initial command, requirements and other necessary information.
+        GPT can automatically recognize the entry point of a console project.
         :param answer:
-        :param techincal_stack:
-        :return:
+        :param technical_stack:
+        :param project_root:
+        :return: message
         """
         message = prompt[self.__class__.__name__]["generate_entry_point"].format(answer=answer,
                                                                                  technical_stack=technical_stack,
                                                                                  project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
+        return self.completion_to_dict(completion)
+
+    def mask_skeleton(self, answer):
+        """
+        as masker need to describe the using method of
+        :param answer:
+        :return:
+        """
+        message = prompt[self.__class__.__name__]['mask_framework'].format(answer=answer)
+        completion = self.send_message(message, "You are a professional computer program architect.")
         return self.completion_to_dict(completion)
 
 

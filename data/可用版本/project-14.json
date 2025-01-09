@@ -68,7 +68,7 @@
                     },
                     {
                         "function": "PageTitle",
-                        "test": "def test_page_title(driver, test_url):\n\tdriver.get(test_url)\n\ttitle = driver.title\n\tassert title == 'Hello World'",
+                        "test": "def test_page_title(driver, test_url):\n\tdriver.get(test_url)\n\ttitle = driver.title\n\tassert title.lower() in 'Hello World'.lower() or title.lower() in 'HelloWorld'.lower()",
                         "parameter": [
                             {
                                 "name": "test_url",

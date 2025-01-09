@@ -11,11 +11,6 @@
             "code": "from django.apps import AppConfig\n\n\n\nclass QrAppConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'qr_app'"
         },
         {
-            "file": "tests.py",
-            "path": "qr_app/tests.py",
-            "code": "from django.test import TestCase\n\nfrom django.urls import reverse\n\n\n\nclass QRCodeTests(TestCase):\n\n    def test_home_page(self):\n\n        response = self.client.get(reverse('home'))\n\n        self.assertEqual(response.status_code, 200)\n\n        self.assertContains(response, 'QR Code Generator')\n\n"
-        },
-        {
             "file": "urls.py",
             "path": "qr_app/urls.py",
             "code": "# This file can be used to define URLs specific to the qr_app\nfrom .views import *\nfrom django.urls import path\n\nurlpatterns = [\n    path('', home, name='home'),\n    path('generate/', generate_qr_code, name='generate_qr_code'),\n    path('download/', download_qr_code, name='download_qr_code'),\n    path('about/', about, name='about'),\n]\n"

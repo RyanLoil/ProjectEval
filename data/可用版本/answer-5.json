@@ -28,7 +28,7 @@
         {
             "file": "convert.html",
             "path": "example_app/templates/convert.html",
-            "code": "<h1>Convert Markdown to HTML</h1>\n\n<form method=\"post\" enctype=\"multipart/form-data\">\n    {% csrf_token %}\n\n    <!-- Markdown Text Input Area -->\n    <label for=\"markdown_input\">Enter Markdown:</label>\n    <textarea id=\"markdown_input\" name=\"markdown\">{{ markdown_input }}</textarea>\n\n    <!-- Convert Button -->\n    <button id=\"convert_button\" type=\"submit\">Convert</button>\n\n    <hr/>\n\n    <!-- File Upload Input -->\n    <label for=\"upload_file\">Or upload a Markdown file:</label>\n    <input type=\"file\" id=\"upload_file\" name=\"upload_file\">\n    <button type=\"submit\" id=\"upload_file_btn\">Upload and Convert</button>\n</form>\n\n{% if html_output %}\n<!-- HTML Output Area -->\n<div id=\"html_output\">\n    <h2>HTML Output</h2>\n    {{ html_output|safe }}\n</div>\n\n<!-- Download HTML Button -->\n<a href=\"?download=true&last_file_name={{ file_name }}\">\n    <button id=\"download_html\">Download HTML</button>\n</a>\n{% endif %}\n"
+            "code": "<h1>Convert Markdown to HTML</h1>\n\n<form method=\"post\" enctype=\"multipart/form-data\">\n    {% csrf_token %}\n\n    <!-- Markdown Text Input Area -->\n    <label for=\"markdown_input\">Enter Markdown:</label>\n    <textarea id=\"markdown_input\" name=\"markdown\">{{ markdown_input }}</textarea>\n\n    <!-- Convert Button -->\n    <button id=\"convert_button\" type=\"submit\">Convert</button>\n\n    <hr/>\n\n    <!-- File Upload Input -->\n    <label for=\"upload_file\">Or upload a Markdown file:</label>\n    <input type=\"file\" id=\"upload_file\" name=\"upload_file\">\n    <button type=\"submit\" id=\"upload_file_btn\">Upload and Convert</button>\n</form>\n\n{% if html_output %}\n<!-- HTML Output Area -->-\n<div id=\"html_output\">\n    <h2>HTML Output</h2>\n    {{ html_output|safe }}\n</div>\n{% endif %}\n{% if file_name %}\n<!-- Download HTML Button -->\n<a href=\"?download=true&last_file_name={{ file_name }}\">\n    <button id=\"download_html\">Download HTML</button>\n</a>\n{% endif %}\n\n"
         },
         {
             "file": "home.html",
@@ -36,49 +36,9 @@
             "code": "<h1>Welcome</h1>\n<p id=\"introduction\">This is the Markdown to HTML converter.</p>\n<nav>\n  <a href='/convert/' id=\"convert_link\">Convert</a>\n  <a href='/about/' id=\"about_link\">About</a>\n</nav>\n"
         },
         {
-            "file": "5-markdown-test.md",
-            "path": "media/5-markdown-test.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_ByxD5dP.md",
-            "path": "media/5-markdown-test_ByxD5dP.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_dBokJwE.md",
-            "path": "media/5-markdown-test_dBokJwE.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_hUW0yom.md",
-            "path": "media/5-markdown-test_hUW0yom.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_mSZyVOC.md",
-            "path": "media/5-markdown-test_mSZyVOC.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_nZagLHT.md",
-            "path": "media/5-markdown-test_nZagLHT.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_QdFCBeq.md",
-            "path": "media/5-markdown-test_QdFCBeq.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_UqTf6Mw.md",
-            "path": "media/5-markdown-test_UqTf6Mw.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
-        },
-        {
-            "file": "5-markdown-test_xgn6rg0.md",
-            "path": "media/5-markdown-test_xgn6rg0.md",
-            "code": "# Project Eval\n\n## \u65b0Benchmark\n\n1. \u62d3\u5145\u6570\u636e\uff0c\u5b8c\u5584benchmark"
+            "file": null,
+            "path": "media",
+            "code": ""
         },
         {
             "file": "settings.py",
