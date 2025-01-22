@@ -24,6 +24,6 @@ def write_to_file(data_path: str, output_path: str):
             _to_file(output_path + source + "/" + file['path'], file['code'])
 
 if __name__ == '__main__':
-    data_path = 'data/操作版本/skeletongpt-4o_20250116-184227.json'
+    data_path = 'data/操作版本/skeletongpt-4o_20250122-215803.json'
     output_path = 'test/project_2/'
     write_to_file(data_path, output_path)

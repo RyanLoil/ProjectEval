@@ -1,0 +1,104 @@
+{
+    "20": [
+        {
+            "file": "manage.py",
+            "path": "manage.py",
+            "code": "import os\nimport sys\n\nif __name__ == '__main__':\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'example_project.settings')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n"
+        },
+        {
+            "file": "admin.py",
+            "path": "example_app/admin.py",
+            "code": "from django.contrib import admin\nfrom django.utils.html import format_html\n\nfrom .models import BlogPost, Category, Comment\n\n@admin.register(BlogPost)\nclass BlogPostAdmin(admin.ModelAdmin):\n    \"\"\"\n    Admin view settings for Blog Post.\n    \"\"\"\n    def operations(self, obj):\n        \"\"\"\n        Generate HTML links for edit and delete operations.\n        \"\"\"\n        return format_html(f'<a href=\"/admin/example_app/blogpost/{obj.id}/change/\" class=\"edit-link\">Edit</a> <a href=\"/post/{obj.id}/delete/\" class=\"delete-link\">Delete</a>')\n\n@admin.register(Category)\nclass CategoryAdmin(admin.ModelAdmin):\n    \"\"\"\n    Admin view settings for Category.\n    \"\"\"\n    def operations(self, obj):\n        \"\"\"\n        Generate HTML links for edit and delete operations.\n        \"\"\"\n        return format_html(f'<a href=\"/admin/example_app/category/{obj.id}/change/\" class=\"edit-link\">Edit</a> <a href=\"/category/{obj.id}/delete/\" class=\"delete-link\">Delete</a>')\n\n@admin.register(Comment)\nclass CommentAdmin(admin.ModelAdmin):\n    \"\"\"\n    Admin view settings for Comment.\n    \"\"\"\n"
+        },
+        {
+            "file": "forms.py",
+            "path": "example_app/forms.py",
+            "code": "from django import forms\nfrom .models import Comment, BlogPost\n\nclass CommentForm(forms.ModelForm):\n    \"\"\"\n    Form for adding comments.\n    \"\"\"\n    class Meta:\n        model = Comment\n        fields = ['author', 'content']\n        widgets = {\n            'author': forms.TextInput(attrs={'placeholder': 'Your Name'}),\n            'content': forms.Textarea(attrs={'placeholder': 'Your Comment'}),\n        }\n\nclass BlogPostForm(forms.ModelForm):\n    \"\"\"\n    Form for adding or editing blog posts.\n    \"\"\"\n    class Meta:\n        model = BlogPost\n        fields = ['title', 'content', 'category']  # Update fields as needed\n"
+        },
+        {
+            "file": "models.py",
+            "path": "example_app/models.py",
+            "code": "from django.db import models\nfrom django.contrib.auth.models import User\n\n\nclass Category(models.Model):\n    \"\"\"\n    Category model settings.\n    \"\"\"\n\n    class Meta:\n        verbose_name_plural = 'Categories'\n\n    def __str__(self):\n        \"\"\"\n        Return string representation of Category.\n        \"\"\"\n\n\nclass BlogPost(models.Model):\n    \"\"\"\n    Blog post model settings.\n    \"\"\"\n\n    def __str__(self):\n        \"\"\"\n        Return string representation of BlogPost.\n        \"\"\"\n\n\nclass Comment(models.Model):\n    \"\"\"\n    Comment model settings.\n    \"\"\"\n\n    def __str__(self):\n        \"\"\"\n        Return string representation of Comment.\n        \"\"\"\n\n\nclass ContactUs(models.Model):\n    \"\"\"\n    Contact Us model settings.\n    \"\"\"\n\n    def __str__(self):\n        \"\"\"\n        Return string representation of ContactUs.\n        \"\"\"\n"
+        },
+        {
+            "file": "urls.py",
+            "path": "example_app/urls.py",
+            "code": "from django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path('', views.home, name='home'),\n    path('post/<int:pk>/', views.post_detail, name='post_detail'),\n    path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),\n    path('category/', views.category, name='category'),\n    path('category/<int:pk>/', views.category_detail, name='category_detail'),\n    path('category/<int:pk>/delete/', views.category_delete, name='category_delete'),\n    path('archive/', views.archive, name='archive'),\n    path('about/', views.about, name='about'),\n    path('search/', views.search, name='search'),\n]\n"
+        },
+        {
+            "file": "utils.py",
+            "path": "example_app/utils.py",
+            "code": "def filter_by_date(posts, year=None, month=None):\n    \"\"\"\n    Filter posts by the given year and month.\n    \"\"\"\n"
+        },
+        {
+            "file": "views.py",
+            "path": "example_app/views.py",
+            "code": "from django.contrib.auth.decorators import login_required\nfrom django.db.models import Count\nfrom django.db.models.functions import TruncMonth\nfrom django.http import Http404, HttpResponseRedirect\nfrom django.shortcuts import render, get_object_or_404\nfrom django.contrib import messages\nfrom .models import BlogPost, Category, ContactUs\nfrom .forms import CommentForm\n\n\ndef home(request):\n    \"\"\"\n    Render the homepage with latest posts.\n    \"\"\"\n\n\ndef post_detail(request, pk):\n    \"\"\"\n    Render the post detail page and handle comments.\n    \"\"\"\n\n\ndef category(request):\n    \"\"\"\n    Render the category page listing all categories.\n    \"\"\"\n\n\ndef archive(request):\n    \"\"\"\n    Render the archive page with posts filtered by date.\n    \"\"\"\n\n\ndef about(request):\n    \"\"\"\n    Render the about page and handle contact form submissions.\n    \"\"\"\n\n\ndef search(request):\n    \"\"\"\n    Perform search on posts and render the results on the homepage.\n    \"\"\"\n\n\n@login_required\ndef post_delete(request, pk):\n    \"\"\"\n    Delete a blog post and redirect to the admin interface.\n    \"\"\"\n\n\ndef category_detail(request, pk):\n    \"\"\"\n    Render the category detail page with posts in the category.\n    \"\"\"\n\n\n@login_required\ndef category_delete(request, pk):\n    \"\"\"\n    Delete a category and redirect to the admin interface.\n    \"\"\"\n"
+        },
+        {
+            "file": "__init__.py",
+            "path": "example_app/__init__.py",
+            "code": ""
+        },
+        {
+            "file": "__init__.py",
+            "path": "example_app/migrations/__init__.py",
+            "code": ""
+        },
+        {
+            "file": "styles.css",
+            "path": "example_app/static/css/styles.css",
+            "code": "body {\n    font-family: Arial, sans-serif;\n    line-height: 1.6;\n    margin: 0;\n    padding: 0;\n    background-color: #f4f4f4;\n}\n\nheader {\n    background: #333;\n    color: #fff;\n    padding: 10px 0;\n    text-align: center;\n}\n\nheader nav a {\n    color: #fff;\n    margin: 0 15px;\n    text-decoration: none;\n}\n\nmain {\n    padding: 20px;\n    background: #fff;\n    margin: 20px auto;\n    max-width: 800px;\n    border: 1px solid #ddd;\n}\n\nfooter {\n    text-align: center;\n    padding: 10px 0;\n    background: #333;\n    color: #fff;\n}\n"
+        },
+        {
+            "file": "about.html",
+            "path": "example_app/templates/blog/about.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>About - My Blog</title>\n</head>\n<body>\n    <!-- About page content including an author introduction and a contact form -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "archive.html",
+            "path": "example_app/templates/blog/archive.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Archive - My Blog</title>\n</head>\n<body>\n    <!-- Archive page content showing monthly post counts and post listing -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "base.html",
+            "path": "example_app/templates/blog/base.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>My Blog</title>\n    {% load static %}\n    <link rel=\"stylesheet\" href=\"{% static 'styles.css' %}\">\n</head>\n<body>\n    <!-- Main layout for the blog with navigation and footer elements -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "category.html",
+            "path": "example_app/templates/blog/category.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Categories - My Blog</title>\n</head>\n<body>\n    <!-- Categories page listing blog categories with links to their details -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "home.html",
+            "path": "example_app/templates/blog/home.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Home - My Blog</title>\n</head>\n<body>\n    <!-- Homepage content showing latest posts and a search bar -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "post_detail.html",
+            "path": "example_app/templates/blog/post_detail.html",
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Post Detail - My Blog</title>\n</head>\n<body>\n    <!-- Post detail page with post content and comment section -->\n</body>\n</html>\n"
+        },
+        {
+            "file": "settings.py",
+            "path": "example_project/settings.py",
+            "code": "import os\n\nBASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n\nSECRET_KEY = 'your_secret_key_here'\n\nDEBUG = True\n\nALLOWED_HOSTS = []\n\nINSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'example_app',\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'example_project.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'example_project.wsgi.application'\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),\n    }\n}\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\n    },\n]\n\nLANGUAGE_CODE = 'en-us'\n\nTIME_ZONE = 'UTC'\n\nUSE_I18N = True\n\nUSE_L10N = True\n\nUSE_TZ = False\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\nLOGIN_URL = '/admin/login/'"
+        },
+        {
+            "file": "urls.py",
+            "path": "example_project/urls.py",
+            "code": "from django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('', include('example_app.urls')),\n]\n"
+        },
+        {
+            "file": "wsgi.py",
+            "path": "example_project/wsgi.py",
+            "code": "import os\n\nfrom django.core.wsgi import get_wsgi_application\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'example_project.settings')\n\napplication = get_wsgi_application()\n"
+        },
+        {
+            "file": "__init__.py",
+            "path": "example_project/__init__.py",
+            "code": ""
+        }
+    ]
+}
