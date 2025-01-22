@@ -203,8 +203,7 @@ class WebsiteJudge(BaseJudge):
             if initiate_command_list == [[]] or not initiate_command_list:
                 initiate_command_list = [["manage.py", "makemigrations"],
                                          ["manage.py", "migrate"],
-                                         ["manage.py", "createsuperuser", "--username", "Admin", "--email",
-                                          "abc@example.com", "--noinput"]]
+                                         ] # ["manage.py", "createsuperuser", "--username", "Admin", "--email",  "abc@example.com", "--noinput"]
                 super().initiate_command(initiate_command_list)
                 # Create Superuser
                 process = subprocess.Popen([self.get_activate_script(), "manage.py", "shell"], cwd=self.project_path,
@@ -214,12 +213,16 @@ class WebsiteJudge(BaseJudge):
                                            stderr=subprocess.PIPE,
                                            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
                                            )
-                process.communicate(input="""
-                    from django.contrib.auth.models import User\n
-                    u = User.objects.get(username='Admin')\n
-                    u.set_password('abc#12345')\n
-                    u.save()\n
-                    """, timeout=10)
+                process.communicate(input="\n".join([
+                    "from django.contrib.auth.models import User",
+                    "u = User(username='Admin')", # ProjectEval Django Standard Admin User. Username: Admin, Password: abc#12345
+                    "u.set_password('abc#12345')",
+                    "u.is_superuser = True",
+                    "u.is_staff = True",
+                    "u.is_active = True",
+                    "u.save()",
+                    "",
+                ]), timeout=10)
                 process.kill()
             else:
                 super().initiate_command(initiate_command_list)

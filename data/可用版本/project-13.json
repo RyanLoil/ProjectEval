@@ -1,0 +1,907 @@
+[
+    {
+        "project_id": "13",
+        "project_type": "website",
+        "nl_prompt": "Create a website-base client relationship management system.The customer needs to save this information: name, birthday, age, sex, company and phone number. Each customer may have one or more preferred products and also may have one or more purchase records. The product needs to save this information: name, category, recommended price. The purchase record has these column: datetime, product, customer, quantity, amount. There also should be a marketing application for the administrator to analyze the sales.",
+        "framework_technical_stack": [
+            {
+                "language": "Python",
+                "technical_stack": "Django"
+            }
+        ],
+        "nl_checklist": [
+            {
+                "page": "Home Page",
+                "required": true,
+                "function": [
+                    {
+                        "function": "View Home",
+                        "description": "Displays a welcome message and overview of the system features",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Customer Management",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Add Customer",
+                        "description": "Allows the user to add a new customer with details such as name, birthday, age, sex, company, and phone number.",
+                        "required": true
+                    },
+                    {
+                        "function": "Edit Customer",
+                        "description": "Allows the user to update the existing customer information.",
+                        "required": true
+                    },
+                    {
+                        "function": "Delete Customer",
+                        "description": "Enables the user to remove a customer from the database.",
+                        "required": true
+                    },
+                    {
+                        "function": "View Customer",
+                        "description": "Displays detailed information about a specific customer.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Product Management",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Add Product",
+                        "description": "Allows the administrator to add a new product with information like name, category, and recommended price.",
+                        "required": true
+                    },
+                    {
+                        "function": "Edit Product",
+                        "description": "Enables the administrator to modify the existing product details.",
+                        "required": true
+                    },
+                    {
+                        "function": "Delete Product",
+                        "description": "Allows the administrator to delete a product from the system.",
+                        "required": true
+                    },
+                    {
+                        "function": "View Product",
+                        "description": "Displays detailed information about a product.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Purchase Records",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Add Purchase Record",
+                        "description": "Allows recording a new purchase made by a customer, including datetime, product, customer, quantity, and amount.",
+                        "required": true
+                    },
+                    {
+                        "function": "Edit Purchase Record",
+                        "description": "Enables editing existing purchase records.",
+                        "required": true
+                    },
+                    {
+                        "function": "Delete Purchase Record",
+                        "description": "Allows deleting a purchase record from the system.",
+                        "required": true
+                    },
+                    {
+                        "function": "View Purchase Record",
+                        "description": "Displays detailed information about a specific purchase.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Preferred Products Management",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Add Preferred Product",
+                        "description": "Enables adding preferred products for each customer.",
+                        "required": false
+                    },
+                    {
+                        "function": "Edit Preferred Product",
+                        "description": "Allows modification of a customer's preferred products.",
+                        "required": false
+                    },
+                    {
+                        "function": "Delete Preferred Product",
+                        "description": "Allows removing a product from a customer's preferred list.",
+                        "required": false
+                    },
+                    {
+                        "function": "View Preferred Products",
+                        "description": "Displays a list of products preferred by the customer.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Sales Analysis",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Generate Sales Report",
+                        "description": "Generates reports to analyze sales data based on purchases.",
+                        "required": true
+                    },
+                    {
+                        "function": "Analyze Sales Trends",
+                        "description": "Provides tools to identify trends in sales over time.",
+                        "required": true
+                    },
+                    {
+                        "function": "Product Performance Analysis",
+                        "description": "Analyzes the performance of different products based on sales data.",
+                        "required": true
+                    }
+                ]
+            }
+        ],
+        "testcode": [
+            {
+                "page": "Home Page",
+                "function": [
+                    {
+                        "function": "View Home",
+                        "test": "def test_welcome_message(driver, test_url):\r\n\tdriver.get(test_url)\r\n\tassert 'Welcome' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Customer Management",
+                "function": [
+                    {
+                        "function": "Add Customer",
+                        "test": "def test_add_customer(driver, test_url,add_customer_link, name_field, birthday_field, age_field, sex_field, company_field, phone_number_field,save_customer_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, add_customer_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Joe')\r\n\tdriver.find_element(By.ID, birthday_field).send_keys('19930501')\r\n\tdriver.find_element(By.ID, age_field).send_keys('31')\r\n\tdriver.find_element(By.ID, sex_field).send_keys('Male')\r\n\tdriver.find_element(By.ID, company_field).send_keys('AAA Inc.')\r\n\tdriver.find_element(By.ID, phone_number_field).send_keys('11111111111')\r\n\tdriver.find_element(By.ID, save_customer_button).click()\r\n\tassert 'Joe' in driver.page_source\r\n\tassert '11111111111' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "add_customer_link",
+                                "description": "the link button that links to the Add Customer page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "age_field",
+                                "description": "the input box component id of the age"
+                            },
+                            {
+                                "name": "sex_field",
+                                "description": "the input box component id of the sex"
+                            },
+                            {
+                                "name": "company_field",
+                                "description": "the input box component id of the company"
+                            },
+                            {
+                                "name": "phone_number_field",
+                                "description": "the input box component id of the phone number"
+                            },
+                            {
+                                "name": "save_customer_button",
+                                "description": "the id of save customer button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Customer2",
+                        "test": "def test_add_customer2(driver, test_url,add_customer_link, name_field, birthday_field, age_field, sex_field, company_field, phone_number_field,save_customer_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, add_customer_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Jane')\r\n\tdriver.find_element(By.ID, birthday_field).send_keys('19950102')\r\n\tdriver.find_element(By.ID, age_field).send_keys('29')\r\n\tdriver.find_element(By.ID, sex_field).send_keys('Female')\r\n\tdriver.find_element(By.ID, company_field).send_keys('BBB Inc.')\r\n\tdriver.find_element(By.ID, phone_number_field).send_keys('22222222222')\r\n\tdriver.find_element(By.ID, save_customer_button).click()\r\n\tassert 'Jane' in driver.page_source\r\n\tassert '22222222222' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "add_customer_link",
+                                "description": "the link button that links to the Add Customer page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "age_field",
+                                "description": "the input box component id of the age"
+                            },
+                            {
+                                "name": "sex_field",
+                                "description": "the input box component id of the sex"
+                            },
+                            {
+                                "name": "company_field",
+                                "description": "the input box component id of the company"
+                            },
+                            {
+                                "name": "phone_number_field",
+                                "description": "the input box component id of the phone number"
+                            },
+                            {
+                                "name": "save_customer_button",
+                                "description": "the id of save customer button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Customer3",
+                        "test": "def test_add_customer3(driver, test_url,add_customer_link, name_field, birthday_field, age_field, sex_field, company_field, phone_number_field,save_customer_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, add_customer_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Mike')\r\n\tdriver.find_element(By.ID, birthday_field).send_keys('20000605')\r\n\tdriver.find_element(By.ID, age_field).send_keys('24')\r\n\tdriver.find_element(By.ID, sex_field).send_keys('Male')\r\n\tdriver.find_element(By.ID, company_field).send_keys('CCC Inc.')\r\n\tdriver.find_element(By.ID, phone_number_field).send_keys('33333333333')\r\n\tdriver.find_element(By.ID, save_customer_button).click()\r\n\tassert 'Mike' in driver.page_source\r\n\tassert '33333333333' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "add_customer_link",
+                                "description": "the link button that links to the Add Customer page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "age_field",
+                                "description": "the input box component id of the age"
+                            },
+                            {
+                                "name": "sex_field",
+                                "description": "the input box component id of the sex"
+                            },
+                            {
+                                "name": "company_field",
+                                "description": "the input box component id of the company"
+                            },
+                            {
+                                "name": "phone_number_field",
+                                "description": "the input box component id of the phone number"
+                            },
+                            {
+                                "name": "save_customer_button",
+                                "description": "the id of save customer button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Customer4",
+                        "test": "def test_add_customer4(driver, test_url,add_customer_link, name_field, birthday_field, age_field, sex_field, company_field, phone_number_field,save_customer_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, add_customer_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Lisa')\r\n\tdriver.find_element(By.ID, birthday_field).send_keys('19891213')\r\n\tdriver.find_element(By.ID, age_field).send_keys('35')\r\n\tdriver.find_element(By.ID, sex_field).send_keys('Female')\r\n\tdriver.find_element(By.ID, company_field).send_keys('EEE Inc.')\r\n\tdriver.find_element(By.ID, phone_number_field).send_keys('55555555555')\r\n\tdriver.find_element(By.ID, save_customer_button).click()\r\n\tassert 'Lisa' in driver.page_source\r\n\tassert '55555555555' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "add_customer_link",
+                                "description": "the link button that links to the Add Customer page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "age_field",
+                                "description": "the input box component id of the age"
+                            },
+                            {
+                                "name": "sex_field",
+                                "description": "the input box component id of the sex"
+                            },
+                            {
+                                "name": "company_field",
+                                "description": "the input box component id of the company"
+                            },
+                            {
+                                "name": "phone_number_field",
+                                "description": "the input box component id of the phone number"
+                            },
+                            {
+                                "name": "save_customer_button",
+                                "description": "the id of save customer button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Edit Customer",
+                        "test": "def test_edit_customer(driver, test_url,edit_button_class_name, name_field, birthday_field, age_field, sex_field, company_field, phone_number_field,save_changes_button):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Joe') or @value='Joe']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, edit_button_class_name)\r\n\ttag = tag.find_element(By.CLASS_NAME, edit_button_class_name)\r\n\ttag.click()\r\n\tdriver.find_element(By.ID, name_field).clear()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Amy')\r\n\tdriver.find_element(By.ID, birthday_field).clear()\r\n\tdriver.find_element(By.ID, birthday_field).send_keys('19890730')\r\n\tdriver.find_element(By.ID, age_field).clear()\r\n\tdriver.find_element(By.ID, age_field).send_keys('35')\r\n\tdriver.find_element(By.ID, sex_field).send_keys('Female')\r\n\tdriver.find_element(By.ID, company_field).clear()\r\n\tdriver.find_element(By.ID, company_field).send_keys('DDD Inc.')\r\n\tdriver.find_element(By.ID, phone_number_field).clear()\r\n\tdriver.find_element(By.ID, phone_number_field).send_keys('44444444444')\r\n\tdriver.find_element(By.ID, save_changes_button).click()\r\n\tassert 'Amy' in driver.page_source\r\n\tassert '44444444444' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the class name of edit customer links"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "age_field",
+                                "description": "the input box component id of the age"
+                            },
+                            {
+                                "name": "sex_field",
+                                "description": "the input box component id of the sex"
+                            },
+                            {
+                                "name": "company_field",
+                                "description": "the input box component id of the company"
+                            },
+                            {
+                                "name": "phone_number_field",
+                                "description": "the input box component id of the phone number"
+                            },
+                            {
+                                "name": "save_changes_button",
+                                "description": "the id of save changes button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete Customer",
+                        "test": "def test_delete_customer(driver, test_url,delete_button_class_name):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Amy') or @value='Amy']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, delete_button_class_name)\r\n\ttag.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tassert 'Amy' not in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the class name of delete customer links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Product Management",
+                "function": [
+                    {
+                        "function": "Add Product",
+                        "test": "def test_add_product(driver, test_url, product_link, add_product_link,name_field, category_field, recommended_price_field,save_product_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, product_link).click()\r\n\tdriver.find_element(By.ID,add_product_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Widget')\r\n\tdriver.find_element(By.ID, category_field).send_keys('Gadgets')\r\n\tdriver.find_element(By.ID, recommended_price_field).send_keys('19.99')\r\n\tdriver.find_element(By.ID, save_product_button).click()\r\n\tassert 'Widget' in driver.page_source\r\n\tassert 'Gadgets' in driver.page_source\r\n\tassert '19.99' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "product_link",
+                                "description": "the link button that links to the Product Management page"
+                            },
+                            {
+                                "name": "add_product_link",
+                                "description": "the link button that links to the Add Product page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_product_button",
+                                "description": "the id of save product button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Product2",
+                        "test": "def test_add_product(driver, test_url, product_link, add_product_link,name_field, category_field, recommended_price_field,save_product_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, product_link).click()\r\n\tdriver.find_element(By.ID,add_product_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Tomato')\r\n\tdriver.find_element(By.ID, category_field).send_keys('Food')\r\n\tdriver.find_element(By.ID, recommended_price_field).send_keys('0.5')\r\n\tdriver.find_element(By.ID, save_product_button).click()\r\n\tassert 'Tomato' in driver.page_source\r\n\tassert 'Food' in driver.page_source\r\n\tassert '0.5' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "product_link",
+                                "description": "the link button that links to the Product Management page"
+                            },
+                            {
+                                "name": "add_product_link",
+                                "description": "the link button that links to the Add Product page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_product_button",
+                                "description": "the id of save product button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Product3",
+                        "test": "def test_add_product(driver, test_url, product_link, add_product_link,name_field, category_field, recommended_price_field,save_product_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, product_link).click()\r\n\tdriver.find_element(By.ID,add_product_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Aircondition')\r\n\tdriver.find_element(By.ID, category_field).send_keys('Applicance')\r\n\tdriver.find_element(By.ID, recommended_price_field).send_keys('1000')\r\n\tdriver.find_element(By.ID, save_product_button).click()\r\n\tassert 'Aircondition' in driver.page_source\r\n\tassert 'Applicance' in driver.page_source\r\n\tassert '1000' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "product_link",
+                                "description": "the link button that links to the Product Management page"
+                            },
+                            {
+                                "name": "add_product_link",
+                                "description": "the link button that links to the Add Product page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_product_button",
+                                "description": "the id of save product button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Product4",
+                        "test": "def test_add_product(driver, test_url, product_link, add_product_link,name_field, category_field, recommended_price_field,save_product_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, product_link).click()\r\n\tdriver.find_element(By.ID,add_product_link).click()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Juice')\r\n\tdriver.find_element(By.ID, category_field).send_keys('Drink')\r\n\tdriver.find_element(By.ID, recommended_price_field).send_keys('10')\r\n\tdriver.find_element(By.ID, save_product_button).click()\r\n\tassert 'Juice' in driver.page_source\r\n\tassert 'Drink' in driver.page_source\r\n\tassert '10' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "product_link",
+                                "description": "the link button that links to the Product Management page"
+                            },
+                            {
+                                "name": "add_product_link",
+                                "description": "the link button that links to the Add Product page"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_product_button",
+                                "description": "the id of save product button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Edit Product",
+                        "test": "def test_edit_product(driver, test_url, edit_button_class_name,name_field, category_field, recommended_price_field,save_changes_button):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Widget') or @value='Widget']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, edit_button_class_name)\r\n\ttag = tag.find_element(By.CLASS_NAME, edit_button_class_name)\r\n\ttag.click()\r\n\ttime.sleep(0.1)\r\n\tdriver.find_element(By.ID, name_field).clear()\r\n\tdriver.find_element(By.ID, name_field).send_keys('Pen')\r\n\tdriver.find_element(By.ID, category_field).clear()\r\n\tdriver.find_element(By.ID, category_field).send_keys('stationery')\r\n\tdriver.find_element(By.ID, recommended_price_field).clear()\r\n\tdriver.find_element(By.ID, recommended_price_field).send_keys('9.9')\r\n\tdriver.find_element(By.ID, save_changes_button).click()\r\n\ttime.sleep(0.1)\r\n\tassert 'Pen' in driver.page_source\r\n\tassert 'stationery' in driver.page_source\r\n\tassert '9.9' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the class name of edit product links"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_changes_button",
+                                "description": "the id of save changes button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete Product",
+                        "test": "def test_delete_product(driver, test_url,delete_button_class_name):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Pen') or @value='Pen']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, delete_button_class_name)\r\n\ttag.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tassert 'Pen' not in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the class name of delete customer links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Purchase Records",
+                "function": [
+                    {
+                        "function": "Add Purchase Record",
+                        "test": "def test_add_purchase_record(driver, test_url,purchase_link, add_purchase_record_link,product_field, customer_field, quantity_field,amount_field,save_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,purchase_link).click()\r\n\tdriver.find_element(By.ID, add_purchase_record_link).click()\r\n\tdriver.find_element(By.ID, product_field).send_keys('Aircondition')\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Mike')\r\n\tdriver.find_element(By.ID, quantity_field).send_keys('10')\r\n\tdriver.find_element(By.ID, amount_field).send_keys('20')\r\n\tdriver.find_element(By.ID, save_button).click()\r\n\tassert 'Mike' in driver.page_source\r\n\tassert 'Aircondition' in driver.page_source\r\n\tassert 'Date/Time' in driver.page_source\r\n\tassert '10' in driver.page_source\r\n\tassert '20.00' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "purchase_link",
+                                "description": "the link button that links to the Purchase Record page"
+                            },
+                            {
+                                "name": "add_purchase_record_link",
+                                "description": "the link button that links to the Add Purchase Record page"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the product"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the customer"
+                            },
+                            {
+                                "name": "quantity_field",
+                                "description": "the input box component id of the quantity"
+                            },
+                            {
+                                "name": "amount_field",
+                                "description": "the input box component id of the amount"
+                            },
+                            {
+                                "name": "save_button",
+                                "description": "the id of save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Purchase Record2",
+                        "test": "def test_add_purhcase_record(driver, test_url,purchase_link, add_purchase_record_link, product_field, customer_field, quantity_field,amount_field,save_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,purchase_link).click()\r\n\tdriver.find_element(By.ID, add_purchase_record_link).click()\r\n\tdriver.find_element(By.ID, product_field).send_keys('Airconditon')\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Jane')\r\n\tdriver.find_element(By.ID, quantity_field).send_keys('15')\r\n\tdriver.find_element(By.ID, amount_field).send_keys('30')\r\n\tdriver.find_element(By.ID, save_button).click()\r\n\tassert 'Jane' in driver.page_source\r\n\tassert 'Aircondition' in driver.page_source\r\n\tassert 'Date/Time' in driver.page_source\r\n\tassert '15' in driver.page_source\r\n\tassert '30.00' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "purchase_link",
+                                "description": "the link button that links to the Purchase Record page"
+                            },
+                            {
+                                "name": "add_purchase_record_link",
+                                "description": "the link button that links to the Add Purchase Record page"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the product"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the customer"
+                            },
+                            {
+                                "name": "quantity_field",
+                                "description": "the input box component id of the quantity"
+                            },
+                            {
+                                "name": "amount_field",
+                                "description": "the input box component id of the amount"
+                            },
+                            {
+                                "name": "save_button",
+                                "description": "the id of save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Purchase Record3",
+                        "test": "def test_add_purhcase_record(driver, test_url,purchase_link, add_purchase_record_link, product_field, customer_field, quantity_field,amount_field,save_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,purchase_link).click()\r\n\tdriver.find_element(By.ID, add_purchase_record_link).click()\r\n\tdriver.find_element(By.ID, product_field).send_keys('Tomato')\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Jane')\r\n\tdriver.find_element(By.ID, quantity_field).send_keys('90')\r\n\tdriver.find_element(By.ID, amount_field).send_keys('100')\r\n\tdriver.find_element(By.ID, save_button).click()\r\n\tassert 'Jane' in driver.page_source\r\n\tassert 'Tomato' in driver.page_source\r\n\tassert 'Date/Time' in driver.page_source\r\n\tassert '90' in driver.page_source\r\n\tassert '100.00' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "purchase_link",
+                                "description": "the link button that links to the Purchase Record page"
+                            },
+                            {
+                                "name": "add_purchase_record_link",
+                                "description": "the link button that links to the Add Purchase Record page"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the product"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the customer"
+                            },
+                            {
+                                "name": "quantity_field",
+                                "description": "the input box component id of the quantity"
+                            },
+                            {
+                                "name": "amount_field",
+                                "description": "the input box component id of the amount"
+                            },
+                            {
+                                "name": "save_button",
+                                "description": "the id of save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Purchase Record4",
+                        "test": "def test_add_purhcase_record(driver, test_url,purchase_link, add_purchase_record_link, product_field, customer_field, quantity_field,amount_field,save_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,purchase_link).click()\r\n\tdriver.find_element(By.ID, add_purchase_record_link).click()\r\n\tdriver.find_element(By.ID, product_field).send_keys('Airconditon')\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Jane')\r\n\tdriver.find_element(By.ID, quantity_field).send_keys('10')\r\n\tdriver.find_element(By.ID, amount_field).send_keys('20')\r\n\tdriver.find_element(By.ID, save_button).click()\r\n\tassert 'Jane' in driver.page_source\r\n\tassert 'Aircondition' in driver.page_source\r\n\tassert 'Date/Time' in driver.page_source\r\n\tassert '10' in driver.page_source\r\n\tassert '20.00' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "purchase_link",
+                                "description": "the link button that links to the Purchase Record page"
+                            },
+                            {
+                                "name": "add_purchase_record_link",
+                                "description": "the link button that links to the Add Purchase Record page"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the product"
+                            },
+                            {
+                                "name": "birthday_field",
+                                "description": "the input box component id of the birthday"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the customer"
+                            },
+                            {
+                                "name": "quantity_field",
+                                "description": "the input box component id of the quantity"
+                            },
+                            {
+                                "name": "amount_field",
+                                "description": "the input box component id of the amount"
+                            },
+                            {
+                                "name": "save_button",
+                                "description": "the id of save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Edit Purchase Record",
+                        "test": "def test_edit_purchase_record(driver, test_url, product_field, customer_field, quantity_field,amount_field,edit_button_class_name,save_changes_button):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH,\"//*[contains(text(),'30') or @value='30']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, edit_button_class_name)\r\n\ttag = tag.find_element(By.CLASS_NAME, edit_button_class_name)\r\n\ttime.sleep(0.1)\r\n\ttag.click()\t\r\n\tdriver.find_element(By.ID, product_field).send_keys('Juice')\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Lisa')\r\n\tdriver.find_element(By.ID, quantity_field).clear()\r\n\tdriver.find_element(By.ID, quantity_field).send_keys('99')\r\n\tdriver.find_element(By.ID, amount_field).clear()\r\n\tdriver.find_element(By.ID, amount_field).send_keys('199')\r\n\tdriver.find_element(By.ID, save_changes_button).click()\r\n\ttime.sleep(0.1)\r\n\tassert 'Juice' in driver.page_source\r\n\tassert '99' in driver.page_source\r\n\tassert '199' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the class name of edit purchase record links"
+                            },
+                            {
+                                "name": "name_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "category_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "recommended_price_field",
+                                "description": "the input box component id of the recommended_price"
+                            },
+                            {
+                                "name": "save_changes_button",
+                                "description": "the id of save changes button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete Purchase Record",
+                        "test": "def test_delete_purchase_record(driver, test_url,delete_button_class_name):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Lisa') or @value='Lisa']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, delete_button_class_name)\r\n\ttag.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tassert 'Lisa' not in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the class name of delete customer links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Preferred Products Management",
+                "function": [
+                    {
+                        "function": "Add Preferred Product",
+                        "test": "def test_add_preferred_product(driver, test_url,preferred_link, add_preferred_product_link,product_field, customer_field,save_button):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID, preferred_link).click()\t\r\n\tdriver.find_element(By.ID,add_preferred_product_link).click()\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Mike')\r\n\tdriver.find_element(By.ID, product_field).send_keys('Aircondition')\r\n\tdriver.find_element(By.ID, save_button).click()\r\n\tassert 'Mike' in driver.page_source\r\n\tassert 'Aircondition' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test page"
+                            },
+                            {
+                                "name": "preferred_link",
+                                "description": "the link button that links to the Preferred Products page"
+                            },
+                            {
+                                "name": "add_preferred_product_link",
+                                "description": "the link button that links to the Add Preferred Products page"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the customer"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the product"
+                            },
+                            {
+                                "name": "save_button",
+                                "description": "the id of save button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Edit Preferred Product",
+                        "test": "def test_edit_preferred_product(driver, test_url, edit_button_class_name,product_field, customer_field,update_button):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Mike') or @value='Mike']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, edit_button_class_name)\r\n\ttag = tag.find_element(By.CLASS_NAME, edit_button_class_name)\r\n\ttag.click()\r\n\tdriver.find_element(By.ID, customer_field).send_keys('Jane')\r\n\tdriver.find_element(By.ID, product_field).send_keys('Tomato')\r\n\tdriver.find_element(By.ID, update_button).click()\r\n\tassert 'Jane' in driver.page_source\r\n\tassert 'Tomato' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the class name of edit preferred product links"
+                            },
+                            {
+                                "name": "customer_field",
+                                "description": "the input box component id of the name"
+                            },
+                            {
+                                "name": "product_field",
+                                "description": "the input box component id of the category"
+                            },
+                            {
+                                "name": "update_button",
+                                "description": "the id of update button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Delete Preferred Product",
+                        "test": "def test_delete_preferred_product(driver, test_url,delete_button_class_name):\r\n\tdriver.get(test_url)\r\n\ttag = driver.find_element(By.XPATH, \"//*[contains(text(),'Jane') or @value='Jane']\")\r\n\ttag = utils.selenium_find_minimum_ancestor(driver, tag, By.CLASS_NAME, delete_button_class_name)\r\n\ttag.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tassert 'Jane' not in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the class name of delete customer links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Sales Analysis",
+                "function": [
+                    {
+                        "function": "Generate Sales Report",
+                        "test": "def test_generate_sales_report(driver, test_url,analysis_link):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,analysis_link).click()\r\n\tassert 'report' in driver.page_source.lower() or 'analy' in driver.page_source.lower(), \"Page not loaded or missing title\"",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "analysis_link",
+                                "description": "the link button that links to the Sales Report page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Product Performance Analysis",
+                        "test": "def test_product_performance_analysis(driver, test_url,analysis_link):\r\n\tdriver.get(test_url)\r\n\tdriver.find_element(By.ID,analysis_link).click()\r\n\tassert 'Airconditon' in driver.page_source\r\n\tassert '20' in driver.page_source\r\n\tassert '40' in driver.page_source\r\n\tassert 'Tomato' in driver.page_source\r\n\tassert '90' in driver.page_source\r\n\tassert '100' in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "the url for test"
+                            },
+                            {
+                                "name": "analysis_link",
+                                "description": "the link button that links to the Sales Report page"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
