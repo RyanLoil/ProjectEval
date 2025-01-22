@@ -15,9 +15,9 @@ def selenium_find_minimum_ancestor(driver, source_tag, check_by, check_text):
     """
     a selenium function that finds the minimum ancestor for a given tag
     :param driver: selenium driver, usually used self.driver in the project eval
-    :param source_tag:
-    :param check_by:
-    :param check_text:
+    :param source_tag: the start point of up searching ancestor
+    :param check_by: For the target check, By.Something, followed selenium. E.g. By.CLASS_NAME
+    :param check_text: For the target check, meet the check_by requirement. E.g. edit-button
     :return:
     """
     counter = 5
