@@ -1,0 +1,744 @@
+[
+    {
+        "project_id": "20",
+        "project_type": "website",
+        "nl_prompt": "Create a blog website.",
+        "framework_technical_stack": [
+            {
+                "language": "Python",
+                "technical_stack": "Django"
+            }
+        ],
+        "nl_checklist": [
+            {
+                "page": "Home",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Display Latest Blogs",
+                        "description": "Showcase the most recent blog posts on the homepage.",
+                        "required": true
+                    },
+                    {
+                        "function": "Search Bar",
+                        "description": "Allow users to search for specific blog posts or topics.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Blog Post",
+                "required": true,
+                "function": [
+                    {
+                        "function": "Read Blog Content",
+                        "description": "Provide full content of the selected blog post for reading.",
+                        "required": true
+                    },
+                    {
+                        "function": "Comments Section",
+                        "description": "Enable readers to leave comments on blog posts.",
+                        "required": true
+                    },
+                    {
+                        "function": "Add Post",
+                        "description": "Add a new post by blog owner.",
+                        "required": true
+                    },
+                    {
+                        "function": "Manage Post",
+                        "description": "Edit and delete old post by blog owner.",
+                        "required": true
+                    },
+                    {
+                        "function": "Manage Comments",
+                        "description": "Delete inappropriate comments by blog owner.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "About",
+                "required": false,
+                "function": [
+                    {
+                        "function": "Display Author Information",
+                        "description": "Show details about the blog author or team behind the blog.",
+                        "required": true
+                    },
+                    {
+                        "function": "Contact Form",
+                        "description": "Provide a way for readers to contact the author or team.",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "page": "Categories",
+                "required": false,
+                "function": [
+                    {
+                        "function": "List Blog Categories",
+                        "description": "Show all categories the blog posts are grouped under.",
+                        "required": true
+                    },
+                    {
+                        "function": "Filter by Category",
+                        "description": "Allow users to view posts within a specific category.",
+                        "required": true
+                    },
+                    {
+                        "function": "Manage Categories",
+                        "description": "Add, edit and delete categories by blog owner.",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "page": "Archive",
+                "required": false,
+                "function": [
+                    {
+                        "function": "Display Archived Posts",
+                        "description": "List older posts that can be accessed by month. They will be shown after the user click the link of month filter.",
+                        "required": false
+                    },
+                    {
+                        "function": "Date Filter",
+                        "description": "Allow users to find posts by specific dates. Usually in a blog, this filter is a simply month list with link.",
+                        "required": false
+                    }
+                ]
+            }
+        ],
+        "testcode": [
+            {
+                "page": "Preset Blog",
+                "function": [
+                    {
+                        "function": "Login as Owner",
+                        "test": "def login_as_owner(driver, admin_url, username_id, password_id, button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\") # Default ProjectEval Standard\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "button_xpath",
+                                "description": "the xpath of button login"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Category",
+                        "test": "def add_category(driver, category_url, add_button_xpath, name_id, save_button_xpath):\r\n\t# Assume that the login function has redirect the browser to admin panel\r\n\tdriver.get(category_url)\r\n\t\r\n\t# Category 1\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, name_id).send_keys(\"Technology\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\t\r\n\t# Category 2. A normal admin panel should redirect to blog post index.\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, name_id).send_keys(\"Health\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "category_url",
+                                "description": "the url that link to category index page in admin panel contained \"add\" button or link which link to add page of category"
+                            },
+                            {
+                                "name": "add_button_xpath",
+                                "description": "the add button xpath that link from category index page to add category page"
+                            },
+                            {
+                                "name": "name_id",
+                                "description": "the name input field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Add Post",
+                        "test": "def add_post(driver,  blog_post_url, add_button_xpath, title_id, content_id, author_id, category_id, save_button_xpath):\r\n\t# Assume that the login function has redirect the browser to admin panel\r\n\tdriver.get(blog_post_url)\r\n\t\r\n\t# Post 1\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"Latest Trends in AI\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"Artificial Intelligence is rapidly changing the world. In this blog post, we discuss the latest advancements in AI technology.\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Technology\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\t\r\n\t# Post 2. A normal admin panel should redirect to blog post index.\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"How to Stay Healthy in 2024\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"With the new year approaching, it's important to focus on health. In this blog post, we share tips on staying healthy.\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Health\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\t\r\n\t# Post 3\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"The Future of Web Development\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"Web development is evolving at a rapid pace. In this post, we explore what the future holds for web developers.\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Technology\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\t\r\n\t# Post 4\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"Mental Health Awareness\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"In this post, we explore the importance of mental health and how we can all contribute to reducing stigma around mental illness.\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Health\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "blog_post_url",
+                                "description": "the url that link to blog post index page in admin panel contained \"add\" button or link which link to add page of blog post"
+                            },
+                            {
+                                "name": "add_button_xpath",
+                                "description": "the add button xpath that link from blog post index page to add blog post page"
+                            },
+                            {
+                                "name": "title_id",
+                                "description": "the title input field id"
+                            },
+                            {
+                                "name": "content_id",
+                                "description": "the content input field id"
+                            },
+                            {
+                                "name": "author_id",
+                                "description": "the author input/select field id"
+                            },
+                            {
+                                "name": "category_id",
+                                "description": "the category input/select field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Logout as Owner",
+                        "test": "def logout_as_owner(driver, admin_url, button_xpath, expect_message):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, button_xpath).click()\r\n\tassert expect_message in driver.page_source, \"Logout failed\"",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "expect_message",
+                                "description": "The message or page text that shown to owner after the logout action. A sentence is enough."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Home",
+                "function": [
+                    {
+                        "function": "Display Latest Blogs",
+                        "test": "def test_display_latest_blogs(driver, test_url, blog_class):\r\n\tdriver.get(test_url)\r\n\tlatest_blogs = driver.find_elements(By.CLASS_NAME, blog_class)\r\n\tassert len(latest_blogs) > 0, \"No blog is shown in home\"\r\n\tassert \"Mental Health Awareness\" in driver.page_source, \"The shown blog(s) is(are) not latest.\"",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "The URL for the home page for test"
+                            },
+                            {
+                                "name": "blog_class",
+                                "description": "the class name of latest blog"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Search Bar",
+                        "test": "def test_search_bar(driver, test_url, searchbar_id, submit_button_xpath, blog_class):\r\n\tdriver.get(test_url)\r\n\tsearch_bar = driver.find_element(By.ID, searchbar_id)\r\n\tsearch_bar.send_keys(\"AI\")\r\n\tdriver.find_element(By.XPATH, submit_button_xpath).click()\r\n\tlatest_blogs = driver.find_elements(By.CLASS_NAME, blog_class)\r\n\tassert len(latest_blogs) > 0, \"No blog is shown in home\"\r\n\tassert \"Latest Trends in AI\" in driver.page_source, \"The shown blog is not correct.\"",
+                        "parameter": [
+                            {
+                                "name": "test_url",
+                                "description": "The URL for the home page for test"
+                            },
+                            {
+                                "name": "searchbar_id",
+                                "description": "the input component id of searchbar"
+                            },
+                            {
+                                "name": "blog_class",
+                                "description": "the class name of latest blog"
+                            },
+                            {
+                                "name": "submit_button_xpath",
+                                "description": "the xpath of search bar submit button"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Blog Post",
+                "function": [
+                    {
+                        "function": "Read Blog Content",
+                        "test": "def test_read_blog_content(driver, home_url):\r\n\tdriver.get(home_url)\r\n\ttry:\r\n\t\tdriver.find_element(By.XPATH, '//*[text()=\"Mental Health Awareness\"]').click() # Blog title can't be clicked is a stupid design\r\n\texcept:\r\n\t\traise Exception(\"Can't find target article, maybe you forget to display it on home page?\")\r\n\tassert \"In this post, we explore the importance of mental health and how we can all contribute to reducing stigma around mental illness.\" in driver.page_source, \"Failed to display the selected blog.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Comments Section",
+                        "test": "def test_comments_section(driver,  author_id, content_id, submit_button_xpath):\r\n\t# Comment section is always shown below the blog content\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Tom\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"It is awesome.\")\r\n\tdriver.find_element(By.XPATH, submit_button_xpath).click()\r\n\tassert all([\"Tom\" in driver.page_source, \"It is awesome.\" in driver.page_source]), \"Add comment failed.\"",
+                        "parameter": [
+                            {
+                                "name": "author_id",
+                                "description": "the input component's id of commentator to claim him/herself"
+                            },
+                            {
+                                "name": "content_id",
+                                "description": "the input component's id of comment content"
+                            },
+                            {
+                                "name": "submit_button_xpath",
+                                "description": "the xpath of comment submit button"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Add Post 1",
+                        "test": "def dynamic_add_post(driver, admin_url, username_id, password_id, login_button_xpath, blog_post_button_xpath, add_button_xpath, title_id, content_id, author_id, category_id, save_button_xpath, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, blog_post_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"ProjectEval is an amazing benchmark\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"It is unbelievable that they made such an amazing huge benchmark. It's really useful for AI testing\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Technology\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "blog_post_button_xpath",
+                                "description": "the xpath of button redirect to blog post index page in admin panel"
+                            },
+                            {
+                                "name": "add_button_xpath",
+                                "description": "the add button xpath that link from blog post index page to add blog post page"
+                            },
+                            {
+                                "name": "title_id",
+                                "description": "the title input field id"
+                            },
+                            {
+                                "name": "content_id",
+                                "description": "the content input field id"
+                            },
+                            {
+                                "name": "author_id",
+                                "description": "the author input/select field id"
+                            },
+                            {
+                                "name": "category_id",
+                                "description": "the category input/select field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Edit Post",
+                        "test": "def dynamic_edit_post(driver, admin_url, username_id, password_id, login_button_xpath, blog_post_button_xpath, edit_button_class_name, title_id, category_id, save_button_xpath, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, blog_post_button_xpath).click()\r\n\ttarget_row_text = driver.find_element(By.XPATH, '//*[text()=\"ProjectEval is an amazing benchmark\"]')\r\n\trow = utils.selenium_find_minimum_ancestor(driver, target_row_text, By.CLASS_NAME, edit_button_class_name)\r\n\trow.find_element(By.CLASS_NAME, edit_button_class_name).click()\r\n\ttitle = driver.find_element(By.ID, title_id)\r\n\ttitle.clear()\r\n\ttitle.send_keys(\"ProjectEval is an awesome benchmark\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"Health\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "blog_post_button_xpath",
+                                "description": "the xpath of button redirect to blog post index page in admin panel"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the edit button class that allow user to edit the existing blog"
+                            },
+                            {
+                                "name": "title_id",
+                                "description": "the title input field id"
+                            },
+                            {
+                                "name": "content_id",
+                                "description": "the content input field id"
+                            },
+                            {
+                                "name": "author_id",
+                                "description": "the author input/select field id"
+                            },
+                            {
+                                "name": "category_id",
+                                "description": "the category input/select field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Read Update Blog",
+                        "test": "def test_read_update_blog(driver, home_url):\r\n\tdriver.get(home_url)\r\n\ttry:\r\n\t\tdriver.find_element(By.XPATH, '//*[text()=\"ProjectEval is an awesome benchmark\"]').click() # Blog title can't be clicked is a stupid design\r\n\texcept:\r\n\t\traise Exception(\"Can't find target article, maybe you forget to display it on home page?\")\r\n\tassert \"It is unbelievable that they made such an amazing huge benchmark.\" in driver.page_source, \"Failed to display new blog post.\"\r\n\tassert \"Health\" in driver.page_source, \"Wrong category.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Delete Post",
+                        "test": "def dynamic_delete_post(driver, admin_url,username_id, password_id, login_button_xpath, blog_post_button_xpath, delete_button_class_name, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, blog_post_button_xpath).click()\r\n\ttarget_row_text = driver.find_element(By.XPATH, '//*[text()=\"ProjectEval is an awesome benchmark\"]')\r\n\trow = utils.selenium_find_minimum_ancestor(driver, target_row_text, By.CLASS_NAME, delete_button_class_name)\r\n\trow.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "blog_post_button_xpath",
+                                "description": "the xpath of button redirect to blog post index page in admin panel"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the edit button class that allow user to delete the existing blog"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Check Post Deleted",
+                        "test": "def test_blog_post_deleted(driver, home_url):\r\n\tdriver.get(home_url)\r\n\tassert \"awesome\" not in driver.page_source, \"Delete failed.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Categories",
+                "function": [
+                    {
+                        "function": "List Blog Categories",
+                        "test": "def test_list_blog_categories(driver, home_url, category_xpath, category_item_class_name):\r\n\tdriver.get(home_url)\r\n\tdriver.find_element(By.XPATH, category_xpath).click()\r\n\tcategories_list = driver.find_elements(By.CLASS_NAME, category_item_class_name)\r\n\tassert len(categories_list) > 0 and \"Technology\" in driver.page_source, \"Failed to load categories.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            },
+                            {
+                                "name": "category_xpath",
+                                "description": "the xpath of link or button that link to category page"
+                            },
+                            {
+                                "name": "category_item_class_name",
+                                "description": "the class name of categories"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Filter by Category",
+                        "test": "def test_filter_by_category(driver, blog_class):\r\n\ttry:\r\n\t\tdriver.find_element(By.XPATH, '//*[text()=\"Technology\"]').click()  # It's a stupid design if category text can't be click\r\n\texcept:\r\n\t\traise Exception(\"Can't find the target category.\")\r\n\tlatest_blogs = driver.find_elements(By.CLASS_NAME, blog_class)\r\n\tassert len(latest_blogs) > 0, \"No blog is shown, failed filter.\"\r\n\tassert len(latest_blogs) == 2 and \"Development\" in driver.page_source, \"Wrong filter.\"",
+                        "parameter": [
+                            {
+                                "name": "blog_class",
+                                "description": "the class name of filtered blog"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Add Category",
+                        "test": "def dynamic_add_category(driver, admin_url, username_id, password_id, login_button_xpath, category_button_xpath, add_button_xpath, name_id, save_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, category_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, name_id).send_keys(\"AI\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "category_button_xpath",
+                                "description": "the xpath of button redirect to category index page in admin panel"
+                            },
+                            {
+                                "name": "add_button_xpath",
+                                "description": "the add button xpath that link from category index page to add category page"
+                            },
+                            {
+                                "name": "name_id",
+                                "description": "the name input field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Add Post 2",
+                        "test": "def dynamic_add_post(driver, admin_url, blog_post_button_xpath, add_button_xpath, title_id, content_id, author_id, category_id, save_button_xpath, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, blog_post_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, add_button_xpath).click()\r\n\tdriver.find_element(By.ID, title_id).send_keys(\"ProjectEval is an amazing benchmark\")\r\n\tdriver.find_element(By.ID, content_id).send_keys(\"It is unbelievable that they made such an amazing huge benchmark. It's really useful for LLM testing\")\r\n\tdriver.find_element(By.ID, author_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, category_id).send_keys(\"AI\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "blog_post_button_xpath",
+                                "description": "the xpath of button redirect to blog post index page in admin panel"
+                            },
+                            {
+                                "name": "add_button_xpath",
+                                "description": "the add button xpath that link from blog post index page to add blog post page"
+                            },
+                            {
+                                "name": "title_id",
+                                "description": "the title input field id"
+                            },
+                            {
+                                "name": "content_id",
+                                "description": "the content input field id"
+                            },
+                            {
+                                "name": "author_id",
+                                "description": "the author input/select field id"
+                            },
+                            {
+                                "name": "category_id",
+                                "description": "the category input/select field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Read New Post with New Category",
+                        "test": "def test_read_new_post_with_new_category(driver, home_url):\r\n\tdriver.get(home_url)\r\n\ttry:\r\n\t\tdriver.find_element(By.XPATH, '//*[text()=\"ProjectEval is an amazing benchmark\"]').click() # Blog title can't be clicked is a stupid design\r\n\texcept:\r\n\t\traise Exception(\"Can't find target article, maybe you forget to display it on home page?\")\r\n\tassert \"It is unbelievable that they made such an amazing huge benchmark.\" in driver.page_source, \"Failed to display new blog post.\"\r\n\tassert \"AI\" in driver.page_source, \"Wrong category.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Edit Category",
+                        "test": "def dynamic_edit_category(driver, admin_url,username_id, password_id,login_button_xpath, category_button_xpath, edit_button_class_name, name_id, save_button_xpath, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, category_button_xpath).click()\r\n\ttarget_row_text = driver.find_element(By.XPATH, '//*[text()=\"AI\"]')\r\n\trow = utils.selenium_find_minimum_ancestor(driver, target_row_text, By.CLASS_NAME, edit_button_class_name)\r\n\trow.find_element(By.CLASS_NAME, edit_button_class_name).click()\r\n\tname = driver.find_element(By.ID, name_id)\r\n\tname.clear()\r\n\tname.send_keys(\"Nier\")\r\n\tdriver.find_element(By.XPATH, save_button_xpath).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "category_button_xpath",
+                                "description": "the xpath of button redirect to category index page in admin panel"
+                            },
+                            {
+                                "name": "edit_button_class_name",
+                                "description": "the edit button class that allow user to edit the existing category"
+                            },
+                            {
+                                "name": "name_id",
+                                "description": "the name input field id"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Check Category Changed",
+                        "test": "def test_check_category_changed(driver, home_url):\r\n\tdriver.get(home_url)\r\n\ttry:\r\n\t\tdriver.find_element(By.XPATH, '//*[text()=\"ProjectEval is an amazing benchmark\"]').click() # Blog title can't be clicked is a stupid design\r\n\texcept:\r\n\t\traise Exception(\"Can't find target article, maybe you forget to display it on home page?\")\r\n\tassert \"Nier\" in driver.page_source, \"Edit category failed.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Dynamic Delete Category",
+                        "test": "def dynamic_delete_category(driver, admin_url, username_id, password_id, login_button_xpath, category_button_xpath, delete_button_class_name, logout_button_xpath):\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.ID, username_id).send_keys(\"Admin\")\r\n\tdriver.find_element(By.ID, password_id).send_keys(\"abc#12345\")\t\r\n\tdriver.find_element(By.XPATH, login_button_xpath).click()\r\n\tdriver.find_element(By.XPATH, category_button_xpath).click()\r\n\ttarget_row_text = driver.find_element(By.XPATH, '//*[text()=\"Nier\"]')\r\n\trow = utils.selenium_find_minimum_ancestor(driver, target_row_text, By.CLASS_NAME, delete_button_class_name)\r\n\trow.find_element(By.CLASS_NAME, delete_button_class_name).click()\r\n\tdriver.get(admin_url)\r\n\tdriver.find_element(By.XPATH, logout_button_xpath).click()",
+                        "parameter": [
+                            {
+                                "name": "admin_url",
+                                "description": "the url that link to the login page of admin panel"
+                            },
+                            {
+                                "name": "username_id",
+                                "description": "the username input field id"
+                            },
+                            {
+                                "name": "password_id",
+                                "description": "the password input field id"
+                            },
+                            {
+                                "name": "login_button_xpath",
+                                "description": "the xpath of button login"
+                            },
+                            {
+                                "name": "category_button_xpath",
+                                "description": "the xpath of button redirect to category index page in admin panel"
+                            },
+                            {
+                                "name": "delete_button_class_name",
+                                "description": "the edit button class that allow user to delete the existing category"
+                            },
+                            {
+                                "name": "save_button_xpath",
+                                "description": "the save button xpath"
+                            },
+                            {
+                                "name": "logout_button_xpath",
+                                "description": "the xpath of button logout"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Check Category Deleted",
+                        "test": "def test_check_category_deleted(driver, home_url, category_xpath, category_item_class_name):\r\n\tdriver.get(home_url)\r\n\tdriver.find_element(By.XPATH, category_xpath).click()\r\n\tcategories_list = driver.find_elements(By.CLASS_NAME, category_item_class_name)\r\n\tassert len(categories_list) > 0 and \"Nier\" not in driver.page_source and \"AI\" not in driver.page_source, \"Failed to delete category.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL of the home page"
+                            },
+                            {
+                                "name": "category_xpath",
+                                "description": "the xpath of link or button that link to category page"
+                            },
+                            {
+                                "name": "category_item_class_name",
+                                "description": "the class name of categories"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "Archive",
+                "function": [
+                    {
+                        "function": "Date Filter",
+                        "test": "def test_date_filter(driver, home_url, archive_xpath, date_filter_class_name, blog_class):\r\n\tdriver.get(home_url)\r\n\tdriver.find_element(By.XPATH, archive_xpath).click()\r\n\ttry:\r\n\t\tdate_filter_element = driver.find_elements(By.CLASS_NAME, date_filter_class_name)[0]\r\n\texcept:\r\n\t\traise Exception(\"Can't find date filter.\")\r\n\tdate_filter_element.click()\r\n\tblogs = driver.find_elements(By.CLASS_NAME, blog_class)\r\n\tassert len(blogs) > 0, \"No blog is shown, failed filter.\"\r\n\tassert (len(blogs) == 5 or len(blogs) == 4) and \"Development\" in driver.page_source, \"Wrong filter.\"",
+                        "parameter": [
+                            {
+                                "name": "home_url",
+                                "description": "The URL for the home page"
+                            },
+                            {
+                                "name": "date_filter_class_name",
+                                "description": "The date filter (usually a blog is filtered simply by month) class name"
+                            },
+                            {
+                                "name": "blog_class",
+                                "description": "the class name of filtered blog"
+                            },
+                            {
+                                "name": "archive_xpath",
+                                "description": "the xpath of link or button that link to archive page"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "page": "About",
+                "function": [
+                    {
+                        "function": "Display Author Information",
+                        "test": "def test_display_author_information(driver, home_url, about_link_text,  expected_text):\r\n\tdriver.get(home_url)\r\n\tdriver.find_element(By.LINK_TEXT, about_link_text).click()\r\n\tassert expected_text in driver.page_source",
+                        "parameter": [
+                            {
+                                "name": "about_link_text",
+                                "description": "The display text of link which link to the about page on home page"
+                            },
+                            {
+                                "name": "expected_text",
+                                "description": "One UNIQUE sentence that should be displayed on the about page"
+                            },
+                            {
+                                "name": "home_url",
+                                "description": "the URL of home page"
+                            }
+                        ]
+                    },
+                    {
+                        "function": "Contact Form",
+                        "test": "def test_contact_form(driver):\r\n\ttry:\r\n\t\tdriver.find_element(By.TAG_NAME, \"form\")\r\n\texcept:\r\n\t\traise Exception(\"Contact us form is not found.\")",
+                        "parameter": []
+                    }
+                ]
+            }
+        ]
+    }
+]

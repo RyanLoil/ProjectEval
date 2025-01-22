@@ -1,0 +1,498 @@
+{
+  "20": {
+    "Preset Blog": {
+      "Login as Owner": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "button_xpath",
+          "answer": "/html/body/div/div/main/div/div/form/div[3]/input"
+        }
+      ],
+      "Add Category": [
+        {
+          "name": "category_url",
+          "answer": "http://localhost:8000/admin/example_app/category/"
+        },
+        {
+          "name": "add_button_xpath",
+          "answer": "/html/body/div/div/main/div/div/ul/li/a"
+        },
+        {
+          "name": "name_id",
+          "answer": "id_name"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "/html/body/div/div/main/div/div/form/div/div/input[1]"
+        }
+      ],
+      "Add Post": [
+        {
+          "name": "blog_post_url",
+          "answer": "http://localhost:8000/admin/example_app/blogpost/"
+        },
+        {
+          "name": "add_button_xpath",
+          "answer": "/html/body/div/div/main/div/div/ul/li/a"
+        },
+        {
+          "name": "title_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "content_id",
+          "answer": "id_content"
+        },
+        {
+          "name": "author_id",
+          "answer": "id_author"
+        },
+        {
+          "name": "category_id",
+          "answer": "id_category"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "/html/body/div/div/main/div/div/form/div/div/input[1]"
+        }
+      ],
+      "Logout as Owner": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "button_xpath",
+          "answer": "/html/body/div/header/div[2]/form/button"
+        },
+        {
+          "name": "expect_message",
+          "answer": "Logged out"
+        }
+      ]
+    },
+    "Home": {
+      "Display Latest Blogs": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "blog_class",
+          "answer": "blog-post"
+        }
+      ],
+      "Search Bar": [
+        {
+          "name": "test_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "searchbar_id",
+          "answer": "searchbar"
+        },
+        {
+          "name": "submit_button_xpath",
+          "answer": "/html/body/main/section/form/input[3]"
+        },
+        {
+          "name": "blog_class",
+          "answer": "blog-post"
+        }
+      ]
+    },
+    "Blog Post": {
+      "Read Blog Content": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        }
+      ],
+      "Comments Section": [
+        {
+          "name": "author_id",
+          "answer": "id_author"
+        },
+        {
+          "name": "content_id",
+          "answer": "id_content"
+        },
+        {
+          "name": "submit_button_xpath",
+          "answer": "/html/body/main/section/form/button"
+        }
+      ],
+      "Dynamic Add Post 1": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "blog_post_button_xpath",
+          "answer": "//*[text()=\"Blog posts\"]"
+        },
+        {
+          "name": "add_button_xpath",
+          "answer": "//*[@id=\"content-main\"]/ul/li/a"
+        },
+        {
+          "name": "title_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "content_id",
+          "answer": "id_content"
+        },
+        {
+          "name": "author_id",
+          "answer": "id_author"
+        },
+        {
+          "name": "category_id",
+          "answer": "id_category"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "//*[@value=\"Save\"]"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Dynamic Edit Post": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "blog_post_button_xpath",
+          "answer": "//*[text()=\"Blog posts\"]"
+        },
+        {
+          "name": "edit_button_class_name",
+          "answer": "edit-link"
+        },
+        {
+          "name": "title_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "category_id",
+          "answer": "id_category"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "//*[@value=\"Save\"]"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Read Update Blog": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        }
+      ],
+      "Dynamic Delete Post": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "blog_post_button_xpath",
+          "answer": "//*[text()=\"Blog posts\"]"
+        },
+        {
+          "name": "delete_button_class_name",
+          "answer": "delete-link"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Check Post Deleted": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        }
+      ]
+    },
+    "Categories": {
+      "List Blog Categories": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "category_xpath",
+          "answer": "/html/body/header/nav/a[2]"
+        },
+        {
+          "name": "category_item_class_name",
+          "answer": "category-item"
+        }
+      ],
+      "Filter by Category": [
+        {
+          "name": "blog_class",
+          "answer": "blog-post"
+        }
+      ],
+      "Dynamic Add Category": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "category_button_xpath",
+          "answer": "//*[text()=\"Categories\"]"
+        },
+        {
+          "name": "add_button_xpath",
+          "answer": "//*[@id=\"content-main\"]/ul/li/a"
+        },
+        {
+          "name": "name_id",
+          "answer": "id_name"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "//*[@value=\"Save\"]"
+        }
+      ],
+      "Dynamic Add Post 2": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "blog_post_button_xpath",
+          "answer": "//*[text()=\"Blog posts\"]"
+        },
+        {
+          "name": "add_button_xpath",
+          "answer": "//*[@id=\"content-main\"]/ul/li/a"
+        },
+        {
+          "name": "title_id",
+          "answer": "id_title"
+        },
+        {
+          "name": "content_id",
+          "answer": "id_content"
+        },
+        {
+          "name": "author_id",
+          "answer": "id_author"
+        },
+        {
+          "name": "category_id",
+          "answer": "id_category"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "//*[@value=\"Save\"]"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Read New Post with New Category": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        }
+      ],
+      "Dynamic Edit Category": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "category_button_xpath",
+          "answer": "//*[text()=\"Categories\"]"
+        },
+        {
+          "name": "edit_button_class_name",
+          "answer": "edit-link"
+        },
+        {
+          "name": "name_id",
+          "answer": "id_name"
+        },
+        {
+          "name": "save_button_xpath",
+          "answer": "//*[@value=\"Save\"]"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Check Category Changed": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        }
+      ],
+      "Dynamic Delete Category": [
+        {
+          "name": "admin_url",
+          "answer": "http://localhost:8000/admin/"
+        },
+        {
+          "name": "username_id",
+          "answer": "id_username"
+        },
+        {
+          "name": "password_id",
+          "answer": "id_password"
+        },
+        {
+          "name": "login_button_xpath",
+          "answer": "//*[@value=\"Log in\"]"
+        },
+        {
+          "name": "category_button_xpath",
+          "answer": "//*[text()=\"Categories\"]"
+        },
+        {
+          "name": "delete_button_class_name",
+          "answer": "delete-link"
+        },
+        {
+          "name": "logout_button_xpath",
+          "answer": "//*[text()=\"Log out\"]"
+        }
+      ],
+      "Check Category Deleted": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "category_xpath",
+          "answer": "/html/body/header/nav/a[2]"
+        },
+        {
+          "name": "category_item_class_name",
+          "answer": "category-item"
+        }
+      ]
+    },
+    "Archive": {
+      "Date Filter": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "archive_xpath",
+          "answer": "/html/body/header/nav/a[3]"
+        },
+        {
+          "name": "date_filter_class_name",
+          "answer": "month-filter"
+        },
+        {
+          "name": "blog_class",
+          "answer": "blog-post"
+        }
+      ]
+    },
+    "About": {
+      "Display Author Information": [
+        {
+          "name": "home_url",
+          "answer": "http://localhost:8000/"
+        },
+        {
+          "name": "about_link_text",
+          "answer": "About"
+        },
+        {
+          "name": "expected_text",
+          "answer": "I am a passionate writer who loves sharing knowledge and stories."
+        }
+      ],
+      "Contact Form": [
+      ]
+    }
+  }
+}
