@@ -1,0 +1,3897 @@
+{
+    "1": {
+        "HomePage": {
+            "View Introduction": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "introduction_element_id",
+                    "answer": "introduction"
+                }
+            ],
+            "Navigation to Calculator": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "navigate_button_id",
+                    "answer": "navigate_button"
+                },
+                {
+                    "name": "calculator_element_id",
+                    "answer": "bmi_calculator"
+                }
+            ]
+        },
+        "BMICalculatorPage": {
+            "Input Height": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "height_input_box_id",
+                    "answer": "id_height"
+                }
+            ],
+            "Input Weight": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "weight_input_box_id",
+                    "answer": "id_weight"
+                }
+            ],
+            "Submit Data": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "height_input_box_id",
+                    "answer": "id_height"
+                },
+                {
+                    "name": "weight_input_box_id",
+                    "answer": "id_weight"
+                },
+                {
+                    "name": "submit_button_id",
+                    "answer": "submit_button"
+                }
+            ],
+            "Display BMI Result": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "bmi_result_id",
+                    "answer": "bmi_result"
+                }
+            ],
+            "Display BMI Category": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "bmi_category_id",
+                    "answer": "bmi_category"
+                }
+            ],
+            "Provide Interpretation": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "interpretation_id",
+                    "answer": "interpretation"
+                }
+            ],
+            "Reset Form": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/bmi-calculator/"
+                },
+                {
+                    "name": "height_input_box_id",
+                    "answer": "id_height"
+                },
+                {
+                    "name": "weight_input_box_id",
+                    "answer": "id_weight"
+                },
+                {
+                    "name": "reset_button_id",
+                    "answer": "reset_button"
+                }
+            ],
+            "Link to Health Advice": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/advice/"
+                },
+                {
+                    "name": "health_advice_id",
+                    "answer": "bmi_advice"
+                }
+            ]
+        }
+    },
+    "2": {
+        "Home Page": {
+            "Select Source Currency": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "source_currency_dropdown_id",
+                    "answer": "id_source_currency"
+                },
+                {
+                    "name": "source_currency_value",
+                    "answer": "USD"
+                }
+            ],
+            "Select Target Currency": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "target_currency_dropdown_id",
+                    "answer": "id_target_currency"
+                },
+                {
+                    "name": "target_currency_value",
+                    "answer": "EUR"
+                }
+            ],
+            "Enter Amount": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "amount_input_box_id",
+                    "answer": "id_input_amount"
+                },
+                {
+                    "name": "amount_value",
+                    "answer": "100"
+                }
+            ],
+            "Convert Button": [
+                {
+                    "name": "convert_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "Display Conversion Result": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "result_box_id",
+                    "answer": "converted_amount"
+                }
+            ],
+            "Exchange Rate Info": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "exchange_rate_info_id",
+                    "answer": "exchange_rate_info"
+                }
+            ]
+        },
+        "Currency Details Page": {
+            "Currency Information": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/trends/"
+                },
+                {
+                    "name": "currency_info_id",
+                    "answer": "currency_info"
+                }
+            ],
+            "Historical Exchange Rates": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/trends/"
+                },
+                {
+                    "name": "historical_rates_id",
+                    "answer": "historical_rate_EUR"
+                }
+            ]
+        }
+    },
+    "3": {
+        "Home": {
+            "Display Welcome Message": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "swelcome_message_id",
+                    "answer": "welcome_message"
+                }
+            ],
+            "Navigation Button": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "navigation_button_id",
+                    "answer": "navigate_generate"
+                },
+                {
+                    "name": "generator_id",
+                    "answer": "generator"
+                }
+            ]
+        },
+        "PasswordOptions": {
+            "Length Input": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/generator/"
+                },
+                {
+                    "name": "length_input_id",
+                    "answer": "length"
+                }
+            ],
+            "Include Uppercase": [
+                {
+                    "name": "include_uppercase_id",
+                    "answer": "uppercase"
+                }
+            ],
+            "Include Lowercase": [
+                {
+                    "name": "include_lowercase_id",
+                    "answer": "lowercase"
+                }
+            ],
+            "Include Numbers": [
+                {
+                    "name": "include_numbers_id",
+                    "answer": "numbers"
+                }
+            ],
+            "Include Symbols": [
+                {
+                    "name": "include_symbols_id",
+                    "answer": "symbols"
+                }
+            ],
+            "Generate Button": [
+                {
+                    "name": "generate_button_id",
+                    "answer": "generate_button"
+                }
+            ]
+        },
+        "GeneratedPassword": {
+            "Display Password": [
+                {
+                    "name": "display_password_id",
+                    "answer": "password"
+                }
+            ],
+            "Copy to Clipboard": [
+                {
+                    "name": "copy_button_id",
+                    "answer": "copy_button"
+                },
+                {
+                    "name": "display_password_id",
+                    "answer": "password"
+                }
+            ],
+            "Generate Another Password": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/generator/"
+                },
+                {
+                    "name": "length_input_id",
+                    "answer": "length"
+                },
+                {
+                    "name": "include_lowercase_id",
+                    "answer": "lowercase"
+                },
+                {
+                    "name": "include_numbers_id",
+                    "answer": "numbers"
+                },
+                {
+                    "name": "generate_button_id",
+                    "answer": "generate_button"
+                },
+                {
+                    "name": "display_password_id",
+                    "answer": "password"
+                }
+            ],
+            "Rule Check 1": [
+                {
+                    "name": "display_password_id",
+                    "answer": "password"
+                }
+            ],
+            "Rule Check 2": [
+                {
+                    "name": "display_password_id",
+                    "answer": "password"
+                }
+            ]
+        },
+        "About": {
+            "Description": [
+                {
+                    "name": "description_id",
+                    "answer": "description"
+                }
+            ],
+            "About Link": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "about_link_id",
+                    "answer": "about_us_link"
+                }
+            ]
+        }
+    },
+    "4": {
+        "Home": {
+            "Introduction": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "intro_text_css_selector",
+                    "answer": "p.introduction"
+                }
+            ],
+            "Generate QR Code Navigate Button": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "generate_qr_button_id",
+                    "answer": "generate_qr_button"
+                },
+                {
+                    "name": "expected_url",
+                    "answer": "http://localhost:8000/generate/"
+                },
+                {
+                    "name": "generator_id",
+                    "answer": "generator"
+                }
+            ]
+        },
+        "QR Code Generator": {
+            "Text Input Field": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/generate/"
+                },
+                {
+                    "name": "text_input_id",
+                    "answer": "text"
+                }
+            ],
+            "Enter Box Size": [
+                {
+                    "name": "box_size_input_id",
+                    "answer": "box_size"
+                }
+            ],
+            "Enter Border Size": [
+                {
+                    "name": "border_size_input_id",
+                    "answer": "border_size"
+                }
+            ],
+            "Select Fill Color": [
+                {
+                    "name": "fill_color_select_id",
+                    "answer": "fill_color"
+                }
+            ],
+            "Select Back Color": [
+                {
+                    "name": "back_color_select_id",
+                    "answer": "back_color"
+                }
+            ],
+            "Select Error Correction Rate": [
+                {
+                    "name": "correction_rate_select_id",
+                    "answer": "correction_rate"
+                }
+            ],
+            "Generate Button": [
+                {
+                    "name": "generate_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "QR Code Display Area": [
+                {
+                    "name": "qr_code_display_id",
+                    "answer": "qr_code"
+                }
+            ],
+            "Download QR Code Button": [
+                {
+                    "name": "download_button_id",
+                    "answer": "download"
+                },
+                {
+                    "name": "default_download_path",
+                    "answer": "%USERPROFILE%\\Downloads\\qr_code.png"
+                }
+            ],
+            "Error Handling": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/generate/"
+                },
+                {
+                    "name": "text_input_id",
+                    "answer": "text"
+                },
+                {
+                    "name": "generate_button_id",
+                    "answer": "submit"
+                },
+                {
+                    "name": "error_message_css_selector",
+                    "answer": ".error-message"
+                }
+            ]
+        },
+        "About": {
+            "Description": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "about_description_css_selector",
+                    "answer": "p.description"
+                }
+            ],
+            "Common Questions": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "faq_id",
+                    "answer": "common_questions"
+                }
+            ],
+            "Privacy Policy": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "privacy_policy_id",
+                    "answer": "privacy_policy"
+                }
+            ],
+            "Terms of Service": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "terms_of_service_id",
+                    "answer": "terms_of_service"
+                }
+            ]
+        }
+    },
+    "5": {
+        "Home": {
+            "Welcome Message": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Introduction to Converter": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "introduction_id",
+                    "answer": "introduction"
+                }
+            ],
+            "Navigation Links": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "convert_link_id",
+                    "answer": "convert_link"
+                },
+                {
+                    "name": "expected_url",
+                    "answer": "http://localhost:8000/convert/"
+                }
+            ]
+        },
+        "Convert": {
+            "Markdown Input Area": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/convert/"
+                },
+                {
+                    "name": "markdown_input_id",
+                    "answer": "markdown_input"
+                }
+            ],
+            "Convert Button": [
+                {
+                    "name": "convert_button_id",
+                    "answer": "convert_button"
+                }
+            ],
+            "HTML Output Area": [
+                {
+                    "name": "html_output_id",
+                    "answer": "html_output"
+                }
+            ],
+            "Rule Check 1": [
+                {
+                    "name": "html_output_id",
+                    "answer": "html_output"
+                }
+            ],
+            "Upload File": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/convert/"
+                },
+                {
+                    "name": "upload_file_id",
+                    "answer": "upload_file"
+                },
+                {
+                    "name": "upload_file_btn_id",
+                    "answer": "upload_file_btn"
+                }
+            ],
+            "Download HTML": [
+                {
+                    "name": "download_html_btn_id",
+                    "answer": "download_html"
+                },
+                {
+                    "name": "default_download_path",
+                    "answer": "%USERPROFILE%\\Downloads\\converted.html"
+                }
+            ],
+            "Rule Check 2": [
+                {
+                    "name": "default_download_path",
+                    "answer": "%USERPROFILE%\\Downloads\\converted.html"
+                }
+            ]
+        },
+        "About": {
+            "Team Information": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                }
+            ],
+            "FAQ Section": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                }
+            ]
+        }
+    },
+    "6": {
+        "Home": {
+            "View Dashboard": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "navigate_dashboard_id",
+                    "answer": "dashboard-link"
+                }
+            ],
+            "Navigate to Todo Lists": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "navigate_todo_lists_id",
+                    "answer": "navigate-todo-lists"
+                }
+            ]
+        },
+        "Todo List": {
+            "Create New List": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/todos/"
+                },
+                {
+                    "name": "list_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "create_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "View Tasks": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/todos/"
+                },
+                {
+                    "name": "todo_list_selector_class_name",
+                    "answer": "todo-list-selector"
+                }
+            ]
+        },
+        "Task": {
+            "Add New Task": [
+                {
+                    "name": "task_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "add_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "Edit Task": [
+                {
+                    "name": "task_selector_class",
+                    "answer": "edit-todo-item"
+                },
+                {
+                    "name": "edit_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "save_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "Mark Task as Completed": [
+                {
+                    "name": "complete_button_class",
+                    "answer": "complete-todo-item"
+                }
+            ],
+            "Delete Task": [
+                {
+                    "name": "task_selector_class",
+                    "answer": "delete-todo-item"
+                },
+                {
+                    "name": "delete_button_id",
+                    "answer": "delete-todo-item"
+                }
+            ],
+            "Add New Task 2": [
+                {
+                    "name": "task_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "add_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "Add New Task 3": [
+                {
+                    "name": "task_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "add_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "View Task 2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/todos/view_task/1/"
+                },
+                {
+                    "name": "task_class",
+                    "answer": "task"
+                }
+            ],
+            "Mark Task as Completed 2": [
+                {
+                    "name": "complete_button_class",
+                    "answer": "complete-todo-item"
+                }
+            ]
+        },
+        "Analysis": {
+            "Return to Todolists": [
+                {
+                    "name": "return_link_id",
+                    "answer": "return"
+                }
+            ],
+            "Return to Homepage": [
+                {
+                    "name": "return_link_id",
+                    "answer": "return"
+                }
+            ],
+            "View Task Completion Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/analysis/"
+                },
+                {
+                    "name": "chart_id",
+                    "answer": "taskCompletionChart"
+                }
+            ],
+            "View Task Distribution Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/analysis/"
+                },
+                {
+                    "name": "chart_id",
+                    "answer": "taskDistributionChart"
+                }
+            ],
+            "Return to Homepage 2": [
+                {
+                    "name": "return_link_id",
+                    "answer": "return"
+                }
+            ]
+        },
+        "Todo List 2": {
+            "Edit List": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/todos/"
+                },
+                {
+                    "name": "edit_button_xpath",
+                    "answer": "//li[contains(text(),'New List')]/a/button[contains(@class,'todo-list-edit')]"
+                },
+                {
+                    "name": "list_input_box_id",
+                    "answer": "title"
+                },
+                {
+                    "name": "save_button_id",
+                    "answer": "submit"
+                }
+            ],
+            "Delete List": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/todos/"
+                },
+                {
+                    "name": "delete_button_xpath",
+                    "answer": "//li[contains(text(),'Edited List')]/a/button[contains(@class,'todo-list-delete')]"
+                }
+            ]
+        }
+    },
+    "7": {
+        "Home": {
+            "View Home": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "User Check 1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/login/"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                },
+                {
+                    "name": "invalid_message_text",
+                    "answer": "Invalid credentials"
+                }
+            ],
+            "View Dashboard 1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                }
+            ],
+            "View Settings": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                }
+            ],
+            "View Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/charts/"
+                }
+            ],
+            "Sign Up": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/signup/"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "confirm_password_field",
+                    "answer": "confirm_password"
+                },
+                {
+                    "name": "signup_button",
+                    "answer": "submit"
+                }
+            ],
+            "User Login": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/login/"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                }
+            ],
+            "View Dashboard 2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                }
+            ]
+        },
+        "Balance Tracker": {
+            "Add Transaction": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "amount"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "category"
+                },
+                {
+                    "name": "submit_button",
+                    "answer": "add_translation"
+                },
+                {
+                    "name": "date_field",
+                    "answer": "date"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "description"
+                }
+            ],
+            "Edit Transaction": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-button"
+                },
+                {
+                    "name": "category_field_class_name",
+                    "answer": "category-input"
+                },
+                {
+                    "name": "description_field_name",
+                    "answer": "description-input"
+                }
+            ],
+            "Delete Transaction": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete-button"
+                }
+            ],
+            "Filter Transactions": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "start_date_field",
+                    "answer": "start_date"
+                },
+                {
+                    "name": "end_date_field",
+                    "answer": "end_date"
+                },
+                {
+                    "name": "filter_category_field",
+                    "answer": "filter_category"
+                },
+                {
+                    "name": "filter_button",
+                    "answer": "filter"
+                }
+            ],
+            "View Balance Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/charts/"
+                },
+                {
+                    "name": "balance_chart_id",
+                    "answer": "timeChart"
+                }
+            ],
+            "View Balance Structure Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/charts/"
+                },
+                {
+                    "name": "balance_structure_chart_id",
+                    "answer": "structureChart"
+                }
+            ]
+        },
+        "Reports": {
+            "Generate Monthly Report": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "generate_button",
+                    "answer": "generate_monthly_report"
+                }
+            ],
+            "Export Data": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "export_button",
+                    "answer": "download_csv"
+                },
+                {
+                    "name": "default_download_path",
+                    "answer": "%USERPROFILE%\\Downloads\\financial_report.csv"
+                }
+            ]
+        },
+        "Settings 2": {
+            "Update Profile": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "name"
+                },
+                {
+                    "name": "email_field",
+                    "answer": "email"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save_button"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "new_password_field",
+                    "answer": "new_password"
+                },
+                {
+                    "name": "confirm_password_field",
+                    "answer": "confirm_password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Help": {
+            "View FAQs": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/support/"
+                },
+                {
+                    "name": "faqs_id",
+                    "answer": "faq"
+                }
+            ],
+            "Contact Support": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/support/"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "name"
+                },
+                {
+                    "name": "email_field",
+                    "answer": "email"
+                },
+                {
+                    "name": "message_field",
+                    "answer": "message"
+                },
+                {
+                    "name": "submit_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Settings 1": {
+            "Add Category": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                },
+                {
+                    "name": "add_button",
+                    "answer": "add_category_button"
+                },
+                {
+                    "name": "category_name_field",
+                    "answer": "category_name"
+                }
+            ],
+            "Edit Category": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-category-button"
+                },
+                {
+                    "name": "category_field_class_name",
+                    "answer": "category-name-input"
+                }
+            ],
+            "List Category": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                }
+            ],
+            "Delete Category": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete-category-button"
+                }
+            ]
+        }
+    },
+    "8": {
+        "Home": {
+            "View Current Date": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "current_date_id",
+                    "answer": "today"
+                }
+            ],
+            "Quick Access to Calendar": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "calendar_id",
+                    "answer": "calendar"
+                }
+            ]
+        },
+        "Calendar": {
+            "View Calendar": [],
+            "Add Event": [
+                {
+                    "name": "event_input_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "add_event_id",
+                    "answer": "add_event"
+                },
+                {
+                    "name": "description_input_id",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "datetime_id",
+                    "answer": "id_datetime"
+                },
+                {
+                    "name": "save_event_id",
+                    "answer": "submit"
+                }
+            ],
+            "Switch Month": [
+                {
+                    "name": "year_id",
+                    "answer": "year"
+                },
+                {
+                    "name": "month_id",
+                    "answer": "month"
+                },
+                {
+                    "name": "switch_button_id",
+                    "answer": "switch_button"
+                }
+            ],
+            "Add Event Page Back Home": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/calendar/add-event/"
+                },
+                {
+                    "name": "back_button_id",
+                    "answer": "home"
+                }
+            ]
+        },
+        "Event Details": {
+            "List All Events": [
+                {
+                    "name": "list_link_id",
+                    "answer": "list_events"
+                }
+            ],
+            "Edit Event": [
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit_event"
+                },
+                {
+                    "name": "event_input_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "description_input_id",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "datetime_id",
+                    "answer": "id_datetime"
+                },
+                {
+                    "name": "save_event_id",
+                    "answer": "submit"
+                }
+            ],
+            "Delete Event": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/calendar/view-events/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete_event"
+                }
+            ],
+            "Search Events": [
+                {
+                    "name": "search_input_id",
+                    "answer": "search_input"
+                },
+                {
+                    "name": "search_button_id",
+                    "answer": "search_button"
+                }
+            ],
+            "View Event Details 1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/calendar/view-event-details/1/"
+                },
+                {
+                    "name": "event_detail_button_class_name",
+                    "answer": "event_detail_link"
+                }
+            ],
+            "View Event Details 2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "event_detail_button_class_name",
+                    "answer": "details-link"
+                }
+            ],
+            "Event Detail Page Back": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/calendar/view-event-details/1/"
+                },
+                {
+                    "name": "back_button_id",
+                    "answer": "back_button"
+                }
+            ]
+        },
+        "Help": {
+            "FAQ": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "faq_link_id",
+                    "answer": "faq"
+                },
+                {
+                    "name": "faq_id",
+                    "answer": "faq"
+                }
+            ],
+            "FAQs Back Home": [
+                {
+                    "name": "back_button_id",
+                    "answer": "back_button"
+                }
+            ],
+            "User Guide": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "user_guide_link_id",
+                    "answer": "user_guide"
+                },
+                {
+                    "name": "user_guide_id",
+                    "answer": "user_guide"
+                }
+            ],
+            "User Guide Back Home Test": [
+                {
+                    "name": "back_button_id",
+                    "answer": "back_button"
+                }
+            ]
+        }
+    },
+    "9": {
+        "Home": {
+            "Read Product Overview": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "overview_text_id",
+                    "answer": "introduction"
+                }
+            ]
+        },
+        "Features": {
+            "List Key Features": [
+                {
+                    "name": "link_id",
+                    "answer": "features"
+                },
+                {
+                    "name": "features_list_id",
+                    "answer": "features"
+                }
+            ],
+            "Features Back Home": [
+                {
+                    "name": "back_home_id",
+                    "answer": "home"
+                }
+            ]
+        },
+        "Pricing": {
+            "View Pricing Plans": [
+                {
+                    "name": "link_id",
+                    "answer": "pricing"
+                },
+                {
+                    "name": "pricing_table_id",
+                    "answer": "plans"
+                }
+            ],
+            "Contact Sales": [
+                {
+                    "name": "contact_form_id",
+                    "answer": "form"
+                },
+                {
+                    "name": "name_input_name",
+                    "answer": "name"
+                },
+                {
+                    "name": "email_input_name",
+                    "answer": "email"
+                },
+                {
+                    "name": "submit_button_id",
+                    "answer": "submit"
+                },
+                {
+                    "name": "message_input_name",
+                    "answer": "message"
+                }
+            ],
+            "Contact Sales Back": [
+                {
+                    "name": "back_id",
+                    "answer": "back"
+                }
+            ],
+            "Pricing Back Home": [
+                {
+                    "name": "back_home_id",
+                    "answer": "home"
+                }
+            ]
+        },
+        "About Us": {
+            "Company Background": [
+                {
+                    "name": "link_id",
+                    "answer": "about_us"
+                },
+                {
+                    "name": "background_section_id",
+                    "answer": "about_us"
+                }
+            ],
+            "About Back Home": [
+                {
+                    "name": "back_home_id",
+                    "answer": "home"
+                }
+            ]
+        },
+        "Support": {
+            "FAQ": [
+                {
+                    "name": "link_id",
+                    "answer": "support"
+                },
+                {
+                    "name": "faq_section_id",
+                    "answer": "faq"
+                }
+            ],
+            "Support Message": [
+                {
+                    "name": "contact_form_id",
+                    "answer": "form"
+                },
+                {
+                    "name": "name_input_name",
+                    "answer": "name"
+                },
+                {
+                    "name": "email_input_name",
+                    "answer": "email"
+                },
+                {
+                    "name": "submit_button_id",
+                    "answer": "submit"
+                },
+                {
+                    "name": "issue_input_name",
+                    "answer": "issue"
+                }
+            ],
+            "Support Back Home": [
+                {
+                    "name": "back_home_id",
+                    "answer": "home"
+                }
+            ]
+        }
+    },
+    "10": {
+        "Home": {
+            "Welcome Message": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "title_text",
+                    "answer": "Welcome to Calorie Tracker!"
+                }
+            ],
+            "View Dashboard 1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "title_text",
+                    "answer": "Welcome to Calorie Tracker!"
+                }
+            ],
+            "Sign Up": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "sign_up_id",
+                    "answer": "signup"
+                },
+                {
+                    "name": "id_username_field",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "id_email_field",
+                    "answer": "id_email"
+                },
+                {
+                    "name": "id_password1_field",
+                    "answer": "id_password1"
+                },
+                {
+                    "name": "id_password2_field",
+                    "answer": "id_password2"
+                },
+                {
+                    "name": "sign_up_button",
+                    "answer": "submit"
+                }
+            ],
+            "Log In": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "login_id",
+                    "answer": "login"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "login"
+                }
+            ],
+            "User Check 1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/login/"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "login"
+                }
+            ]
+        },
+        "Dashboard": {
+            "Add Meal": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "add_meal",
+                    "answer": "add_meal"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "calories_field",
+                    "answer": "id_calories"
+                },
+                {
+                    "name": "time_field",
+                    "answer": "id_time"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "add_meal_button",
+                    "answer": "add_meal"
+                }
+            ],
+            "Add Meal2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "add_meal",
+                    "answer": "add_meal"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "calories_field",
+                    "answer": "id_calories"
+                },
+                {
+                    "name": "time_field",
+                    "answer": "id_time"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "add_meal_button",
+                    "answer": "add_meal"
+                }
+            ],
+            "Daily Calorie Intake": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                }
+            ],
+            "Recent Meals": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                }
+            ],
+            "Add Activity": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "add_activity",
+                    "answer": "add_activity"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "calories_burned_field",
+                    "answer": "id_calories_burned"
+                },
+                {
+                    "name": "time_field",
+                    "answer": "id_time"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "add_activity_button",
+                    "answer": "add_activity"
+                }
+            ],
+            "Add Activity2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "add_activity",
+                    "answer": "add_activity"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "calories_burned_field",
+                    "answer": "id_calories_burned"
+                },
+                {
+                    "name": "time_field",
+                    "answer": "id_time"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "add_activity_button",
+                    "answer": "add_activity"
+                }
+            ],
+            "Recent Activities": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                }
+            ]
+        },
+        "Meal Log": {
+            "Meal Search": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "all_meals",
+                    "answer": "meal_log"
+                },
+                {
+                    "name": "search_field",
+                    "answer": "search_meal"
+                },
+                {
+                    "name": "search_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Activity Log": {
+            "Activity Search": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "all_activities",
+                    "answer": "activity_log"
+                },
+                {
+                    "name": "search_field",
+                    "answer": "search_activity"
+                },
+                {
+                    "name": "search_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Analysis": {
+            "Calorie Intake Chart": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard/"
+                },
+                {
+                    "name": "chart_link",
+                    "answer": "charts"
+                },
+                {
+                    "name": "chart_image",
+                    "answer": "chart_image"
+                }
+            ]
+        },
+        "Settings": {
+            "Profile": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "settings_button",
+                    "answer": "settings"
+                },
+                {
+                    "name": "profile_button",
+                    "answer": "update_profile"
+                },
+                {
+                    "name": "daily_calorie_goal",
+                    "answer": "id_daily_calorie_goal"
+                },
+                {
+                    "name": "dietary_preferences",
+                    "answer": "id_dietary_preferences"
+                },
+                {
+                    "name": "update_profile_button",
+                    "answer": "submit"
+                }
+            ],
+            "Preferences": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/settings/"
+                },
+                {
+                    "name": "preferences_button",
+                    "answer": "update_preferences"
+                },
+                {
+                    "name": "dietary_preferences",
+                    "answer": "id_dietary_preferences"
+                },
+                {
+                    "name": "save_preferences_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Help": {
+            "FAQ": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                }
+            ],
+            "Contact Support": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                }
+            ],
+            "Tutorials": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/dashboard"
+                },
+                {
+                    "name": "view_tutorials",
+                    "answer": "tutorials"
+                }
+            ]
+        }
+    },
+    "11": {
+        "Home": {
+            "Display Welcome Message": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "title_text",
+                    "answer": ""
+                }
+            ],
+            "Navigation Link": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "home_link_id",
+                    "answer": "home_link"
+                },
+                {
+                    "name": "about_link_id",
+                    "answer": "about_link"
+                },
+                {
+                    "name": "about_expected_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "home_expected_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Upload File1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "json_file_id",
+                    "answer": "id_json_file"
+                },
+                {
+                    "name": "upload_file_btn_id",
+                    "answer": "upload"
+                }
+            ],
+            "Upload File2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "json_file_id",
+                    "answer": "id_json_file"
+                },
+                {
+                    "name": "upload_file_btn_id",
+                    "answer": "upload"
+                }
+            ],
+            "Test Code Review1": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "project_class_name",
+                    "answer": "project"
+                },
+                {
+                    "name": "notes_class_name",
+                    "answer": "notes"
+                },
+                {
+                    "name": "select_class_name",
+                    "answer": "select"
+                },
+                {
+                    "name": "status_class_name",
+                    "answer": "status"
+                },
+                {
+                    "name": "submit_button",
+                    "answer": "submit"
+                },
+                {
+                    "name": "success_text",
+                    "answer": "Review submitted successfully."
+                }
+            ],
+            "Test Code Review2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "project_class_name",
+                    "answer": "project"
+                },
+                {
+                    "name": "notes_class_name",
+                    "answer": "notes"
+                },
+                {
+                    "name": "select_class_name",
+                    "answer": "select"
+                },
+                {
+                    "name": "status_class_name",
+                    "answer": "status"
+                },
+                {
+                    "name": "submit_button",
+                    "answer": "submit"
+                },
+                {
+                    "name": "select_status_text",
+                    "answer": "Not reviewed yet"
+                }
+            ]
+        },
+        "About": {
+            "Test Description": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/about/"
+                },
+                {
+                    "name": "expected_description",
+                    "answer": "This website is designed to manually review projects and code."
+                }
+            ]
+        }
+    },
+    "12": {
+        "Home": {
+            "View Home": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "title_text",
+                    "answer": "Welcome to Accounting and Cashier Management!"
+                },
+                {
+                    "name": "signup_id",
+                    "answer": "signup"
+                },
+                {
+                    "name": "signup_url",
+                    "answer": "http://localhost:8000/signup/"
+                },
+                {
+                    "name": "login_id",
+                    "answer": "login"
+                },
+                {
+                    "name": "login_url",
+                    "answer": "http://localhost:8000/login/"
+                }
+            ],
+            "View Dashboard": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/submit_claim/"
+                },
+                {
+                    "name": "title_text",
+                    "answer": "My Claims"
+                }
+            ],
+            "Sign Up": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "signup_id",
+                    "answer": "signup"
+                },
+                {
+                    "name": "id_username_field",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "id_email_field",
+                    "answer": "id_email"
+                },
+                {
+                    "name": "id_password1_field",
+                    "answer": "id_password1"
+                },
+                {
+                    "name": "id_password2_field",
+                    "answer": "id_password2"
+                },
+                {
+                    "name": "sign_up_button",
+                    "answer": "sign_up"
+                }
+            ],
+            "Log In": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "login_id",
+                    "answer": "login"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                }
+            ]
+        },
+        "Frontend (Employee Portal)": {
+            "Submit Claim": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/submit_claim/"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "submit_claim_button",
+                    "answer": "submit"
+                }
+            ],
+            "Submit Claim2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/submit_claim/"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "submit_claim_button",
+                    "answer": "submit"
+                }
+            ],
+            "Submit Claim3": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/submit_claim/"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "submit_claim_button",
+                    "answer": "submit"
+                }
+            ],
+            "View Claim Status": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/claim_status/"
+                },
+                {
+                    "name": "status_text",
+                    "answer": "Pending"
+                }
+            ],
+            "Edit Submitted Claim": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/claim_status/"
+                },
+                {
+                    "name": "edit_class_name",
+                    "answer": "edit"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "description_field",
+                    "answer": "id_description"
+                },
+                {
+                    "name": "save_changes_button",
+                    "answer": "save"
+                }
+            ]
+        },
+        "Admin Page (Accounting Administrator Portal)": {
+            "Approve Claim": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@id=\"login-form\"]/div[3]/input"
+                },
+                {
+                    "name": "claims_xpath",
+                    "answer": "//*[@id=\"example_app-claim\"]/a"
+                },
+                {
+                    "name": "status_id",
+                    "answer": "id_status"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@id=\"claim_form\"]/div/div/input[1]"
+                },
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "login_id",
+                    "answer": "login"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                },
+                {
+                    "name": "claim_status_url",
+                    "answer": "http://localhost:8000/claim_status/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-link"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                },
+                {
+                    "name": "status_class_name",
+                    "answer": "status"
+                }
+            ],
+            "Reject Claim with Reason": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@id=\"login-form\"]/div[3]/input"
+                },
+                {
+                    "name": "claims_xpath",
+                    "answer": "//*[@id=\"example_app-claim\"]/a"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-link"
+                },
+                {
+                    "name": "status_id",
+                    "answer": "id_status"
+                },
+                {
+                    "name": "rejection_reason_id",
+                    "answer": "id_rejection_reason"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@id=\"claim_form\"]/div/div/input[1]"
+                },
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "login_id",
+                    "answer": "login"
+                },
+                {
+                    "name": "username_field",
+                    "answer": "username"
+                },
+                {
+                    "name": "password_field",
+                    "answer": "password"
+                },
+                {
+                    "name": "login_button",
+                    "answer": "submit"
+                },
+                {
+                    "name": "claim_status_url",
+                    "answer": "http://localhost:8000/claim_status/"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                },
+                {
+                    "name": "status_class_name",
+                    "answer": "status"
+                }
+            ],
+            "View Claim Details": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@id=\"login-form\"]/div[3]/input"
+                },
+                {
+                    "name": "claims_xpath",
+                    "answer": "//*[@id=\"example_app-claim\"]/a"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-link"
+                }
+            ],
+            "Search and Filter Claims": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "claims_xpath",
+                    "answer": "//*[@id=\"example_app-claim\"]/a"
+                },
+                {
+                    "name": "search_id",
+                    "answer": "searchbar"
+                },
+                {
+                    "name": "search_button_xpath",
+                    "answer": "//*[@id=\"changelist-search\"]/div/input[2]"
+                }
+            ]
+        },
+        "Budget Control Application": {
+            "Add Budget": [
+                {
+                    "name": "budget_url",
+                    "answer": "http://localhost:8000/admin/example_app/budget/"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "//*[@id=\"content-main\"]/ul/li/a"
+                },
+                {
+                    "name": "category_id",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "limit_id",
+                    "answer": "id_limit"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@id=\"budget_form\"]/div/div/input[1]"
+                }
+            ],
+            "Analyze Expense Balances": [
+                {
+                    "name": "budget_url",
+                    "answer": "http://localhost:8000/admin/example_app/budget/"
+                },
+                {
+                    "name": "balance_class_name",
+                    "answer": "field-remaining_balance"
+                }
+            ],
+            "Generate Reports": [
+                {
+                    "name": "budget_url",
+                    "answer": "http://localhost:8000/admin/example_app/budget/"
+                }
+            ],
+            "Send Budget Alerts": [
+                {
+                    "name": "budget_url",
+                    "answer": "http://localhost:8000/admin/example_app/budget/"
+                },
+                {
+                    "name": "over_balanace_class_name",
+                    "answer": "field-is_over_budget"
+                }
+            ]
+        }
+    },
+    "13": {
+        "Home Page": {
+            "View Home": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ]
+        },
+        "Customer Management": {
+            "Add Customer": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "add_customer_link",
+                    "answer": "add_customer"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "birthday_field",
+                    "answer": "id_birthday"
+                },
+                {
+                    "name": "age_field",
+                    "answer": "id_age"
+                },
+                {
+                    "name": "sex_field",
+                    "answer": "id_sex"
+                },
+                {
+                    "name": "company_field",
+                    "answer": "id_company"
+                },
+                {
+                    "name": "phone_number_field",
+                    "answer": "id_phone_number"
+                },
+                {
+                    "name": "save_customer_button",
+                    "answer": "save_customer"
+                }
+            ],
+            "Add Customer2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "add_customer_link",
+                    "answer": "add_customer"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "birthday_field",
+                    "answer": "id_birthday"
+                },
+                {
+                    "name": "age_field",
+                    "answer": "id_age"
+                },
+                {
+                    "name": "sex_field",
+                    "answer": "id_sex"
+                },
+                {
+                    "name": "company_field",
+                    "answer": "id_company"
+                },
+                {
+                    "name": "phone_number_field",
+                    "answer": "id_phone_number"
+                },
+                {
+                    "name": "save_customer_button",
+                    "answer": "save_customer"
+                }
+            ],
+            "Add Customer3": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "add_customer_link",
+                    "answer": "add_customer"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "birthday_field",
+                    "answer": "id_birthday"
+                },
+                {
+                    "name": "age_field",
+                    "answer": "id_age"
+                },
+                {
+                    "name": "sex_field",
+                    "answer": "id_sex"
+                },
+                {
+                    "name": "company_field",
+                    "answer": "id_company"
+                },
+                {
+                    "name": "phone_number_field",
+                    "answer": "id_phone_number"
+                },
+                {
+                    "name": "save_customer_button",
+                    "answer": "save_customer"
+                }
+            ],
+            "Add Customer4": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "add_customer_link",
+                    "answer": "add_customer"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "birthday_field",
+                    "answer": "id_birthday"
+                },
+                {
+                    "name": "age_field",
+                    "answer": "id_age"
+                },
+                {
+                    "name": "sex_field",
+                    "answer": "id_sex"
+                },
+                {
+                    "name": "company_field",
+                    "answer": "id_company"
+                },
+                {
+                    "name": "phone_number_field",
+                    "answer": "id_phone_number"
+                },
+                {
+                    "name": "save_customer_button",
+                    "answer": "save_customer"
+                }
+            ],
+            "Edit Customer": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit_button"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "birthday_field",
+                    "answer": "id_birthday"
+                },
+                {
+                    "name": "age_field",
+                    "answer": "id_age"
+                },
+                {
+                    "name": "sex_field",
+                    "answer": "id_sex"
+                },
+                {
+                    "name": "company_field",
+                    "answer": "id_company"
+                },
+                {
+                    "name": "phone_number_field",
+                    "answer": "id_phone_number"
+                },
+                {
+                    "name": "save_changes_button",
+                    "answer": "save_changes"
+                }
+            ],
+            "Delete Customer": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete_button"
+                }
+            ]
+        },
+        "Product Management": {
+            "Add Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "product_link",
+                    "answer": "products"
+                },
+                {
+                    "name": "add_product_link",
+                    "answer": "add_product"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "recommended_price_field",
+                    "answer": "id_recommended_price"
+                },
+                {
+                    "name": "save_product_button",
+                    "answer": "save_product"
+                }
+            ],
+            "Add Product2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "product_link",
+                    "answer": "products"
+                },
+                {
+                    "name": "add_product_link",
+                    "answer": "add_product"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "recommended_price_field",
+                    "answer": "id_recommended_price"
+                },
+                {
+                    "name": "save_product_button",
+                    "answer": "save_product"
+                }
+            ],
+            "Add Product3": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "product_link",
+                    "answer": "products"
+                },
+                {
+                    "name": "add_product_link",
+                    "answer": "add_product"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "recommended_price_field",
+                    "answer": "id_recommended_price"
+                },
+                {
+                    "name": "save_product_button",
+                    "answer": "save_product"
+                }
+            ],
+            "Add Product4": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "product_link",
+                    "answer": "products"
+                },
+                {
+                    "name": "add_product_link",
+                    "answer": "add_product"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "recommended_price_field",
+                    "answer": "id_recommended_price"
+                },
+                {
+                    "name": "save_product_button",
+                    "answer": "save_product"
+                }
+            ],
+            "Edit Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/products/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit_button"
+                },
+                {
+                    "name": "name_field",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "category_field",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "recommended_price_field",
+                    "answer": "id_recommended_price"
+                },
+                {
+                    "name": "save_changes_button",
+                    "answer": "save_changes"
+                }
+            ],
+            "Delete Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/products/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete_button"
+                }
+            ]
+        },
+        "Purchase Records": {
+            "Add Purchase Record": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "purchase_link",
+                    "answer": "purchase"
+                },
+                {
+                    "name": "add_purchase_record_link",
+                    "answer": "add_purchase_record"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "quantity_field",
+                    "answer": "id_quantity"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save"
+                }
+            ],
+            "Add Purchase Record2": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "purchase_link",
+                    "answer": "purchase"
+                },
+                {
+                    "name": "add_purchase_record_link",
+                    "answer": "add_purchase_record"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "quantity_field",
+                    "answer": "id_quantity"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save"
+                }
+            ],
+            "Add Purchase Record3": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "purchase_link",
+                    "answer": "purchase"
+                },
+                {
+                    "name": "add_purchase_record_link",
+                    "answer": "add_purchase_record"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "quantity_field",
+                    "answer": "id_quantity"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save"
+                }
+            ],
+            "Add Purchase Record4": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "purchase_link",
+                    "answer": "purchase"
+                },
+                {
+                    "name": "add_purchase_record_link",
+                    "answer": "add_purchase_record"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "quantity_field",
+                    "answer": "id_quantity"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save"
+                }
+            ],
+            "Edit Purchase Record": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/purchases"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit_button"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "quantity_field",
+                    "answer": "id_quantity"
+                },
+                {
+                    "name": "amount_field",
+                    "answer": "id_amount"
+                },
+                {
+                    "name": "save_changes_button",
+                    "answer": "save_changes"
+                }
+            ],
+            "Delete Purchase Record": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/purchases"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete_button"
+                }
+            ]
+        },
+        "Preferred Products Management": {
+            "Add Preferred Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "preferred_link",
+                    "answer": "preferred"
+                },
+                {
+                    "name": "add_preferred_product_link",
+                    "answer": "add_preferred_product"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "save_button",
+                    "answer": "save"
+                }
+            ],
+            "Edit Preferred Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/preferred_products_list/"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit_button"
+                },
+                {
+                    "name": "customer_field",
+                    "answer": "id_customer"
+                },
+                {
+                    "name": "product_field",
+                    "answer": "id_product"
+                },
+                {
+                    "name": "update_button",
+                    "answer": "update"
+                }
+            ],
+            "Delete Preferred Product": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/preferred_products_list/"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete_button"
+                }
+            ]
+        },
+        "Sales Analysis": {
+            "Generate Sales Report": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "analysis_link",
+                    "answer": "analysis"
+                }
+            ],
+            "Product Performance Analysis": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "analysis_link",
+                    "answer": "analysis"
+                }
+            ]
+        }
+    },
+    "14": {
+        "HelloWorld": {
+            "DisplayText": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "BasicStyling": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "PageTitle": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "MetaTags": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ]
+        }
+    },
+    "15": {
+        "Home": {
+            "Button to 'HelloWorld' page": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ]
+        },
+        "HelloWorld": {
+            "Display 'HelloWorld' message": []
+        }
+    },
+    "16": {
+        "Input File Validation": {
+            "CheckFileExistence": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: The file 'Spring Semester Subjects.xlsx' does not exist."
+                }
+            ],
+            "ValidateHeaders": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: The input file is missing one or more required columns: ['#', 'Name', 'Weekday', 'Time']"
+                }
+            ],
+            "ValidateNullValue": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: There are missing values in the input data. Please fill in all required fields."
+                }
+            ],
+            "ValidateTimeColumn": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: Invalid time values found: [...]. Valid options are ['First period', 'Second period', 'Third period', 'Fourth period']."
+                }
+            ],
+            "ValidateDataIntegrity": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: Invalid weekday values found: [...]. Valid options are ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']."
+                }
+            ]
+        },
+        "Data Transformation and File Output": {
+            "EmptyFileRun": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                }
+            ],
+            "RunProject": [
+                {
+                    "name": "entry",
+                    "answer": "16-stdanswer.py"
+                }
+            ],
+            "OutputFileCheck": []
+        }
+    },
+    "17": {
+        "Data Preparation": {
+            "CheckFileExistence": [
+                {
+                    "name": "entry",
+                    "answer": "17-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Error: The file 'Gamedata.xlsx' does not exist."
+                }
+            ],
+            "ValidateNullValue": [
+                {
+                    "name": "entry",
+                    "answer": "17-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Dataset contains missing or invalid values. Please clean the data and try again."
+                }
+            ],
+            "ValidateEmptyFile": [
+                {
+                    "name": "entry",
+                    "answer": "17-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Feature matrix or target vector is empty. Check your input data."
+                }
+            ]
+        },
+        "Model Creation and Output": {
+            "RunProject": [
+                {
+                    "name": "entry",
+                    "answer": "17-stdanswer.py"
+                }
+            ],
+            "OutputFileCheck": []
+        }
+    },
+    "18": {
+        "Main Menu": {
+            "Welcome Message": [
+                {
+                    "name": "expected_output",
+                    "answer": "\n=== BashCrawl Main Menu ===\n1. Start Game\n2. Help\n3. Quit\nChoose an option (1, 2, or 3):"
+                }
+            ],
+            "Help in Main Menu": [
+                {
+                    "name": "help_in_main_menu_command",
+                    "answer": "2"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "Welcome to the BashCrawl Main Menu!\nHere are your options:\n1. Start Game - Begin your adventure.\n2. Help - Learn how to play the game.\n3. Quit - Exit the program.\n"
+                }
+            ],
+            "Start Game": [
+                {
+                    "name": "start_game_command",
+                    "answer": "1"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "Welcome to BashCrawl!\nYour goal is to find the golden key and escape the cave.\nIn-game commands:\n- ls: List the contents of the current directory.\n- cd <dir>: Move into a directory.\n- inventory: Check what you're carrying.\n- help: Show this help message.\n- quit: Exit the game.\n\nYour goal is to find the golden key hidden in the cave and return to the root directory.\n\nCurrent location: \\"
+                }
+            ],
+            "Wrong Selection Check": [
+                {
+                    "name": "expected_output",
+                    "answer": "Invalid option. Please choose 1, 2, or 3.\nChoose an option (1, 2, or 3):"
+                }
+            ]
+        },
+        "Game": {
+            "Display Help": [
+                {
+                    "name": "help_in_game",
+                    "answer": "help"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "In-game commands:\n- ls: List the contents of the current directory.\n- cd <dir>: Move into a directory.\n- inventory: Check what you're carrying.\n- help: Show this help message.\n- quit: Exit the game.\n\nYour goal is to find the golden key hidden in the cave and return to the root directory.\n\nCurrent location: \\"
+                }
+            ],
+            "Look Around": [
+                {
+                    "name": "expected_output",
+                    "answer": "home\nforest\ncave\n\nCurrent location: \\"
+                }
+            ],
+            "Move Player": [
+                {
+                    "name": "direction",
+                    "answer": "home"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "You are now in \\home\n\nCurrent location: \\home"
+                }
+            ],
+            "Move Back": [
+                {
+                    "name": "expected_output",
+                    "answer": "You are now in \\\n\nCurrent location: \\"
+                }
+            ],
+            "Check Inventory 1": [
+                {
+                    "name": "check_inventory_command",
+                    "answer": "inventory"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "Your inventory is empty.\n\nCurrent location: \\"
+                }
+            ],
+            "Pick Item": [
+                {
+                    "name": "directions",
+                    "answer": "cave,treasure_room"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "You are now in \\cave\\treasure_room\nYou found a golden_key!\n\nCurrent location: \\cave\\treasure_room"
+                }
+            ],
+            "Check Inventory 2": [
+                {
+                    "name": "check_inventory_command",
+                    "answer": "inventory"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "You are carrying:\ngolden_key\n\nCurrent location: \\cave\\treasure_room"
+                }
+            ],
+            "Win the Game": [
+                {
+                    "name": "directions",
+                    "answer": "..,.."
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "You are now in \\cave\n\nCurrent location: \\cave\n$ You are now in \\\nCongratulations! You've found the golden key and escaped!\n=== BashCrawl Main Menu ===\n1. Start Game\n2. Help\n3. Quit\nChoose an option (1, 2, or 3): "
+                }
+            ]
+        },
+        "Main Menu 2": {
+            "Exit Game": [
+                {
+                    "name": "exit_command",
+                    "answer": "3"
+                },
+                {
+                    "name": "expected_output",
+                    "answer": "Goodbye!"
+                }
+            ]
+        }
+    },
+    "19": {
+        "Batch Program": {
+            "CheckFileExistence": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "The file 'Deathlist.csv' was not found."
+                }
+            ],
+            "ValidateHeaders": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "The dataset is missing the following required columns: Date of death"
+                }
+            ],
+            "ValidateEmptyFile": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "The dataset is empty."
+                }
+            ],
+            "ValidateTimeColumn": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Warning: Found [number] non-date entries. These will be ignored.\nHistogram saved as 'weekly_deaths_histogram.png'."
+                }
+            ],
+            "ValidateNullValue": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "error_message",
+                    "answer": "Warning: Found [number] non-date entries. These will be ignored.\nWarning: 2 invalid date entries were found and will be ignored.\nHistogram saved as 'weekly_deaths_histogram.png'."
+                }
+            ],
+            "RunProject1": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "image_name",
+                    "answer": "weekly_deaths_histogram.png"
+                }
+            ],
+            "RunProject2": [
+                {
+                    "name": "entry",
+                    "answer": "19-stdanswer.py"
+                },
+                {
+                    "name": "image_name",
+                    "answer": "weekly_deaths_histogram.png"
+                }
+            ]
+        }
+    },
+    "20": {
+        "Preset Blog": {
+            "Login as Owner": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "button_xpath",
+                    "answer": "/html/body/div/div/main/div/div/form/div[3]/input"
+                }
+            ],
+            "Add Category": [
+                {
+                    "name": "category_url",
+                    "answer": "http://localhost:8000/admin/example_app/category/"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "/html/body/div/div/main/div/div/ul/li/a"
+                },
+                {
+                    "name": "name_id",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "/html/body/div/div/main/div/div/form/div/div/input[1]"
+                }
+            ],
+            "Add Post": [
+                {
+                    "name": "blog_post_url",
+                    "answer": "http://localhost:8000/admin/example_app/blogpost/"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "/html/body/div/div/main/div/div/ul/li/a"
+                },
+                {
+                    "name": "title_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "content_id",
+                    "answer": "id_content"
+                },
+                {
+                    "name": "author_id",
+                    "answer": "id_author"
+                },
+                {
+                    "name": "category_id",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "/html/body/div/div/main/div/div/form/div/div/input[1]"
+                }
+            ],
+            "Logout as Owner": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "button_xpath",
+                    "answer": "/html/body/div/header/div[2]/form/button"
+                },
+                {
+                    "name": "expect_message",
+                    "answer": "Logged out"
+                }
+            ]
+        },
+        "Home": {
+            "Display Latest Blogs": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "blog_class",
+                    "answer": "blog-post"
+                }
+            ],
+            "Search Bar": [
+                {
+                    "name": "test_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "searchbar_id",
+                    "answer": "searchbar"
+                },
+                {
+                    "name": "submit_button_xpath",
+                    "answer": "/html/body/main/section/form/input[3]"
+                },
+                {
+                    "name": "blog_class",
+                    "answer": "blog-post"
+                }
+            ]
+        },
+        "Blog Post": {
+            "Read Blog Content": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Comments Section": [
+                {
+                    "name": "author_id",
+                    "answer": "id_author"
+                },
+                {
+                    "name": "content_id",
+                    "answer": "id_content"
+                },
+                {
+                    "name": "submit_button_xpath",
+                    "answer": "/html/body/main/section/form/button"
+                }
+            ],
+            "Dynamic Add Post 1": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "blog_post_button_xpath",
+                    "answer": "//*[text()=\"Blog posts\"]"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "//*[@id=\"content-main\"]/ul/li/a"
+                },
+                {
+                    "name": "title_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "content_id",
+                    "answer": "id_content"
+                },
+                {
+                    "name": "author_id",
+                    "answer": "id_author"
+                },
+                {
+                    "name": "category_id",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@value=\"Save\"]"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Dynamic Edit Post": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "blog_post_button_xpath",
+                    "answer": "//*[text()=\"Blog posts\"]"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-link"
+                },
+                {
+                    "name": "title_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "category_id",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@value=\"Save\"]"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Read Update Blog": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Dynamic Delete Post": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "blog_post_button_xpath",
+                    "answer": "//*[text()=\"Blog posts\"]"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete-link"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Check Post Deleted": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ]
+        },
+        "Categories": {
+            "List Blog Categories": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "category_xpath",
+                    "answer": "/html/body/header/nav/a[2]"
+                },
+                {
+                    "name": "category_item_class_name",
+                    "answer": "category-item"
+                }
+            ],
+            "Filter by Category": [
+                {
+                    "name": "blog_class",
+                    "answer": "blog-post"
+                }
+            ],
+            "Dynamic Add Category": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "category_button_xpath",
+                    "answer": "//*[text()=\"Categories\"]"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "//*[@id=\"content-main\"]/ul/li/a"
+                },
+                {
+                    "name": "name_id",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@value=\"Save\"]"
+                }
+            ],
+            "Dynamic Add Post 2": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "blog_post_button_xpath",
+                    "answer": "//*[text()=\"Blog posts\"]"
+                },
+                {
+                    "name": "add_button_xpath",
+                    "answer": "//*[@id=\"content-main\"]/ul/li/a"
+                },
+                {
+                    "name": "title_id",
+                    "answer": "id_title"
+                },
+                {
+                    "name": "content_id",
+                    "answer": "id_content"
+                },
+                {
+                    "name": "author_id",
+                    "answer": "id_author"
+                },
+                {
+                    "name": "category_id",
+                    "answer": "id_category"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@value=\"Save\"]"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Read New Post with New Category": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Dynamic Edit Category": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "category_button_xpath",
+                    "answer": "//*[text()=\"Categories\"]"
+                },
+                {
+                    "name": "edit_button_class_name",
+                    "answer": "edit-link"
+                },
+                {
+                    "name": "name_id",
+                    "answer": "id_name"
+                },
+                {
+                    "name": "save_button_xpath",
+                    "answer": "//*[@value=\"Save\"]"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Check Category Changed": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                }
+            ],
+            "Dynamic Delete Category": [
+                {
+                    "name": "admin_url",
+                    "answer": "http://localhost:8000/admin/"
+                },
+                {
+                    "name": "username_id",
+                    "answer": "id_username"
+                },
+                {
+                    "name": "password_id",
+                    "answer": "id_password"
+                },
+                {
+                    "name": "login_button_xpath",
+                    "answer": "//*[@value=\"Log in\"]"
+                },
+                {
+                    "name": "category_button_xpath",
+                    "answer": "//*[text()=\"Categories\"]"
+                },
+                {
+                    "name": "delete_button_class_name",
+                    "answer": "delete-link"
+                },
+                {
+                    "name": "logout_button_xpath",
+                    "answer": "//*[text()=\"Log out\"]"
+                }
+            ],
+            "Check Category Deleted": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "category_xpath",
+                    "answer": "/html/body/header/nav/a[2]"
+                },
+                {
+                    "name": "category_item_class_name",
+                    "answer": "category-item"
+                }
+            ]
+        },
+        "Archive": {
+            "Date Filter": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "archive_xpath",
+                    "answer": "/html/body/header/nav/a[3]"
+                },
+                {
+                    "name": "date_filter_class_name",
+                    "answer": "month-filter"
+                },
+                {
+                    "name": "blog_class",
+                    "answer": "blog-post"
+                }
+            ]
+        },
+        "About": {
+            "Display Author Information": [
+                {
+                    "name": "home_url",
+                    "answer": "http://localhost:8000/"
+                },
+                {
+                    "name": "about_link_text",
+                    "answer": "About"
+                },
+                {
+                    "name": "expected_text",
+                    "answer": "I am a passionate writer who loves sharing knowledge and stories."
+                }
+            ],
+            "Contact Form": []
+        }
+    }
+}

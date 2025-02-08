@@ -507,6 +507,7 @@ class BatchJudge(BaseJudge):
             self.subprocess.initiate_command(initiate_command_list)
             self.subprocess.start()
             self.status = self.subprocess.initial_status
+
             return True
         except Exception as e:
             self.logger.critical(f"Preprocess exception: {e}")
