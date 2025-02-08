@@ -1,5 +1,6 @@
 import shutil
 import os
+from collections import defaultdict
 
 import cv2
 from selenium.webdriver.common.by import By
@@ -34,6 +35,7 @@ def selenium_find_minimum_ancestor(driver, source_tag, check_by, check_text):
         raise AssertionError('No minimum ancestor found')
     return tag
 
+
 def copy_file(src: str, dst: str) -> None:
     """
     Copy a file from src to dst.
@@ -59,6 +61,7 @@ def copy_file(src: str, dst: str) -> None:
     except Exception as e:
         print(f"Error: {e}")
 
+
 def rename_file(src: str, dst: str) -> None:
     """
     Rename a file in the same folder or to a new folder.
@@ -73,6 +76,7 @@ def rename_file(src: str, dst: str) -> None:
         # print(f"File renamed successfully from {src} to {dst}")
     except Exception as e:
         raise e
+
 
 def run_entry(path: str) -> tuple[str, str]:
     """
@@ -92,7 +96,6 @@ def run_entry(path: str) -> tuple[str, str]:
     finally:
         stdout_buffer.seek(0)
         stderr_buffer.seek(0)
-
 
     return return_value
 
@@ -128,3 +131,39 @@ def calculate_histogram_similarity(image1, image2):
     # 计算匹配率
     similarity = len(matches) / min(len(kp1), len(kp2))
     return similarity > IMAGE_SIMILARITY_THRESHOLD
+
+
+def extract_json_files_from_folder(folder_path):
+    file_groups = defaultdict(lambda: {
+        "answer_checklist_path": None,
+        "answer_skeleton_path": None,
+        "answer_code_path": None,
+        "answer_parameter_path": None
+    })
+    for file_name in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file_name)
+
+        # 确保是文件并且是JSON格式
+        if os.path.isfile(file_path) and file_name.endswith('.json'):
+            # 获取文件名和后缀
+            file_base_name, file_extension = os.path.splitext(file_name)
+            try:
+                int(file_base_name.split('_')[-1])
+                prefix = file_base_name
+                file_groups[prefix]["answer_code_path"] = file_path
+            except ValueError:
+                if file_base_name.split('_')[-1] == "checklist":
+
+                    prefix = "_".join(file_base_name.split('_')[:-2])
+                else:
+                    prefix = "_".join(file_base_name.split('_')[:-1])
+
+            # 根据文件的后缀更新对应组的字典
+            if file_base_name.endswith('_nl_checklist'):
+                file_groups[prefix]["answer_checklist_path"] = file_path
+            elif file_base_name.endswith('_skeleton'):
+                file_groups[prefix]["answer_skeleton_path"] = file_path
+            elif file_base_name.endswith('_parameter'):
+                file_groups[prefix]["answer_parameter_path"] = file_path
+
+    return dict(file_groups)

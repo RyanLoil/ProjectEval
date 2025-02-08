@@ -15,7 +15,7 @@ from selenium import webdriver
 from func_timeout import func_set_timeout, FunctionTimedOut, func_timeout
 
 import utils
-from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT
+from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT, IO_WAIT, LOG_PATH
 from llm import LLMTest
 
 DRIVER_DICT = {
@@ -40,10 +40,8 @@ class BasePythonManager:
         self.logger = logger
         self.start_command: list[str] = []
 
-        self.stdout_file = open("log/{0}-Project-Normal.log".format(
-            self.logger.start_time), "a", encoding="utf-8")
-        self.stderr_file = open("log/{0}-Project-Error.log".format(
-            self.logger.start_time), "a", encoding="utf-8")
+        self.stdout_file = open(f"{LOG_PATH}/{self.logger.start_time}-Project-Normal.log", "a", encoding="utf-8")
+        self.stderr_file = open(f"{LOG_PATH}/{self.logger.start_time}-Project-Error.log", "a", encoding="utf-8")
         self.project_id = project_id
         self.stdout_file.write("=============Project {}===============\n".format(self.project_id))
         self.stderr_file.write("=============Project {}===============\n".format(self.project_id))
@@ -62,8 +60,8 @@ class BasePythonManager:
         '''
         for initiate_command in initiate_command_list:
             process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
-                                           shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+                                       shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
 
             process.wait(10)
             process.terminate()
@@ -102,7 +100,7 @@ class BaseJudge:
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
             self.logger.start_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-            handler = logging.FileHandler("log/{0}-Judge.log".format(self.logger.start_time),encoding="utf-8")
+            handler = logging.FileHandler(f"{LOG_PATH}/{self.logger.start_time}-Judge.log", encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -204,7 +202,7 @@ class WebsiteJudge(BaseJudge):
             if initiate_command_list == [[]] or not initiate_command_list:
                 initiate_command_list = [["manage.py", "makemigrations"],
                                          ["manage.py", "migrate"],
-                                         ] # ["manage.py", "createsuperuser", "--username", "Admin", "--email",  "abc@example.com", "--noinput"]
+                                         ]  # ["manage.py", "createsuperuser", "--username", "Admin", "--email",  "abc@example.com", "--noinput"]
                 super().initiate_command(initiate_command_list)
                 # Create Superuser
                 process = subprocess.Popen([self.get_activate_script(), "manage.py", "shell"], cwd=self.project_path,
@@ -216,7 +214,8 @@ class WebsiteJudge(BaseJudge):
                                            )
                 process.communicate(input="\n".join([
                     "from django.contrib.auth.models import User",
-                    "u = User(username='Admin')", # ProjectEval Django Standard Admin User. Username: Admin, Password: abc#12345
+                    "u = User(username='Admin')",
+                    # ProjectEval Django Standard Admin User. Username: Admin, Password: abc#12345
                     "u.set_password('abc#12345')",
                     "u.is_superuser = True",
                     "u.is_staff = True",
@@ -289,7 +288,7 @@ class WebsiteJudge(BaseJudge):
                     0]
             test = namespace[function_name]
             try:
-                result = func_timeout(TIMEOUT_LIMIT, test, args=(self.driver, *args),kwargs = kwargs)
+                result = func_timeout(TIMEOUT_LIMIT, test, args=(self.driver, *args), kwargs=kwargs)
             except AssertionError as e:
                 result = e
                 self.logger.warning(f"Assertion Error: {str(e)}\nTestcase failed.")
@@ -343,6 +342,7 @@ class BatchJudge(BaseJudge):
                 if file_name.startswith(f"{self.project_id}-"):
                     shutil.copyfile(os.path.join(material_path, file_name), os.path.join(self.project_path, file_name))
                     self.logger.debug(f"{file_name} copied.")
+            time.sleep(IO_WAIT)
 
         def start(self):
             # File Batch no needs of subprocess
@@ -520,7 +520,8 @@ class BatchJudge(BaseJudge):
         try:
             namespace = {"time": time, "pyperclip": pyperclip, "string": string, "pd": pandas,
                          'os': os, 'csv': csv, 'utils': utils, 'datetime': datetime, 'openpyxl': openpyxl,
-                         'runpy': runpy, 'threshold': STRING_SIMILARITY_THRESHOLD, '_subprocess': self.subprocess, # 'func_set_timeout': func_set_timeout,
+                         'runpy': runpy, 'threshold': STRING_SIMILARITY_THRESHOLD, '_subprocess': self.subprocess,
+                         # 'func_set_timeout': func_set_timeout,
                          }  # TODO Namespace中其它库文件将会是需要处理的问题
             callable_default_package = {name for name in namespace.keys()}
             # testcode = f"@func_set_timeout({TIMEOUT_LIMIT})\n"+testcode
@@ -533,7 +534,7 @@ class BatchJudge(BaseJudge):
             try:
                 local_path = os.getcwd()
                 os.chdir(self.project_root)
-                result =  func_timeout(TIMEOUT_LIMIT, test, args=args, kwargs=kwargs)
+                result = func_timeout(TIMEOUT_LIMIT, test, args=args, kwargs=kwargs)
             except AssertionError as e:
                 result = e
                 self.logger.warning(f"Assertion Error: {str(e)}. Testcase failed.")

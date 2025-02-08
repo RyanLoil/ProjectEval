@@ -17,8 +17,6 @@ def jonker_volgenant_algorithm(cost_matrix):
     original_matrix = copy.deepcopy(cost_matrix)
     cost_matrix = - cost_matrix
 
-    print(original_matrix)
-
     def find_optimal_assignment(matrix):
         row_ind, col_ind = linear_sum_assignment(matrix)
         return list(zip(row_ind, col_ind))

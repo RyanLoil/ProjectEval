@@ -128,7 +128,7 @@ class GPTTest(LLMTest):
         return self.completion_to_dict(completion)
 
     def generate_skeleton(self, language, technical_stack, nl_checklist):
-        message = prompt[self.__class__.__name__][language.lower() + '_generate_framework'].format(
+        message = prompt[self.__class__.__name__][language.lower() + '_generate_skeleton'].format(
             nl_checklist=nl_checklist,
             technical_stack=technical_stack)
         completion = self.send_message(message, "You are a professional computer program architect.")

@@ -7,9 +7,11 @@ import time
 import traceback
 from datetime import datetime
 
+from indicator import sentence_transformer_calc, codebleu_calc, levenshtein_calc
 from llm import GPTTest, LLMTest
 from openjudge import WebsiteJudge, BatchJudge, BaseJudge
-from config import DEFAULT_BROWSER_TYPE
+from config import DEFAULT_BROWSER_TYPE, IO_WAIT, PROJECT_EVAL_DEFAULT_TEST_CASE, LOG_PATH, \
+    PROJECT_EVAL_DEFAULT_TEST_DIR, PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR
 
 PROJECT_TYPE = {
     'website': WebsiteJudge,
@@ -19,11 +21,33 @@ PROJECT_TYPE = {
 }
 
 
-class LLMController:
+class BaseController:
+    def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.setLevel(level=logging.DEBUG)
+        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not self.logger.handlers:
+            handler = logging.FileHandler(f"{LOG_PATH}/{self.initiate_time}-{self.__class__.__name__}.log",
+                                          encoding="utf-8")
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.addHandler(console)
+
+
+class LLMController(BaseController):
     def __init__(self, question_path: str, model_class: type(LLMTest), llm: str, language: dict = None,
                  technical_stack: dict = None,
                  device: str = "",
-                 output_path: str = "data/", crush_save_path: str = "data/crash_save/", crush_load_path: str = None):
+                 output_path: str = "data/", crush_save_path: str = "data/crash_save/", crush_load_path: str = None,
+                 parameter_generate: bool = False,
+                 information_generate: bool = False,
+                 start_file_generate: bool = False,
+                 ):
         '''
         Controller to use LLM answering the question of Project Eval.
         :param question_path: The source data
@@ -34,30 +58,20 @@ class LLMController:
         :param crush_save_path: The path to save the dump of answer dict
         :param crush_load_path: if this parameter is NOT None, LLMController will load the give file to continue the task
         '''
+        super().__init__()
 
-        self.logger = logging.getLogger('LLMController')
-        self.logger.setLevel(level=logging.DEBUG)
-        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-        if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-LLMController.log".format(self.initiate_time), encoding="utf-8")
-            handler.setLevel(logging.DEBUG)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            console = logging.StreamHandler()
-            console.setLevel(logging.INFO)
-            console.setFormatter(formatter)
-            self.logger.addHandler(handler)
-            self.logger.addHandler(console)
         self.crash_save = crush_save_path + "/{0}-AnswerCrashSave.py".format(self.initiate_time)
         self.crash_load = crush_load_path
 
         try:
-            self.question_list = json.load(open(question_path, 'r', encoding='utf-8'))
+            question_list = json.load(open(question_path, 'r', encoding='utf-8'))
         except Exception as e:
             self.logger.critical("Loading question list failed with error {}".format(e))
             raise Exception("Loading question list failed with error {}".format(e))
         self.question = []
-        for q in self.question_list:
+        self.requested_parameter, self.testcode = JudgeController.requested_parameter_and_testcode(question_list)
+        del self.testcode
+        for q in question_list:
             temp = copy.deepcopy(q)
             del temp['testcode']
             self.question.append(temp)
@@ -65,6 +79,11 @@ class LLMController:
         self.output_path = output_path
         self.language = language
         self.technical_stack = technical_stack
+        self.parameter_generate = parameter_generate
+        self.information_generate = information_generate
+        self.start_file_generate = start_file_generate
+        if self.parameter_generate:
+            self.project = json.load(open(question_path, 'r', encoding='utf-8'))
 
     LEVEL_DICT = {
         1: "nl_prompt",
@@ -92,15 +111,19 @@ class LLMController:
             answer_dict = {}
         nl_checklist_dict = {}
         skeleton_dict = {}
+        parameter_dict = {}
+        information_dict = {}
+        start_file_dict = {}
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         try:
             for q in self.question:
+                project_id = q['project_id']
                 if crash_mark:
-                    if crash_project_id != q['project_id']:
+                    if crash_project_id != project_id:
                         continue
                     else:
                         crash_mark = False
-                self.logger.info("Answer question {}.".format(q['project_id']))
+                self.logger.info("Answer question {}.".format(project_id))
                 language = self.language[q['project_type']] if self.language else q['framework_technical_stack'][
                     'language']
                 technical_stack = self.technical_stack[q['project_type']] if self.technical_stack else \
@@ -109,14 +132,14 @@ class LLMController:
                     if level == 1:
                         # Level 1 uses nl_prompt
                         nl_checklist = self.model.generate_checklist(q['nl_prompt'])
-                        nl_checklist_dict[q['project_id']] = nl_checklist
+                        nl_checklist_dict[project_id] = nl_checklist
                         skeleton = self.model.generate_skeleton(language, technical_stack, nl_checklist)
-                        skeleton_dict[q['project_id']] = skeleton
+                        skeleton_dict[project_id] = skeleton
                     elif level == 2:
                         # Level 2 uses nl_checklist
                         nl_checklist = q['nl_checklist']
                         skeleton = self.model.generate_skeleton(language, technical_stack, nl_checklist)
-                        skeleton_dict[q['project_id']] = skeleton
+                        skeleton_dict[project_id] = skeleton
                     elif level == 3:
                         # Level 3 directly uses skeleton
                         skeleton = q['skeleton']
@@ -125,14 +148,16 @@ class LLMController:
                         raise Exception("Invalid level number.")
                     final_prompt = skeleton
 
-                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json"
-                    with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        self.logger.info("Writing to " + output_file_path)
-                        json.dump(nl_checklist_dict, output_file)
-                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json"
-                    with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        self.logger.info("Writing to " + output_file_path)
-                        json.dump(skeleton_dict, output_file)
+                    if level == 1:
+                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json"
+                        with open(output_file_path, "w", encoding="utf-8") as output_file:
+                            self.logger.info("Writing to " + output_file_path)
+                            json.dump(nl_checklist_dict, output_file)
+                    if level <= 2:
+                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json"
+                        with open(output_file_path, "w", encoding="utf-8") as output_file:
+                            self.logger.info("Writing to " + output_file_path)
+                            json.dump(skeleton_dict, output_file)
 
                 else:
                     final_prompt = q[self.LEVEL_DICT[level]]
@@ -141,41 +166,55 @@ class LLMController:
                 try:
                     if not isinstance(answer, list):  # In the example, LLM will return a python list as answer.
                         raise Exception("Invalid answer format in project {}.".format(q["project_id"]))
-                    # answer['project_id'] = q['project_id']
+                    # answer['project_id'] = project_id
                 except Exception as e:
                     self.logger.warning(str(e))
                     continue
                 # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
 
+                answer_dict[project_id] = answer
+                output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json"
+                with open(output_file_path, "w", encoding="utf-8") as output_file:
+                    self.logger.info("Writing to " + output_file_path)
+                    json.dump(answer_dict, output_file)
 
-                answer_dict[q['project_id']] = answer
-            output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json"
-            with open(output_file_path, "w", encoding="utf-8") as output_file:
-                self.logger.info("Writing to " + output_file_path)
-                json.dump(answer_dict, output_file)
+                if self.parameter_generate:
+                    parameter = self.model.get_parameter(answer, technical_stack, self.requested_parameter[project_id])
+                    parameter_dict[project_id] = parameter
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_parameter.json"
+                    with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        self.logger.info("Writing to " + output_file_path)
+                        json.dump(parameter_dict, output_file)
+
+                project_root = PROJECT_EVAL_DEFAULT_TEST_DIR + str(project_id) + "/"
+                if self.information_generate:
+                    information = self.model.get_information(answer, technical_stack, project_root)
+                    information_dict[project_id] = information
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_information.json"
+                    with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        self.logger.info("Writing to " + output_file_path)
+                        json.dump(information_dict, output_file)
+
+                if self.start_file_generate:
+                    start_file = self.model.get_start_file(answer, technical_stack, project_root)
+                    information_dict[project_id] = start_file
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_startfile.json"
+                    with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        self.logger.info("Writing to " + output_file_path)
+                        json.dump(information_dict, output_file)
+
+
         except Exception as e:
             print(traceback.format_exc())
-            answer_dict["error_project_id"] = q['project_id']
+            answer_dict["error_project_id"] = project_id
             with open(self.crash_save, "w", encoding="utf-8") as output_file:
                 output_file.write(str(answer_dict))
             output_file.close()
 
 
-class MaskerController:
+class MaskerController(BaseController):
     def __init__(self, answer_path: str, model_class: type(LLMTest), output_path: str, llm: str, device: str = ""):
-        self.logger = logging.getLogger('MaskerController')
-        self.logger.setLevel(level=logging.DEBUG)
-        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-        if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-MaskerController.log".format(self.initiate_time))
-            handler.setLevel(logging.DEBUG)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            console = logging.StreamHandler()
-            console.setLevel(logging.INFO)
-            console.setFormatter(formatter)
-            self.logger.addHandler(handler)
-            self.logger.addHandler(console)
+        super(MaskerController, self).__init__()
         try:
             self.answer_dict = json.load(open(answer_path, 'r', encoding='utf-8'))
         except Exception as e:
@@ -199,9 +238,24 @@ class MaskerController:
             self.logger.critical(str(e))
 
 
-class JudgeController:
+class JudgeController(BaseController):
+    @staticmethod
+    def requested_parameter_and_testcode(question_list):
+        requested_parameter = {}
+        testcode = {}
+        for t in question_list:
+            temp = copy.deepcopy(t)
+            testcode[temp['project_id']] = temp['testcode']  # Save the testcode for each project
+            temp_2 = copy.deepcopy(t)
+            requested_parameter[temp['project_id']] = temp_2['testcode']
+            for page in requested_parameter[temp['project_id']]:
+                for function in page['function']:
+                    del function['test']
+        return requested_parameter, testcode
+
     def __init__(self, question_path: str, answer_path: str, model_class: type(LLMTest),
-                 parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save", llm:str=None,device:str=None):
+                 parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save",
+                 llm: str = None, device: str = None):
         '''
         An
         :param question_path:
@@ -210,20 +264,7 @@ class JudgeController:
         :param parameter_file_path:
         :param parameter_answer_save:
         '''
-
-        self.logger = logging.getLogger('JudgeController')
-        self.logger.setLevel(level=logging.DEBUG)
-        self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-        if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-JudgeController.log".format(self.initiate_time), encoding="utf-8")
-            handler.setLevel(logging.DEBUG)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            console = logging.StreamHandler()
-            console.setLevel(logging.INFO)
-            console.setFormatter(formatter)
-            self.logger.addHandler(handler)
-            self.logger.addHandler(console)
+        super().__init__()
         self.parameter_answer_save = parameter_answer_save
         self.parameter_file_path = parameter_file_path
 
@@ -233,16 +274,8 @@ class JudgeController:
         except Exception as e:
             self.logger.critical("Loading question list failed with error {}".format(e))
             raise Exception("Loading question list failed with error {}".format(e))
-        self.testcode = {}
-        self.requested_parameter = {}
-        for t in question_list:
-            temp = copy.deepcopy(t)
-            self.testcode[temp['project_id']] = temp['testcode']  # Save the testcode for each project
-            temp_2 = copy.deepcopy(t)
-            self.requested_parameter[temp['project_id']] = temp_2['testcode']
-            for page in self.requested_parameter[temp['project_id']]:
-                for function in page['function']:
-                    del function['test']
+        self.requested_parameter, self.testcode = self.requested_parameter_and_testcode(question_list)
+
         # testcode = {<pid>:[<testcode list>]
         del question_list
         try:
@@ -278,7 +311,7 @@ class JudgeController:
     #         self.logger.debug("Evaluating question {} page {}.".format(t['project_id'], page['page']))
 
     def write_answer_to_file(self, project_id):
-        base_dir = "test/" + datetime.now().strftime("%Y%m%d") + "/" + str(project_id) + "/"
+        base_dir = PROJECT_EVAL_DEFAULT_TEST_DIR + str(project_id) + "/"
         try:
             # Remove the directory if it already exists
             if os.path.exists(base_dir):
@@ -313,12 +346,11 @@ class JudgeController:
             # Handle directory structure if there is only one subdirectory
             if len(os.listdir(base_dir)) == 1 and len(os.listdir(base_dir)[0].split(".")) == 1:
                 base_dir = base_dir + os.listdir(base_dir)[0] + "/"
-
+            time.sleep(IO_WAIT)
             return base_dir
         except Exception as e:
             self.logger.critical("Writing answer files failed with error {}".format(e))
             return base_dir
-        time.sleep(IO)
 
     def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
                  project_id_list: list = None, start_file_list: dict = None,
@@ -328,7 +360,7 @@ class JudgeController:
         :param requirements:
         :param technical_stack:
         :param project_id_list:
-        :param start_file:
+        :param start_file_list:
         :return:
         '''
         total_status = {'total': 0, 'pass': 0, 'failed': 0, 'score': 0}
@@ -351,9 +383,7 @@ class JudgeController:
             project_root = self.write_answer_to_file(project_id)
             '''
             #TODO 列表
-            1.	需要适配参数复用，即参数选择也存在标准答案，此处对应产品经理制作用户手册 √
-            2.	Django初始命令的使用，可以使用默认的，也可以使用复用的
-            3.	初始命令和requirements的询问也需要做保存
+            1.	初始命令和requirements的询问也需要做保存
             '''
             # Runner
             if initiate_command and project_id in initiate_command:
@@ -366,7 +396,6 @@ class JudgeController:
                 project_requirements = None
             if project['project_type'] == 'website':
                 if not project_requirements or not project_initiate_command:
-                    # TODO 适配新版本的Judge
                     # Request LLM for requirements and initiate command.
                     competition = self.model.get_information(self.answer_dict[project_id],
                                                              self.question_dict[project_id][
@@ -378,7 +407,6 @@ class JudgeController:
                         "initiate_commands"] if not project_initiate_command else project_initiate_command
                     project_requirements = competition[
                         "requirements"] if not project_requirements else project_requirements
-                # TODO 适配新类预加载
                 # Judge Initial
                 judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
                                                                          DEFAULT_BROWSER_TYPE,
@@ -415,6 +443,7 @@ class JudgeController:
                                                            project_root)
                 else:
                     start_file = start_file_list[project_id]
+
                 judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
                                                                          project_root, )
                 try:
@@ -433,11 +462,11 @@ class JudgeController:
                     continue
             try:
                 if exist_parameters and project_id in exist_parameters:
-                    # 历史Parameter清单复用
+                    # Reuse parameters
                     parameters = exist_parameters[project_id]
 
                 else:
-                    # 清单Parameter制作
+                    # Get parameters
                     parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
                                                           technical_stack=
                                                           self.question_dict[project_id]["framework_technical_stack"][
@@ -498,15 +527,181 @@ class JudgeController:
             total_status['failed'] += (n - pass_count)
             self.logger.info(f"Project id {project_id} scored {project_score}")
             judge.clean()
+        total_status['testcase'] = total_status['total']
+        total_status['total'] = PROJECT_EVAL_DEFAULT_TEST_CASE
+        if len(project_id_list) == 20:
+            # ProjectEval Standard
+            total_status['pass@1'] = total_status['pass'] / PROJECT_EVAL_DEFAULT_TEST_CASE
         self.logger.info("Finished. Report: {}".format(total_status))
         if judge.status:
             judge.clean()
         return total_status, total_status['pass'] / (total_status['total'] if total_status['total'] > 0 else 1)
 
 
-class IndicatorController:
+class IndicatorController(BaseController):
     """
     This controller is for all 4 objective indicators.
     """
-    def __init__(self):
-        pass
+
+    def __init__(self,verbose_name, answer_checklist_path: str, answer_skeleton_path: str, answer_code_path: str,
+                 answer_parameter_path: str,
+                 reference_project_path: str, reference_code_path: str, reference_parameter_path: str,
+                 report_file_path: str = None                 ):
+        super().__init__()
+        self.answer_checklist = json.load(
+            open(answer_checklist_path, "r", encoding="utf-8")) if answer_checklist_path else None
+        self.answer_skeleton = json.load(
+            open(answer_skeleton_path, "r", encoding="utf-8")) if answer_skeleton_path else None
+
+        self.answer_code = json.load(open(answer_code_path, "r", encoding="utf-8")) if answer_code_path else None
+        self.answer_parameter = json.load(
+            open(answer_parameter_path, "r", encoding="utf-8")) if answer_parameter_path else None
+
+        self.reference_project = json.load(open(reference_project_path, "r", encoding="utf-8"))
+        self.reference_code = json.load(open(reference_code_path, "r", encoding="utf-8"))
+        self.reference_parameter = json.load(open(reference_parameter_path, "r", encoding="utf-8"))
+        self._test_data = {
+            "checklist": {},
+            "skeleton": {},
+            "code": {},
+            "parameter": self.answer_parameter,
+        }
+        self._reference_data = {
+            "checklist": {},
+            "skeleton": {},
+            "code": {},
+            "parameter": self.reference_parameter,
+        }
+        self.verbose_name = verbose_name
+        self.standard_checklist_and_skeleton_processing()
+        self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not report_file_path:
+            report_file_path = PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR + f"/{verbose_name}-{self.timestamp}-objective_indicators_reports.txt"
+        self.report_file = open(report_file_path, "w", encoding="utf-8")
+
+    def standard_checklist_and_skeleton_processing(self):
+        try:
+            for project in self.reference_project:
+                self._reference_data["checklist"][project["project_id"]] = []
+                for page in project["nl_checklist"]:
+                    for function in page["function"]:
+                        self._reference_data["checklist"][project["project_id"]].append(
+                            page["page"] + "||" + function["function"] + "||" + function["description"])
+
+                self._reference_data["skeleton"][project["project_id"]] = []
+                for file in project["skeleton"]:
+                    self._reference_data["skeleton"][project["project_id"]].append(file['code'])
+
+                self._reference_data["code"][project["project_id"]] = []
+                for file in self.reference_code[project["project_id"]]:
+                    self._reference_data["code"][project["project_id"]].append(file['code'])
+
+            if self.answer_checklist:
+                for checklist in self.answer_checklist:
+                    self._test_data["checklist"][checklist] = []
+                    for page in self.answer_checklist[checklist]:
+                        try:
+                            for function in page["function"]:
+                                self._test_data["checklist"][checklist].append(
+                                    page["page"] + "||" + function["function"] + "||" + function["description"])
+                        except Exception as e:
+                            self.logger.warning(f"Failed to load function list of project:{checklist} with file {page} on error {e}")
+
+            if self.answer_skeleton:
+                for skeleton in self.answer_skeleton:
+                    self._test_data["skeleton"][skeleton] = []
+                    for file in self.answer_skeleton[skeleton]:
+                        try:
+                            self._test_data["skeleton"][skeleton].append(file['code'])
+                        except Exception as e:
+                            self.logger.warning(f"Failed to load skeleton list of project:{skeleton} with file {file} on error {e}")
+
+            if self.answer_code:
+                for code in self.answer_code:
+                    self._test_data["code"][code] = []
+                    for file in self.answer_code[code]:
+                        try:
+                            self._test_data["code"][code].append(file['code'])
+                        except Exception as e:
+                            self.logger.warning(f"Failed to load code list of project:{code} with file {file} on error {e}")
+
+        except Exception as e:
+            self.logger.critical(f"Initial failed:{e}")
+
+    def run(self, project_id_list: list[str], checklist: bool = True, skeleton: bool = True, code: bool = True,
+            parameter: bool = True):
+        score = {
+            "checklist": 0 if checklist else None,
+            "skeleton": 0 if skeleton else None,
+            "code": 0 if code else None,
+            "parameter": 0 if parameter else None,
+        }
+        report = {
+            "assignment": {
+                "checklist": {},
+                "skeleton": {},
+                "code": {},
+                "parameter": {}
+            }
+        }
+        for project_id in project_id_list:
+            self.logger.info(f"Processing project {project_id}.")
+            if checklist and self.answer_checklist and project_id in self.answer_checklist:
+                self.logger.info(f"Checklist on project {project_id}.")
+                try:
+                    best_score, assignment = sentence_transformer_calc(self._test_data["checklist"][project_id],
+                                                                       self._reference_data["checklist"][project_id])
+                    report["assignment"]["checklist"][project_id] = assignment
+                    score["checklist"] += best_score
+                    self.logger.info(f"Checklist score on project {project_id}: {best_score}")
+                except Exception as e:
+                    self.logger.critical(f"Failed to calculate checklist:{e}")
+
+            if skeleton and self.answer_skeleton and project_id in self.answer_skeleton and self.answer_skeleton[project_id]:
+                self.logger.info(f"Skeleton on project {project_id}.")
+                try:
+                    best_score, assignment = codebleu_calc(self._test_data["skeleton"][project_id],
+                                                           self._reference_data["skeleton"][project_id],
+                                                           language=self.reference_project[int(project_id) - 1][
+                                                               "framework_technical_stack"][0][
+                                                               "language"].lower())
+                    report["assignment"]["skeleton"][project_id] = assignment
+                    score["skeleton"] += best_score
+                    self.logger.info(f"Skeleton score on project {project_id}: {best_score}")
+                except Exception as e:
+                    self.logger.critical(f"Failed to calculate skeleton:{e}")
+
+            if code and self.answer_code and project_id in self.answer_code and self.answer_code[project_id]:
+                self.logger.info(f"Code on project {project_id}.")
+                try:
+                    best_score, assignment = codebleu_calc(self._test_data["code"][project_id],
+                                                           self._reference_data["code"][project_id],
+                                                           language=self.reference_project[int(project_id) - 1][
+                                                               "framework_technical_stack"][0][
+                                                               "language"].lower())
+                    report["assignment"]["code"][project_id] = assignment
+                    score["code"] += best_score
+                    self.logger.info(f"Code score on project {project_id}: {best_score}")
+                except Exception as e:
+                    self.logger.critical(f"Failed to calculate code:{e}")
+
+            if parameter and self.answer_parameter and project_id in self.answer_parameter:
+                self.logger.info(f"Parameter on project {project_id}.")
+                try:
+                    best_score, similarities = levenshtein_calc(self._test_data["parameter"][project_id],
+                                                                self._reference_data["parameter"][project_id])
+                    report["assignment"]["parameter"][project_id] = similarities
+                    score["parameter"] += best_score
+                    self.logger.info(f"Parameter score on project {project_id}: {best_score}")
+                except Exception as e:
+                    self.logger.critical(f"Failed to calculate parameter:{e}")
+
+        for key in score:
+            score[key] = round(float(score[key]), 6)
+        self.logger.info(f"{self.verbose_name} Sum:{score}")
+        self.report_file.write("Sum:"+json.dumps(score)+"\n")
+        for key in score:
+            score[key] = str(round(score[key] / len(project_id_list), 4) * 100) + "%"
+        self.logger.info(f"{self.verbose_name} Average:{score}")
+        self.report_file.write("Average:" + json.dumps(score)+"\n")
+        self.report_file.write(str(report))
