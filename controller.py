@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import shutil
+import time
 import traceback
 from datetime import datetime
 
@@ -317,6 +318,7 @@ class JudgeController:
         except Exception as e:
             self.logger.critical("Writing answer files failed with error {}".format(e))
             return base_dir
+        time.sleep(IO)
 
     def evaluate(self, initiate_command: dict = None, requirements: dict = None, technical_stack: dict = None,
                  project_id_list: list = None, start_file_list: dict = None,
@@ -506,4 +508,5 @@ class IndicatorController:
     """
     This controller is for all 4 objective indicators.
     """
-    pass
+    def __init__(self):
+        pass

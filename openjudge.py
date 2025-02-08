@@ -12,9 +12,10 @@ from selenium.webdriver.support import ui
 from selenium.webdriver.common.by import By
 from datetime import datetime
 from selenium import webdriver
+from func_timeout import func_set_timeout, FunctionTimedOut, func_timeout
 
 import utils
-from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD
+from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT
 from llm import LLMTest
 
 DRIVER_DICT = {
@@ -274,10 +275,6 @@ class WebsiteJudge(BaseJudge):
         self.status = False
 
     def check(self, test_no, testcode, *args, **kwargs):
-        def timeout():
-            self.driver.execute_script("window.stop()")
-            raise TimeoutError("Test execution exceeded the time limit.")
-
         self.logger.info(f"{test_no} starting.")
         super().check(test_no, testcode, *args, **kwargs)
         try:
@@ -292,17 +289,16 @@ class WebsiteJudge(BaseJudge):
                     0]
             test = namespace[function_name]
             try:
-                timer = threading.Timer(3, timeout)  # Set timeout limit (in seconds)
-                timer.start()
-                result = test(self.driver, *args, **kwargs)
+                result = func_timeout(TIMEOUT_LIMIT, test, args=(self.driver, *args),kwargs = kwargs)
             except AssertionError as e:
                 result = e
                 self.logger.warning(f"Assertion Error: {str(e)}\nTestcase failed.")
-            except TimeoutError as e:
+            except FunctionTimedOut as e:
                 result = "timeout"
                 self.logger.warning(f"Timeout Error: {str(e)}")
-            finally:
-                timer.cancel()
+            except Exception as e:
+                result = "runtime error"
+                self.logger.warning(f"Testcode runtime exception: {e}")
             if result is not None:
                 # Test code will return nothing unless something goes wrong.
                 raise Exception(str(test_no) + ': Wrong Answer of ' + str(result))
@@ -524,9 +520,11 @@ class BatchJudge(BaseJudge):
         try:
             namespace = {"time": time, "pyperclip": pyperclip, "string": string, "pd": pandas,
                          'os': os, 'csv': csv, 'utils': utils, 'datetime': datetime, 'openpyxl': openpyxl,
-                         'runpy': runpy, 'threshold': STRING_SIMILARITY_THRESHOLD, '_subprocess': self.subprocess,
+                         'runpy': runpy, 'threshold': STRING_SIMILARITY_THRESHOLD, '_subprocess': self.subprocess, # 'func_set_timeout': func_set_timeout,
                          }  # TODO Namespace中其它库文件将会是需要处理的问题
             callable_default_package = {name for name in namespace.keys()}
+            # testcode = f"@func_set_timeout({TIMEOUT_LIMIT})\n"+testcode
+            # testcode = testcode+"\n\ttime.sleep(5)\n"
             exec(testcode, namespace)
             function_name = \
                 [name for name, value in namespace.items() if callable(value) and name not in callable_default_package][
@@ -535,22 +533,19 @@ class BatchJudge(BaseJudge):
             try:
                 local_path = os.getcwd()
                 os.chdir(self.project_root)
-                global timer
-                timer = threading.Timer(5, timeout,[self.subprocess])  # Set timeout limit (in seconds)
-                timer.start()
-                result = test(*args, **kwargs) # TODO 18 会卡住
+                result =  func_timeout(TIMEOUT_LIMIT, test, args=args, kwargs=kwargs)
             except AssertionError as e:
                 result = e
                 self.logger.warning(f"Assertion Error: {str(e)}. Testcase failed.")
-            except TimeoutError as e:
+            except FunctionTimedOut as e:
                 result = "timeout"
                 self.logger.warning(f"Timeout Error: {str(e)}")
             except Exception as e:
                 result = "runtime error"
-                self.logger.warning(f"Testcode runtime exception: {e}")
+                self.logger.warning(f"Testcode Runtime exception: {e}")
             finally:
                 os.chdir(local_path)
-                timer.cancel()
+                # timer.cancel()
             if result is not None:
                 # Test code will return nothing unless something goes wrong.
                 raise Exception(str(test_no) + ': Wrong answer of ' + str(result))

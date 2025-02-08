@@ -3,6 +3,7 @@ Levenshtein~=0.26.1
 scikit-image~=0.24.0
 opencv-python~=4.10.0.84
 selenium>=4.0.0
+func-timeout >= 4.3.6
 
 # API
 torch

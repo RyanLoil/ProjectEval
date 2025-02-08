@@ -142,7 +142,7 @@ class GPTTest(LLMTest):
         :return: generated answer in json format
         """
         message = prompt[self.__class__.__name__]['generate_answer'].format(description=description,
-                                                                            technical_stack=technical_stack)
+                                                                            technical_stack=technical_stack if technical_stack else "")
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
 
@@ -155,7 +155,7 @@ class GPTTest(LLMTest):
         :return: generated parameters in json format
         """
         message = prompt[self.__class__.__name__]["generate_parameter"].format(answer=answer,
-                                                                               technical_stack=technical_stack,
+                                                                               technical_stack=technical_stack if technical_stack else "",
                                                                                parameter_required=parameter_required)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
@@ -168,7 +168,7 @@ class GPTTest(LLMTest):
         :return: message
         """
         message = prompt[self.__class__.__name__]["generate_information"].format(answer=answer,
-                                                                                 technical_stack=technical_stack,
+                                                                                 technical_stack=technical_stack if technical_stack else "",
                                                                                  project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
@@ -182,7 +182,7 @@ class GPTTest(LLMTest):
         :return: message
         """
         message = prompt[self.__class__.__name__]["generate_entry_point"].format(answer=answer,
-                                                                                 technical_stack=technical_stack,
+                                                                                 technical_stack=technical_stack if technical_stack else "",
                                                                                  project_root=project_root)
         completion = self.send_message(message, "You are a professional computer programmer.")
         return self.completion_to_dict(completion)
