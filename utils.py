@@ -133,7 +133,13 @@ def calculate_histogram_similarity(image1, image2):
     return similarity > IMAGE_SIMILARITY_THRESHOLD
 
 
-def extract_json_files_from_folder(folder_path):
+def extract_json_files_from_folder(folder_path, mode=False):
+    """
+
+    :param folder_path:
+    :param mode: set true when you are trying to find answer of it
+    :return:
+    """
     file_groups = defaultdict(lambda: {
         "answer_checklist_path": None,
         "answer_skeleton_path": None,
@@ -165,5 +171,11 @@ def extract_json_files_from_folder(folder_path):
                 file_groups[prefix]["answer_skeleton_path"] = file_path
             elif file_base_name.endswith('_parameter'):
                 file_groups[prefix]["answer_parameter_path"] = file_path
+            elif mode:
+                if file_base_name.endswith('_information'):
+                    file_groups[prefix]["information"] = file_path
+                if file_base_name.endswith('_startfile'):
+                    file_groups[prefix]["startfile"] = file_path
+
 
     return dict(file_groups)

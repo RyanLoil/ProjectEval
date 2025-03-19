@@ -91,6 +91,11 @@ class LLMController(BaseController):
         3: "skeleton",
     }
 
+    def _dump_file(self, data, output_file_path):
+        with open(output_file_path, "w", encoding="utf-8") as output_file:
+            self.logger.info("Writing to " + output_file_path)
+            json.dump(data, output_file)
+
     def run(self, level: int, cascade: bool = False):
         """
         Execute the test.
@@ -127,7 +132,7 @@ class LLMController(BaseController):
                 language = self.language[q['project_type']] if self.language else q['framework_technical_stack'][
                     'language']
                 technical_stack = self.technical_stack[q['project_type']] if self.technical_stack else \
-                    q['framework_technical_stack']['technical_stack']
+                    q['framework_technical_stack'][0]['technical_stack']
                 if cascade:
                     if level == 1:
                         # Level 1 uses nl_prompt
@@ -149,15 +154,17 @@ class LLMController(BaseController):
                     final_prompt = skeleton
 
                     if level == 1:
-                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json"
-                        with open(output_file_path, "w", encoding="utf-8") as output_file:
-                            self.logger.info("Writing to " + output_file_path)
-                            json.dump(nl_checklist_dict, output_file)
+                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json".replace(":","-")
+                        # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        #     self.logger.info("Writing to " + output_file_path)
+                        #     json.dump(nl_checklist_dict, output_file)
+                        self._dump_file(nl_checklist_dict, output_file_path)
                     if level <= 2:
-                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json"
-                        with open(output_file_path, "w", encoding="utf-8") as output_file:
-                            self.logger.info("Writing to " + output_file_path)
-                            json.dump(skeleton_dict, output_file)
+                        output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json".replace(":","-")
+                        # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                        #     self.logger.info("Writing to " + output_file_path)
+                        #     json.dump(skeleton_dict, output_file)
+                        self._dump_file(skeleton_dict, output_file_path)
 
                 else:
                     final_prompt = q[self.LEVEL_DICT[level]]
@@ -173,35 +180,39 @@ class LLMController(BaseController):
                 # answer['framework_technical_stack'] = {'language': language, 'technical_stack': technical_stack}
 
                 answer_dict[project_id] = answer
-                output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json"
-                with open(output_file_path, "w", encoding="utf-8") as output_file:
-                    self.logger.info("Writing to " + output_file_path)
-                    json.dump(answer_dict, output_file)
+                output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json".replace(":","-")
+                # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                #     self.logger.info("Writing to " + output_file_path)
+                #     json.dump(answer_dict, output_file)
+                self._dump_file(answer_dict, output_file_path)
 
                 if self.parameter_generate:
                     parameter = self.model.get_parameter(answer, technical_stack, self.requested_parameter[project_id])
                     parameter_dict[project_id] = parameter
-                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_parameter.json"
-                    with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        self.logger.info("Writing to " + output_file_path)
-                        json.dump(parameter_dict, output_file)
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_parameter.json".replace(":","-")
+                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                    #     self.logger.info("Writing to " + output_file_path)
+                    #     json.dump(parameter_dict, output_file)
+                    self._dump_file(parameter_dict, output_file_path)
 
                 project_root = PROJECT_EVAL_DEFAULT_TEST_DIR + str(project_id) + "/"
                 if self.information_generate:
                     information = self.model.get_information(answer, technical_stack, project_root)
                     information_dict[project_id] = information
-                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_information.json"
-                    with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        self.logger.info("Writing to " + output_file_path)
-                        json.dump(information_dict, output_file)
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_information.json".replace(":","-")
+                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                    #     self.logger.info("Writing to " + output_file_path)
+                    #     json.dump(information_dict, output_file)
+                    self._dump_file(information_dict, output_file_path)
 
                 if self.start_file_generate:
                     start_file = self.model.get_start_file(answer, technical_stack, project_root)
-                    information_dict[project_id] = start_file
-                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_startfile.json"
-                    with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        self.logger.info("Writing to " + output_file_path)
-                        json.dump(information_dict, output_file)
+                    start_file_dict[project_id] = start_file
+                    output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_startfile.json".replace(":","-")
+                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
+                    #     self.logger.info("Writing to " + output_file_path)
+                    #     json.dump(start_file_dict, output_file)
+                    self._dump_file(start_file_dict, output_file_path)
 
 
         except Exception as e:
@@ -319,6 +330,9 @@ class JudgeController(BaseController):
 
             # Create the base directory
             os.makedirs(base_dir)
+            while not os.path.exists(base_dir):
+                # prevent IO problem
+                continue
 
             # Iterate over files in answer_dict
             for file in self.answer_dict[str(project_id)]:
@@ -375,167 +389,193 @@ class JudgeController(BaseController):
             exist_parameters = json.load(parameter_file)
         else:
             exist_parameters = None
-
+        project_score_table = []
         for project_id in self.question_dict if project_id_list is None else project_id_list:
-            self.logger.info("Evaluating project id {}".format(project_id))
-            project = self.question_dict[project_id]
-            # File Writter
-            project_root = self.write_answer_to_file(project_id)
-            '''
-            #TODO 列表
-            1.	初始命令和requirements的询问也需要做保存
-            '''
-            # Runner
-            if initiate_command and project_id in initiate_command:
-                project_initiate_command: [[]] = initiate_command[project_id]
-            else:
-                project_initiate_command = None
-            if requirements and project_id in requirements:
-                project_requirements = requirements[project_id]
-            else:
-                project_requirements = None
-            if project['project_type'] == 'website':
-                if not project_requirements or not project_initiate_command:
-                    # Request LLM for requirements and initiate command.
-                    competition = self.model.get_information(self.answer_dict[project_id],
-                                                             self.question_dict[project_id][
-                                                                 "framework_technical_stack"][0][
-                                                                 "technical_stack"] if not technical_stack else
-                                                             technical_stack[project_id],
-                                                             project_root)
-                    project_initiate_command: [[]] = competition[
-                        "initiate_commands"] if not project_initiate_command else project_initiate_command
-                    project_requirements = competition[
-                        "requirements"] if not project_requirements else project_requirements
-                # Judge Initial
-                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
-                                                                         DEFAULT_BROWSER_TYPE,
-                                                                         project_initiate_command,
-                                                                         website_home="http://localhost:8000/")
-
-                # TODO 增加模拟数据载入，这个问题挺棘手的，因为严格意义上它不属于Project的一部分，属于测试工程师的工作，但是我们不能保证所有的框架都有自动化测试，因此可能需要要求LLM提前撰写模拟数据的导入脚本来完成此工作，这似乎是二次询问。
-
-                try:
-                    preprocess_result = judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
-                                                         self.question_dict[project_id]["framework_technical_stack"][0][
-                                                             "technical_stack"],
-                                                         initiate_command_list=project_initiate_command,
-                                                         project_path=project_root)
-                    if not preprocess_result:
-                        self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
-                        self.logger.info("{} scored 0.".format(project_id))
-                        continue
-                except Exception as e:
-                    self.logger.warning(f"Preprocessing failed with {str(e)}")
-                    self.logger.info("{} scored 0.".format(project_id))
-                    continue
-            elif project['project_type'] == 'software':
-                # TODO software适配
-                pass
-            else:
-                # Batch or Console
-                if not start_file_list or project_id not in start_file_list:
-                    start_file = self.model.get_start_file(self.answer_dict[project_id],
-                                                           self.question_dict[project_id][
-                                                               "framework_technical_stack"][0][
-                                                               "technical_stack"] if not technical_stack else
-                                                           technical_stack[project_id],
-                                                           project_root)
-                else:
-                    start_file = start_file_list[project_id]
-
-                judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
-                                                                         project_root, )
-                try:
-                    preprocess_result = judge.preprocess(technical_stack[project_id]["batch"] if technical_stack else
-                                                         self.question_dict[project_id]["framework_technical_stack"][0][
-                                                             "technical_stack"],
-                                                         initiate_command_list=project_initiate_command,
-                                                         project_path=project_root, start_file=start_file)
-                    if not preprocess_result:
-                        self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
-                        self.logger.info("{} scored 0.".format(project_id))
-                        continue
-                except Exception as e:
-                    self.logger.warning(f"Preprocessing failed with {str(e)}")
-                    self.logger.info("{} scored 0.".format(project_id))
-                    continue
+            project_score_table_row = {
+                "project_id": project_id,
+                "pass": 0,
+                "testcase": len(self.testcode[project_id])
+            }
+            project_score_table.append(project_score_table_row)
             try:
-                if exist_parameters and project_id in exist_parameters:
-                    # Reuse parameters
-                    parameters = exist_parameters[project_id]
-
+                self.logger.info("Evaluating project id {}".format(project_id))
+                project = self.question_dict[project_id]
+                if project_id not in self.answer_dict:
+                    self.logger.warning("Project id {} does not exist, skip. Score 0.".format(project_id))
+                    continue
+                # File Writter
+                project_root = self.write_answer_to_file(project_id)
+                '''
+                #TODO 列表
+                1.	初始命令和requirements的询问也需要做保存
+                '''
+                # Runner
+                if initiate_command and project_id in initiate_command:
+                    project_initiate_command: [[]] = initiate_command[project_id]
                 else:
-                    # Get parameters
-                    parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
-                                                          technical_stack=
-                                                          self.question_dict[project_id]["framework_technical_stack"][
-                                                              0][
-                                                              "technical_stack"] if not technical_stack else
-                                                          technical_stack[project_id],
-                                                          parameter_request=self.requested_parameter[project_id])
-                    # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
-                    parameters = {}
-                    for page in parameter_list:
-                        parameters[page['page']] = {}
-                        for function in page["function"]:
-                            # temp = {p['name']: p['answer'] for p in function['parameter']}
-                            parameters[page['page']][function['function']] = function["parameter"]
-                    auto_parameter_save_dict[project_id] = parameters
-                    if type(self.parameter_answer_save) == str:
-                        self.parameter_answer_save = open(self.parameter_answer_save
-                                                          + "/{0}-ParameterAnswerSave.json".format(self.initiate_time),
-                                                          "w", encoding="utf-8")
-                    self.parameter_answer_save.seek(0)
-                    self.parameter_answer_save.truncate(0)
-                    self.parameter_answer_save.write(json.dumps(auto_parameter_save_dict))
-                    del parameter_list
+                    project_initiate_command = None
+                if requirements and project_id in requirements:
+                    project_requirements = requirements[project_id]
+                else:
+                    project_requirements = None
+                if project['project_type'] == 'website':
+                    if not project_requirements or not project_initiate_command:
+                        # Request LLM for requirements and initiate command.
+                        competition = self.model.get_information(self.answer_dict[project_id],
+                                                                 self.question_dict[project_id][
+                                                                     "framework_technical_stack"][0][
+                                                                     "technical_stack"] if not technical_stack else
+                                                                 technical_stack[project_id],
+                                                                 project_root)
+                        project_initiate_command: [[]] = competition[
+                            "initiate_commands"] if not project_initiate_command else project_initiate_command
+                        project_requirements = competition[
+                            "requirements"] if not project_requirements else project_requirements
+                    # Judge Initial
+                    judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
+                                                                             DEFAULT_BROWSER_TYPE,
+                                                                             project_initiate_command,
+                                                                             website_home="http://localhost:8000/")
 
-            except Exception as e:
-                self.logger.info(f"Get parameters for project id {project_id} failed with exception {e}.")
-                self.logger.info("{} scored 0.".format(project_id))
-                judge.clean()
-                continue
-            pass_count = 0
-            n = 0
-            index = 0
-            for page in self.testcode[project_id]:
-                n += len(page['function'])
-                total_status['total'] += len(page['function'])
-                for function in page['function']:
-                    index += 1
-                    self.logger.info("Evaluating function {}".format(
-                        str(project_id) + "_" + str(index) + " " + function['function']))
+                    # TODO 增加模拟数据载入，这个问题挺棘手的，因为严格意义上它不属于Project的一部分，属于测试工程师的工作，但是我们不能保证所有的框架都有自动化测试，因此可能需要要求LLM提前撰写模拟数据的导入脚本来完成此工作，这似乎是二次询问。
+
                     try:
-                        kwargs = {}
-                        for parameter in parameters[page['page']][function['function']]:
-                            kwargs[parameter['name']] = parameter['answer']
-
+                        preprocess_result = judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
+                                                             self.question_dict[project_id]["framework_technical_stack"][0][
+                                                                 "technical_stack"],
+                                                             initiate_command_list=project_initiate_command,
+                                                             project_path=project_root)
+                        if not preprocess_result:
+                            self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
+                            self.logger.info("{} scored 0.".format(project_id))
+                            continue
                     except Exception as e:
-                        self.logger.info(
-                            "Parameter(s) finding was failed in the project_answer_list. Exception {}".format(e))
+                        self.logger.warning(f"Preprocessing failed with {str(e)}")
+                        self.logger.info("{} scored 0.".format(project_id))
                         continue
-                    if judge.check(str(project_id) + "_" + str(index), function['test'], **kwargs):
-                        pass_count += 1
-                        self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
+                elif project['project_type'] == 'software':
+                    # TODO software适配
+                    pass
+                else:
+                    # Batch or Console
+                    if not start_file_list or project_id not in start_file_list:
+                        start_file = self.model.get_start_file(self.answer_dict[project_id],
+                                                               self.question_dict[project_id][
+                                                                   "framework_technical_stack"][0][
+                                                                   "technical_stack"] if not technical_stack else
+                                                               technical_stack[project_id],
+                                                               project_root)
                     else:
-                        self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
-            project_score = (pass_count + 1) / (n + 1)  # 1 for runable
-            total_status['total'] += 1
-            total_status['score'] += project_score
-            total_status['pass'] += (pass_count + 1)
-            total_status['failed'] += (n - pass_count)
-            self.logger.info(f"Project id {project_id} scored {project_score}")
-            judge.clean()
+                        start_file = start_file_list[project_id]
+
+                    judge: BaseJudge = PROJECT_TYPE[project['project_type']](project_id, project_requirements,
+                                                                             project_root, )
+                    try:
+                        preprocess_result = judge.preprocess(technical_stack[project_id]["batch"] if technical_stack else
+                                                             self.question_dict[project_id]["framework_technical_stack"][0][
+                                                                 "technical_stack"],
+                                                             initiate_command_list=project_initiate_command,
+                                                             project_path=project_root, start_file=start_file)
+                        if not preprocess_result:
+                            self.logger.warning(f"Preprocessing failed with {preprocess_result}.")
+                            self.logger.info("{} scored 0.".format(project_id))
+                            continue
+                    except Exception as e:
+                        self.logger.warning(f"Preprocessing failed with {str(e)}")
+                        self.logger.info("{} scored 0.".format(project_id))
+                        continue
+                try:
+                    if exist_parameters and project_id in exist_parameters:
+                        # Reuse parameters
+                        parameter_list = exist_parameters[project_id]
+
+                    else:
+                        # Get parameters
+                        parameter_list = judge.get_parameters(model=self.model, answer=self.answer_dict[project_id],
+                                                              technical_stack=
+                                                              self.question_dict[project_id]["framework_technical_stack"][
+                                                                  0][
+                                                                  "technical_stack"] if not technical_stack else
+                                                              technical_stack[project_id],
+                                                              parameter_request=self.requested_parameter[project_id])
+                        # parameter = [{"page":"XXX", "function":"[{"function":"XXX", "parameter": [{"name":"XXX", "answer": "your_answer"}, {...}, ...]},...],...]
+
+                        auto_parameter_save_dict[project_id] =  parameter_list
+                        if type(self.parameter_answer_save) == str:
+                            self.parameter_answer_save = open(self.parameter_answer_save
+                                                              + "/{0}-ParameterAnswerSave.json".format(self.initiate_time),
+                                                              "w", encoding="utf-8")
+                        self.parameter_answer_save.seek(0)
+                        self.parameter_answer_save.truncate(0)
+                        self.parameter_answer_save.write(json.dumps(auto_parameter_save_dict))
+
+
+                except Exception as e:
+                    self.logger.warning(f"Get parameters for project id {project_id} failed with exception {e}.")
+                    self.logger.info("{} scored 0.".format(project_id))
+                    judge.clean()
+                    continue
+
+                try:
+                    if type(parameter_list) == list:
+                        parameters = {}
+                        for page in parameter_list:
+                            parameters[page['page']] = {}
+                            for function in page["function"]:
+                                # temp = {p['name']: p['answer'] for p in function['parameter']}
+                                parameters[page['page']][function['function']] = function["parameter"]
+                        del parameter_list
+                    else:
+                        parameters = parameter_list
+                except Exception as e:
+                    self.logger.warning(f"Get parameters for project id {project_id} failed with exception {e}.")
+                    continue
+                pass_count = 0
+                n = 0
+                index = 0
+                for page in self.testcode[project_id]:
+                    n += len(page['function'])
+                    total_status['total'] += len(page['function'])
+                    for function in page['function']:
+                        index += 1
+                        self.logger.info("Evaluating function {}".format(
+                            str(project_id) + "_" + str(index) + " " + function['function']))
+                        try:
+                            kwargs = {}
+                            for parameter in parameters[page['page']][function['function']]:
+                                kwargs[parameter['name']] = parameter['answer']
+
+                        except Exception as e:
+                            self.logger.info(
+                                "Parameter(s) finding was failed in the project_answer_list. Exception {}".format(e))
+                            continue
+                        try:
+                            if judge.check(str(project_id) + "_" + str(index), function['test'], **kwargs):
+                                pass_count += 1
+                                self.logger.info("Function {} passed.".format(str(project_id) + "_" + str(index)))
+                            else:
+                                self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)))
+                        except Exception as e:
+                            self.logger.info("Function {} failed.".format(str(project_id) + "_" + str(index)) + "Error: {}".format(e))
+                project_score = (pass_count + 1) / (n + 1)  # 1 for runable
+                project_score_table_row["pass"] = pass_count + 1
+                total_status['total'] += 1
+                total_status['score'] += project_score
+                total_status['pass'] += (pass_count + 1)
+                total_status['failed'] += (n - pass_count)
+                self.logger.info(f"Project id {project_id} scored {project_score}")
+                judge.clean()
+            except Exception as e:
+                self.logger.critical(f"Error:{e} | Traceback:{traceback.format_exc()}")
+            if judge.status:
+                judge.clean()
         total_status['testcase'] = total_status['total']
         total_status['total'] = PROJECT_EVAL_DEFAULT_TEST_CASE
         if len(project_id_list) == 20:
             # ProjectEval Standard
             total_status['pass@1'] = total_status['pass'] / PROJECT_EVAL_DEFAULT_TEST_CASE
         self.logger.info("Finished. Report: {}".format(total_status))
-        if judge.status:
-            judge.clean()
-        return total_status, total_status['pass'] / (total_status['total'] if total_status['total'] > 0 else 1)
+        return total_status, project_score_table #, total_status['pass'] / (total_status['total'] if total_status['total'] > 0 else 1)
 
 
 class IndicatorController(BaseController):
@@ -564,7 +604,7 @@ class IndicatorController(BaseController):
             "checklist": {},
             "skeleton": {},
             "code": {},
-            "parameter": self.answer_parameter,
+            "parameter": {},
         }
         self._reference_data = {
             "checklist": {},
@@ -625,6 +665,19 @@ class IndicatorController(BaseController):
                         except Exception as e:
                             self.logger.warning(f"Failed to load code list of project:{code} with file {file} on error {e}")
 
+
+            for project_id in self.answer_parameter:
+                self._test_data["parameter"][project_id] = {}
+                for page in self.answer_parameter[project_id]:
+                    try:
+                        self._test_data["parameter"][project_id][page["page"]] = {}
+                        for function in page["function"]:
+                            # temp = {p['name']: p['answer'] for p in function['parameter']}
+                            self._test_data["parameter"][project_id][page["page"]][function['function']] = function[
+                                "parameter"]
+                    except Exception as e:
+                        self.logger.warning(f"Failed to load parameter list of project:{project_id} with parameter {page} on error {e}")
+
         except Exception as e:
             self.logger.critical(f"Initial failed:{e}")
 
@@ -644,7 +697,16 @@ class IndicatorController(BaseController):
                 "parameter": {}
             }
         }
+        score_table = []
         for project_id in project_id_list:
+            score_table_row = {
+                "project_id": project_id,
+                "checklist": 0 if checklist else None,
+                "skeleton": 0 if skeleton else None,
+                "code": 0 if code else None,
+                "parameter": 0 if parameter else None,
+            }
+            score_table.append(score_table_row)
             self.logger.info(f"Processing project {project_id}.")
             if checklist and self.answer_checklist and project_id in self.answer_checklist:
                 self.logger.info(f"Checklist on project {project_id}.")
@@ -653,6 +715,7 @@ class IndicatorController(BaseController):
                                                                        self._reference_data["checklist"][project_id])
                     report["assignment"]["checklist"][project_id] = assignment
                     score["checklist"] += best_score
+                    score_table_row["checklist"] = best_score
                     self.logger.info(f"Checklist score on project {project_id}: {best_score}")
                 except Exception as e:
                     self.logger.critical(f"Failed to calculate checklist:{e}")
@@ -667,6 +730,7 @@ class IndicatorController(BaseController):
                                                                "language"].lower())
                     report["assignment"]["skeleton"][project_id] = assignment
                     score["skeleton"] += best_score
+                    score_table_row["skeleton"] = best_score
                     self.logger.info(f"Skeleton score on project {project_id}: {best_score}")
                 except Exception as e:
                     self.logger.critical(f"Failed to calculate skeleton:{e}")
@@ -681,6 +745,7 @@ class IndicatorController(BaseController):
                                                                "language"].lower())
                     report["assignment"]["code"][project_id] = assignment
                     score["code"] += best_score
+                    score_table_row["code"] = best_score
                     self.logger.info(f"Code score on project {project_id}: {best_score}")
                 except Exception as e:
                     self.logger.critical(f"Failed to calculate code:{e}")
@@ -692,16 +757,42 @@ class IndicatorController(BaseController):
                                                                 self._reference_data["parameter"][project_id])
                     report["assignment"]["parameter"][project_id] = similarities
                     score["parameter"] += best_score
+                    score_table_row["parameter"] = best_score
                     self.logger.info(f"Parameter score on project {project_id}: {best_score}")
                 except Exception as e:
                     self.logger.critical(f"Failed to calculate parameter:{e}")
 
         for key in score:
-            score[key] = round(float(score[key]), 6)
+            if score[key] is not None:
+                score[key] = round(float(score[key]), 6)
         self.logger.info(f"{self.verbose_name} Sum:{score}")
         self.report_file.write("Sum:"+json.dumps(score)+"\n")
         for key in score:
-            score[key] = str(round(score[key] / len(project_id_list), 4) * 100) + "%"
+            if score[key] is not None:
+                score[key] = str(round(score[key] / len(project_id_list), 4) * 100) + "%"
         self.logger.info(f"{self.verbose_name} Average:{score}")
         self.report_file.write("Average:" + json.dumps(score)+"\n")
         self.report_file.write(str(report))
+        return score, score_table
+
+
+class CaseStudyController(BaseController):
+    def __init__(self, cot_log_path, llm, device, model_class:LLMTest, output_file_path, n):
+        super().__init__()
+        self.cot_log = open(cot_log_path, "r",encoding="utf-8").read()
+        self.model:LLMTest = model_class(llm=llm, device=device)
+        self.n = n
+        self.output_file = open(output_file_path, "w", encoding="utf-8")
+
+    def run(self):
+        message = f"Here is the log what you have reasoned.\n ```log\n  {self.cot_log}  \n```Return your FULL chain of thought of reasoning each step in the log. DO NOT summary the output."
+        role_message = "You are GPT-4o"
+        count = 0
+        while count < self.n:
+            print(f"Start:{count}")
+            text = self.model.send_message(message, role_message)
+            print(f"Finished: {text.choices[0].message.content}")
+            self.output_file.write(f"======Count {count+1}======")
+            self.output_file.write(text.choices[0].message.content)
+            count += 1
+

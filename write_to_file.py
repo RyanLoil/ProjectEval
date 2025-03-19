@@ -21,9 +21,9 @@ def write_to_file(data_path: str, output_path: str):
             shutil.rmtree(output_path + source + "/")
         os.makedirs(output_path + source + "/")
         for file in data[source]:
-            _to_file(output_path + source + "/" + file['path'], file['code'])
+            _to_file(output_path + source + "/" + file['path'], file['code']) # (file['path'] if file['path'] else file['file'])
 
 if __name__ == '__main__':
-    data_path = 'data/操作版本/skeletongpt-4o_20250122-215803.json'
-    output_path = 'test/project_2/'
+    data_path = 'experiments/20250210-2/gpt-4o/direct/gpt-4o_20250211-004959_level_1.json'
+    output_path = 'test/casestudy/direct/'
     write_to_file(data_path, output_path)

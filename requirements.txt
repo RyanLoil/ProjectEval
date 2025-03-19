@@ -9,6 +9,8 @@ func-timeout >= 4.3.5
 torch
 ollama
 openai
+google-genai
+
 
 # Test packages
 Django~=5.1.1

@@ -2,11 +2,12 @@ import json
 import logging
 import os
 import re
+import time
 from datetime import datetime
 
 from openai import OpenAI
-
-from config import OPEN_AI_KEY
+from google import genai
+from config import OPEN_AI_KEY, GOOGLE_AI_KEY
 from prompt import prompt
 
 
@@ -27,6 +28,9 @@ class LLMTest:
             console.setFormatter(formatter)
             self.logger.addHandler(handler)
             self.logger.addHandler(console)
+
+    def send_message(self, message, role_message):
+        pass
 
     def generate_checklist(self, nl_prompt):
         pass
@@ -84,23 +88,7 @@ class LLMTest:
         code_text = match.group(1) if match else rsp
         return code_text
 
-    def completion_to_dict(self, answer):
-        s = answer.choices[0].message.content
-        try:
-            return json.loads(LLMTest.parse(s))
-        except Exception as e:
-            self.logger.debug(f"Completion to dict failed by using pattern ```json(.*)```: {e}")
-        try:
-            return json.loads(LLMTest.parse(s, pattern=r"```json\n(\[.*?\])\n\```"))
-        except Exception as e:
-            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\\[.*?\\])\\n``` : {e}")
-        try:
-            return json.loads(s)
-        except Exception as e:
-            self.logger.debug(f"Completion to dict failed directly: {e}")
-            self.logger.debug("Completion to dict: trying replace \\")
-            s = s.replace("\\", "\\\\")
-            return s
+
 
 
 class GPTTest(LLMTest):
@@ -121,6 +109,24 @@ class GPTTest(LLMTest):
         )
         self.logger.debug("Received:" + completion.choices[0].message.content)
         return completion
+
+    def completion_to_dict(self, answer):
+        s = answer.choices[0].message.content
+        try:
+            return json.loads(LLMTest.parse(s))
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed by using pattern ```json(.*)```: {e}")
+        try:
+            return json.loads(LLMTest.parse(s, pattern=r"```json\n(\[.*?\])\n\```"))
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\\[.*?\\])\\n``` : {e}")
+        try:
+            return json.loads(s)
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed directly: {e}")
+            self.logger.debug("Completion to dict: trying replace \\")
+            s = s.replace("\\", "\\\\")
+            return s
 
     def generate_checklist(self, nl_prompt):
         message = prompt[self.__class__.__name__]['generate_checklist'].format(nl_prompt=nl_prompt)
@@ -206,7 +212,7 @@ class LlamaTest(GPTTest):
         :param device: If you want to use other GPU rather than GPU:0, set the UUID in this param. Check the UUID by using "nvidia-smi -L".
         '''
         super(LlamaTest, self).__init__(llm)
-        if not device:
+        if device:
             os.environ['CUDA_VISIBLE_DEVICES'] = device
         os.environ[
             'NO_PROXY'] = "localhost,127.0.0.1"  # Ollama didn't fit the proxy settings which will lead to 502 error.
@@ -215,5 +221,38 @@ class LlamaTest(GPTTest):
             api_key="llama"  # Required but ignored
         )
         del os.environ['NO_PROXY']
-        if not device:
+        if device:
             del os.environ['CUDA_VISIBLE_DEVICES']
+
+class GeminiTest(GPTTest):
+    def __init__(self, llm="gemini-1.5-flash",  *args, **kwargs):
+        super(GeminiTest, self).__init__(llm)
+        self.client = genai.Client(api_key=GOOGLE_AI_KEY)
+
+    def send_message(self, message, role_message):
+        self.logger.debug("Sending:" + message)
+        completion = self.client.models.generate_content(
+            model=self.llm,
+            contents = message,
+        )
+        self.logger.debug("Received:" + completion.text)
+        time.sleep(1)
+        return completion
+
+    def completion_to_dict(self, answer):
+        s = answer.text
+        try:
+            return json.loads(LLMTest.parse(s))
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed by using pattern ```json(.*)```: {e}")
+        try:
+            return json.loads(LLMTest.parse(s, pattern=r"```json\n(\[.*?\])\n\```"))
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed by using pattern ```json\\n(\\[.*?\\])\\n``` : {e}")
+        try:
+            return json.loads(s)
+        except Exception as e:
+            self.logger.debug(f"Completion to dict failed directly: {e}")
+            self.logger.debug("Completion to dict: trying replace \\")
+            s = s.replace("\\", "\\\\")
+            return s

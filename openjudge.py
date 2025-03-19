@@ -65,6 +65,8 @@ class BasePythonManager:
 
             process.wait(10)
             process.terminate()
+            if process.poll() is not None:
+                process.kill()
 
     def start(self):
         self.process = subprocess.Popen([self.get_activate_script(), *self.start_command],
@@ -200,8 +202,8 @@ class WebsiteJudge(BaseJudge):
             :return: None
             '''
             if initiate_command_list == [[]] or not initiate_command_list:
-                initiate_command_list = [["manage.py", "makemigrations"],
-                                         ["manage.py", "migrate"],
+                initiate_command_list = [["manage.py", "makemigrations", "--noinput"],
+                                         ["manage.py", "migrate", "--noinput"],
                                          ]  # ["manage.py", "createsuperuser", "--username", "Admin", "--email",  "abc@example.com", "--noinput"]
                 super().initiate_command(initiate_command_list)
                 # Create Superuser
