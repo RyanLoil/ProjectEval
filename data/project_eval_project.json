@@ -966,7 +966,7 @@
     {
         "project_id": "4",
         "project_type": "website",
-        "nl_prompt": "Create a website for a  QR code generator.",
+        "nl_prompt": "Create a website for a QR code generator.",
         "framework_technical_stack": [
             {
                 "language": "Python",
@@ -3269,7 +3269,7 @@
     {
         "project_id": "9",
         "project_type": "website",
-        "nl_prompt": "Create a website for a AI Chatbot product introduction.",
+        "nl_prompt": "Create a website for an AI Chatbot product introduction.",
         "framework_technical_stack": [
             {
                 "language": "Python",
@@ -3623,7 +3623,7 @@
     {
         "project_id": "10",
         "project_type": "website",
-        "nl_prompt": "Create a website for a Calorie tracker application,  additional chart for analysis will be better.",
+        "nl_prompt": "Create a website for a Calorie tracker application, additional chart for analysis will be better.",
         "framework_technical_stack": [
             {
                 "language": "Python",
@@ -6496,7 +6496,7 @@
                 "function": [
                     {
                         "function": "DisplayText",
-                        "test": "def test_display_text(driver, test_url):\r\n\tdriver.get(test_url)\r\n\t# text_element = driver.find_element('body').text # 这个地方报错,我给你讲过，by，你没写。然后，你这个地方还有个大问题，比方说如果没有body标签，只有HTML，写了个Helloworld，你这个程序还会报错\r\n\ttext_element = driver.page_source # 这表示直接把driver拿到的HTML以文本形式获取\r\n\tassert 'Hello World'.lower() in text_element.lower() or \"helloworld\" in text_element.lower() # 有可能是不带空格的helloword，也有可能是小写的，或大写的，所以一起转为小写字母，即str.lower()",
+                        "test": "def test_display_text(driver, test_url):\r\n\tdriver.get(test_url) \r\n\ttext_element = driver.page_source \r\n\tassert 'Hello World'.lower() in text_element.lower() or \"helloworld\" in text_element.lower()",
                         "parameter": [
                             {
                                 "name": "test_url",

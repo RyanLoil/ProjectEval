@@ -85,20 +85,24 @@ def save_json(data, output_file):
 
 
 if __name__ == "__main__":
-    all_project_directory = "test/project_2/"  # Set your project directory here
-    output_file = "data/操作版本/framework-20.json"
+    all_project_directory = "rebuttal/OpenHands/Files/"  # Set your project directory here
+    output_file = "data/操作版本/openhands.json"
     index = 20
     json_data = {}
-    for directory in os.listdir(all_project_directory):
-        if int(directory) < index:
+    for directory in range(1, index+1):
+    # for directory in os.listdir(all_project_directory):
+    #     # if int(directory) < index:
+    #     #     continue
+        if str(directory) not in os.listdir(all_project_directory):
             continue
-        if len(os.listdir(os.path.join(all_project_directory, directory))) == 1 and len(os.listdir(os.path.join(all_project_directory, directory))[0].split('.')) == 1:
+        if len(os.listdir(os.path.join(all_project_directory, str(directory)))) == 1 and len(os.listdir(os.path.join(all_project_directory, str(directory)))[0].split('.')) == 1:
             # 防止套娃
-            project_directory = os.path.join(all_project_directory, directory) + "/" + \
-                                os.listdir(os.path.join(all_project_directory, directory))[0]
+            project_directory = os.path.join(all_project_directory, str(directory)) + "/" + \
+                                os.listdir(os.path.join(all_project_directory, str(directory)))[0]
         else:
-            project_directory = os.path.join(all_project_directory, directory)
-        json_data[str(index)] = project_to_json(project_directory)
+            project_directory = os.path.join(all_project_directory, str(directory))
+        # json_data[str(index)] = project_to_json(project_directory)
+        json_data[str(directory)] = project_to_json(project_directory)
         index += 1
     save_json(json_data, output_file)
 
