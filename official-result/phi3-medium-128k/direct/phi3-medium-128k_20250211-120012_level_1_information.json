@@ -1,0 +1,1 @@
+{"3": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"]], "requirements": ["Django==3.2.10", "psycopg2-binary"], "homepage_url": "/password_generator/"}}

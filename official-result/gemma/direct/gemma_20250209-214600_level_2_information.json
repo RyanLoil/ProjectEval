@@ -1,0 +1,1 @@
+{"19": "```json\n{\n\"initiate_commands\": [\n[\"manage.py\",\"makemigrations\"],\n[\"manage.py\",\"migrate\"],\n[\"python index.html\"],\n],\n\"requirements\": [\n\"Django\",\n\"python-csv\",\n]\n}\n```"}

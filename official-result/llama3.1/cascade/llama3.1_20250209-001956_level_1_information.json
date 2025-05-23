@@ -1,0 +1,1 @@
+{"15": {"initiate_commands": [["python", "manage.py", "makemigrations"], ["python", "manage.py", "migrate"], ["python", "manage.py", "runserver"]], "requirements": ["Django==3.2", "django-extends"]}}

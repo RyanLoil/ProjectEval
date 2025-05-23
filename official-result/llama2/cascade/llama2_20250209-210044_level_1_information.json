@@ -1,0 +1,1 @@
+{"8": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate", ["python", "setup_project.py"], ["python", "startapp"], ["python", "createopolicy"]], "requirements": [" Django==3.2.7", " django-admin-tools==0.8.1", "django-policies==1.0.1", "graphene==1.10.1", "graphene-django==2.4.5", "psycopolitan==2.0.1"]}}

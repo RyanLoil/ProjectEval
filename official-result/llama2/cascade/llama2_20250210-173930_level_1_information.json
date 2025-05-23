@@ -1,0 +1,1 @@
+{"1": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["django", "numpy", "pandas", "scikit-learn", "django-bmi-calculator"]}}

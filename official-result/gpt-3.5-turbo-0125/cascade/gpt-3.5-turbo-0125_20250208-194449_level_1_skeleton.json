@@ -1,0 +1,434 @@
+{
+  "1": [
+    {
+      "file": "bmi_calculator_views.py",
+      "path": "somepath/somedir/bmi_calculator_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "bmi_calculator_urls.py",
+      "path": "somepath/somedir/bmi_calculator_urls.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "bmi_calculator_templates.html",
+      "path": "somepath/somedir/bmi_calculator_templates.html",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "bmi_calculator_models.py",
+      "path": "somepath/somedir/bmi_calculator_models.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "2": [
+    {
+      "file": "homepage_views.py",
+      "path": "project/views/homepage_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "currency_conversion_views.py",
+      "path": "project/views/currency_conversion_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "exchange_rates_views.py",
+      "path": "project/views/exchange_rates_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "conversion_result_views.py",
+      "path": "project/views/conversion_result_views.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "3": [
+    {
+      "file": "views.py",
+      "path": "password_generator/views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "models.py",
+      "path": "password_generator/models.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "urls.py",
+      "path": "password_generator/urls.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "templates/home.html",
+      "path": "password_generator/templates/home.html",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "templates/settings.html",
+      "path": "password_generator/templates/settings.html",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "static/password_generator.js",
+      "path": "password_generator/static/password_generator.js",
+      "code": "the_skeleton"
+    }
+  ],
+  "4": [
+    {
+      "file": "homepage_views.py",
+      "path": "path_to_project/homepage_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "settings_views.py",
+      "path": "path_to_project/settings_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "help_views.py",
+      "path": "path_to_project/help_views.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "5": {
+    "framework": "Django",
+    "features": [
+      {
+        "file": "convert.py",
+        "path": "somepath/somedir/convert.py",
+        "code": "the_skeleton"
+      },
+      {
+        "file": "settings.py",
+        "path": "somepath/somedir/settings.py",
+        "code": "the_skeleton"
+      },
+      {
+        "file": "history.py",
+        "path": "somepath/somedir/history.py",
+        "code": "the_skeleton"
+      }
+    ]
+  },
+  "6": [
+    {
+      "file": "urls.py",
+      "path": "somepath/somedir/urls.py",
+      "code": "urlpatterns = [\n  path('', views.homepage, name='homepage'),\n  path('todo-list/', views.todo_list, name='todo_list'),\n  path('analytics/', views.analytics, name='analytics'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": "somepath/somedir/views.py",
+      "code": "def homepage(request):\n  return render(request, 'homepage.html')\n\ndef todo_list(request):\n  return render(request, 'todo_list.html')\n\ndef analytics(request):\n  return render(request, 'analytics.html')"
+    },
+    {
+      "file": "models.py",
+      "path": "somepath/somedir/models.py",
+      "code": "from django.db import models\n\nclass Task(models.Model):\n  name = models.CharField(max_length=100)\n  due_date = models.DateField()\n  description = models.TextField()\n  completed = models.BooleanField(default=False)"
+    },
+    {
+      "file": "homepage.html",
+      "path": "somepath/templates/homepage.html",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Homepage</title>\n</head>\n<body>\n  <h1>Welcome to the Homepage</h1>\n  <!-- Include code for viewing overall tasks, adding new task, marking task as completed, and deleting task -->\n</body>\n</html>"
+    },
+    {
+      "file": "todo_list.html",
+      "path": "somepath/templates/todo_list.html",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Todo List</title>\n</head>\n<body>\n  <h1>Todo List</h1>\n  <!-- Include code for filtering tasks, editing task details, searching for tasks, and sorting tasks -->\n</body>\n</html>"
+    },
+    {
+      "file": "analytics.html",
+      "path": "somepath/templates/analytics.html",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Analytics</title>\n</head>\n<body>\n  <h1>Analytics</h1>\n  <!-- Include code for viewing task completion rate, analyzing task distribution, and tracking productivity trends -->\n</body>\n</html>"
+    }
+  ],
+  "7": [
+    {
+      "file": "models.py",
+      "path": "somepath/somedir/models.py",
+      "code": "Django model classes for managing user balances and budgets"
+    },
+    {
+      "file": "views.py",
+      "path": "somepath/somedir/views.py",
+      "code": "Views for rendering homepage, chart page, and settings with corresponding functions"
+    },
+    {
+      "file": "serializers.py",
+      "path": "somepath/somedir/serializers.py",
+      "code": "Serializers for converting model instances to JSON representation"
+    },
+    {
+      "file": "urls.py",
+      "path": "somepath/somedir/urls.py",
+      "code": "URL patterns for routing requests to appropriate views"
+    },
+    {
+      "file": "templates/homepage.html",
+      "path": "somepath/somedir/templates/homepage.html",
+      "code": "HTML template for rendering the homepage with balance overview and budget control features"
+    },
+    {
+      "file": "templates/chart.html",
+      "path": "somepath/somedir/templates/chart.html",
+      "code": "HTML template for rendering the chart page with balance chart and data filtering options"
+    },
+    {
+      "file": "templates/settings.html",
+      "path": "somepath/somedir/templates/settings.html",
+      "code": "HTML template for rendering the settings page with budget goal setting and category customization"
+    }
+  ],
+  "8": "[{\"file\": \"homepage_views.py\", \"path\": \"somepath/somedir/homepage_views.py\", \"code\": \"the_skeleton_for_homepage_views\"}],\n[{\"file\": \"monthly_views.py\", \"path\": \"somepath/somedir/monthly_views.py\", \"code\": \"the_skeleton_for_monthly_views\"}],\n[{\"file\": \"event_details_views.py\", \"path\": \"somepath/somedir/event_details_views.py\", \"code\": \"the_skeleton_for_event_details_views\"}]",
+  "9": [
+    {
+      "file": "urls.py",
+      "path": "somepath/somedir/urls.py",
+      "code": "URL Patterns Configuration"
+    },
+    {
+      "file": "models.py",
+      "path": "somepath/somedir/models.py",
+      "code": "Database Models Definition"
+    },
+    {
+      "file": "views.py",
+      "path": "somepath/somedir/views.py",
+      "code": "View Functions Implementation"
+    },
+    {
+      "file": "templates",
+      "path": "somepath/somedir/templates",
+      "code": "HTML Templates Directory"
+    },
+    {
+      "file": "forms.py",
+      "path": "somepath/somedir/forms.py",
+      "code": "Form Definitions"
+    },
+    {
+      "file": "admin.py",
+      "path": "somepath/somedir/admin.py",
+      "code": "Admin Panel Configuration"
+    }
+  ],
+  "10": "[\n    {\"file\": \"urls.py\", \"path\": \"yourapp/urls.py\", \"code\": \"urlpatterns = [ path('', views.HomepageView.as_view(), name='homepage'), path('foodlog/', views.FoodLogView.as_view(), name='foodlog'), path('exerciselog/', views.ExerciseLogView.as_view(), name='exerciselog'), path('reports/', views.ReportsView.as_view(), name='reports'), ]\"},\n    {\"file\": \"views.py\", \"path\": \"yourapp/views.py\", \"code\": \"from django.views.generic import TemplateView\\\\nclass HomepageView(TemplateView): template_name = 'homepage.html'\\\\nclass FoodLogView(TemplateView): template_name = 'foodlog.html'\\\\nclass ExerciseLogView(TemplateView): template_name = 'exerciselog.html'\\\\nclass ReportsView(TemplateView): template_name = 'reports.html'\"},\n    {\"file\": \"models.py\", \"path\": \"yourapp/models.py\", \"code\": \"from django.db import models\\\\n# Your models go here...\"},\n    {\"file\": \"templates/homepage.html\", \"path\": \"yourapp/templates/homepage.html\", \"code\": \"<h1>Homepage</h1> <!-- Your homepage template content here -->\"},\n    {\"file\": \"templates/foodlog.html\", \"path\": \"yourapp/templates/foodlog.html\", \"code\": \"<h1>Food Log</h1> <!-- Your food log template content here -->\"},\n    {\"file\": \"templates/exerciselog.html\", \"path\": \"yourapp/templates/exerciselog.html\", \"code\": \"<h1>Exercise Log</h1> <!-- Your exercise log template content here -->\"},\n    {\"file\": \"templates/reports.html\", \"path\": \"yourapp/templates/reports.html\", \"code\": \"<h1>Reports</h1> <!-- Your reports template content here -->\"},\n]",
+  "11": [
+    {
+      "file": "home_views.py",
+      "path": "somepath/somedir/home_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "about_views.py",
+      "path": "somepath/somedir/about_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "urls.py",
+      "path": "somepath/somedir/urls.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "home.html",
+      "path": "somepath/templates/home.html",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "about.html",
+      "path": "somepath/templates/about.html",
+      "code": "the_skeleton"
+    }
+  ],
+  "12": [
+    {
+      "file": "frontend_submission.py",
+      "path": "somepath/somedir/frontend_submission.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "admin_page.py",
+      "path": "somepath/somedir/admin_page.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "claim_status.py",
+      "path": "somepath/somedir/claim_status.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "13": [
+    {
+      "file": "customer_views.py",
+      "path": "somepath/somedir/customer_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "product_views.py",
+      "path": "somepath/somedir/product_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "purchase_views.py",
+      "path": "somepath/somedir/purchase_views.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "marketing_views.py",
+      "path": "somepath/somedir/marketing_views.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "14": {
+    "framework": "Django",
+    "checklist": [
+      {
+        "page": "helloworld",
+        "function": [
+          {
+            "function": "ViewHelloWorld",
+            "description": "View the 'Hello World' message on the page"
+          }
+        ]
+      }
+    ],
+    "JSON_format": [
+      {
+        "file": "xxx.py",
+        "path": "somepath/somedir/xxx.py",
+        "code": "the_skeleton"
+      }
+    ]
+  },
+  "15": {
+    "framework": "Django",
+    "files": [
+      {
+        "file": "xxx.py",
+        "path": "somepath/somedir/xxx.py",
+        "code": "the_skeleton"
+      }
+    ]
+  },
+  "16": [
+    {
+      "file": "read_subject_list.py",
+      "path": "somepath/somedir/read_subject_list.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "convert_data.py",
+      "path": "somepath/somedir/convert_data.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "modify_time_column.py",
+      "path": "somepath/somedir/modify_time_column.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "output_subject_table.py",
+      "path": "somepath/somedir/output_subject_table.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "17": [],
+  "18": [
+    {
+      "file": "main_menu.py",
+      "path": "somepath/somedir/main_menu.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "gameplay.py",
+      "path": "somepath/somedir/gameplay.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "19": [
+    {
+      "file": "dataset_reader.py",
+      "path": "somepath/somedir/dataset_reader.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "data_processor.py",
+      "path": "somepath/somedir/data_processor.py",
+      "code": "the_skeleton"
+    },
+    {
+      "file": "histogram_generator.py",
+      "path": "somepath/somedir/histogram_generator.py",
+      "code": "the_skeleton"
+    }
+  ],
+  "20": [
+    {
+      "file": "urls.py",
+      "path": "project_name/project_name/urls.py",
+      "code": "url_patterns = []"
+    },
+    {
+      "file": "views.py",
+      "path": "project_name/app_name/views.py",
+      "code": "from django.shortcuts import render"
+    },
+    {
+      "file": "models.py",
+      "path": "project_name/app_name/models.py",
+      "code": "from django.db import models"
+    },
+    {
+      "file": "templates_homepage.html",
+      "path": "project_name/app_name/templates/templates_homepage.html",
+      "code": "<html><body></body></html>"
+    },
+    {
+      "file": "templates_blogpost.html",
+      "path": "project_name/app_name/templates/templates_blogpost.html",
+      "code": "<html><body></body></html>"
+    },
+    {
+      "file": "templates_searchresults.html",
+      "path": "project_name/app_name/templates/templates_searchresults.html",
+      "code": "<html><body></body></html>"
+    },
+    {
+      "file": "templates_category.html",
+      "path": "project_name/app_name/templates/templates_category.html",
+      "code": "<html><body></body></html>"
+    },
+    {
+      "file": "templates_subscribe.html",
+      "path": "project_name/app_name/templates/templates_subscribe.html",
+      "code": "<html><body></body></html>"
+    },
+    {
+      "file": "forms.py",
+      "path": "project_name/app_name/forms.py",
+      "code": "from django import forms"
+    },
+    {
+      "file": "urls_blog_post.py",
+      "path": "project_name/app_name/urls_blog_post.py",
+      "code": "url_patterns = []"
+    },
+    {
+      "file": "urls_search.py",
+      "path": "project_name/app_name/urls_search.py",
+      "code": "url_patterns = []"
+    },
+    {
+      "file": "urls_category.py",
+      "path": "project_name/app_name/urls_category.py",
+      "code": "url_patterns = []"
+    },
+    {
+      "file": "urls_subscribe.py",
+      "path": "project_name/app_name/urls_subscribe.py",
+      "code": "url_patterns = []"
+    }
+  ]
+}

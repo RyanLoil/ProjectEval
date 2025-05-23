@@ -1,0 +1,1 @@
+{"17": {"initiate_commands": [[" manage.py ", " makemigrations "], [" manage.py ", " migrate "], ["python", "-c", "python data_prep.py ReadDataset"], ["python", "-c", "python model_creation.py CreateLogisticModel"]], "requirements": ["-r requirements.txt"]}}

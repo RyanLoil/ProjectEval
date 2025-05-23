@@ -1,0 +1,1 @@
+{"15": "{\n    \"initiate_commands\": [\n        [\"manage.py\", \"makemigrations\"],\n        [\"manage.py\", \"migrate\"],\n        [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]],\n    \"requirements\": [\"Django==3.1.\", \"Pillow==\"5.3.2],\n    \"homepage_url\": \"/\"\n}"}

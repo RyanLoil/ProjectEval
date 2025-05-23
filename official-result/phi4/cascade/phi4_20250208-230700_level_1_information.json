@@ -1,0 +1,1 @@
+{"6": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"], ["python3", "-m", "http.server"]], "requirements": ["Django", "django-heroku"], "homepage_url": "http://localhost:8000/"}}

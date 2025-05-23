@@ -3,7 +3,7 @@ import os, json
 from datetime import datetime
 
 from openai import OpenAI
-from config import OPEN_AI_KEY
+from config import OPENAI_KEY
 import logging
 
 prompt = {
@@ -29,7 +29,7 @@ class DataGenerator:
             self.input_data = json.load(file)
         file.close()
         self.output_file = output_file
-        self.client = OpenAI(api_key=OPEN_AI_KEY)
+        self.client = OpenAI(api_key=OPENAI_KEY)
         self.llm = llm
 
         # logger
@@ -151,8 +151,3 @@ class DataGenerator:
         )
         self.logger.debug("Received:" + completion.choices[0].message.content)
         return completion
-
-
-file = "data/generation-console.json"
-dg = DataGenerator(input_file=file, output_file=file[:-5] + "-test.json", llm='gpt-4o') # gpt-4o
-dg.generate(framework=False)

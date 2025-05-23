@@ -1,0 +1,1 @@
+{"8": "```\n{\n  \"initiate_commands\": [\n    [\"python\", \"manage.py\", \"makemigrations\"],\n    [\"python\", \"manage.py\", \"migrate\"]\n  ],\n  \"requirements\": [\n    \"django\",\n    \"calendar\"\n  ]\n}\n```"}

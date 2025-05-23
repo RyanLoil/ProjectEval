@@ -1,0 +1,1 @@
+{"18": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"], ["python menu.py"]], "requirements": ["requests", "beautifulsoup4"]}}

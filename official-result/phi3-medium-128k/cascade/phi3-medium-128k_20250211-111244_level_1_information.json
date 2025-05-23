@@ -1,0 +1,1 @@
+{"2": {"initiate_commands": [["manage.py m", "migrate"]], "homepage_url": "/", "requirements": ["* django == '2.1',\n    \"pillow\": []"]}}

@@ -1,0 +1,1 @@
+{"18": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"]], "requirements": []}, "20": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"]], "requirements": ["Django>=2.1,<3.0", "mysqlclient>=1.4.7"]}}

@@ -1,0 +1,448 @@
+{
+  "1": [
+    {
+      "file": "Dockerfile",
+      "path": "backend/Dockerfile"
+    },
+    {
+      "file": ".dockerignore",
+      "path": "backend/.dockerignore"
+    },
+    {
+      "file": "docker-compose.yml",
+      "path": "backend/docker-compose.yml"
+    },
+    {
+      "file": "requirements.txt",
+      "path": "backend/requirements.txt"
+    },
+    {
+      "file": ".env.example",
+      "path": "backend/.env.example"
+    },
+    {
+      "file": "settings.py",
+      "path": "backend/src/settings.py"
+    },
+    {
+      "file": "urls.py",
+      "path": "backend/src/urls.py"
+    },
+    {
+      "file": "wsgi.py",
+      "path": "backend/src/wsgi.py"
+    },
+    {
+      "file": "models.py",
+      "path": "backend/src/models.py"
+    },
+    {
+      "file": "views.py",
+      "path": "backend/src/views.py"
+    },
+    {
+      "file": "templates/index.html",
+      "path": "frontend/templates/index.html"
+    }
+  ],
+  "2": [
+    {
+      "file": "db.sqlite3",
+      "path": "somepath/somedir/db.sqlite3"
+    },
+    {
+      "file": "manage.py",
+      "path": "somepath/somedir/manage.py"
+    },
+    {
+      "file": "requirements.txt",
+      "path": "somepath/somedir/requirements.txt"
+    },
+    {
+      "file": "example_app/models.py",
+      "path": "somepath/somedir/example_app/models.py"
+    },
+    {
+      "file": "example_app/views.py",
+      "path": "somepath/somedir/example_app/views.py"
+    },
+    {
+      "file": "example_app/urls.py",
+      "path": "somepath/somedir/example_app/urls.py"
+    },
+    {
+      "file": "example_app/settings.py",
+      "path": "somepath/somedir/example_app/settings.py"
+    },
+    {
+      "file": "templates/base.html",
+      "path": "somepath/somedir/templates/base.html"
+    },
+    {
+      "file": "templates/index.html",
+      "path": "somepath/somedir/templates/index.html"
+    },
+    {
+      "file": "example_project/settings.py",
+      "path": "somepath/somedir/example_project/settings.py"
+    },
+    {
+      "file": "example_project/wsgi.py",
+      "path": "somepath/somedir/example_project/wsgi.py"
+    }
+  ],
+  "4": [
+    {
+      "file": "settings.py",
+      "path": "/src/qr_code_generator/",
+      "code": ""
+    },
+    {
+      "file": "urls.py",
+      "path": "/src/qr_code_generator/",
+      "code": ""
+    },
+    {
+      "file": "wsgi.py",
+      "path": "/src/qr_code_generator/",
+      "code": ""
+    },
+    {
+      "file": "__init__.py",
+      "path": "/src/qr_code_generator/",
+      "code": ""
+    },
+    {
+      "file": "templates/index.html",
+      "path": "/src/qr_code_generator/templates/",
+      "code": ""
+    },
+    {
+      "file": "static/style.css",
+      "path": "/src/qr_code_generator/static/",
+      "code": ""
+    }
+  ],
+  "5": [
+    {
+      "file": "manage.py",
+      "path": "manage.py",
+      "code": "import os\nimport sys\n\n# Main entry point\nif __name__ == '__main__':\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n"
+    },
+    {
+      "file": "project/settings.py",
+      "path": "project/settings.py",
+      "code": "import os\nfrom django.conf import settings\n\n# Localization settings\nLANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_L10N = True\nUSE_TZ = True\n\n# Static and media files settings\nSTATIC_URL = '/static/'\nMEDIA_URL = '/media/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'media')\n"
+    },
+    {
+      "file": "project/urls.py",
+      "path": "project/urls.py",
+      "code": "from django.urls import path, include\nfrom django.contrib import admin\nfrom django.conf import settings\nfrom django.conf.urls.static import static\n\n# URL patterns for the project\nurlpatterns = [ \n    path('admin/', admin.site.urls),\n    path('', include('example_app.urls')),\n] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n"
+    },
+    {
+      "file": "project/wsgi.py",
+      "path": "project/wsgi.py",
+      "code": "import os\nfrom django.core.wsgi import get_wsgi_application\n\n# WSGI application definition\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')\napplication = get_wsgi_application()\n"
+    },
+    {
+      "file": "requirements.txt",
+      "path": "requirements.txt",
+      "code": "asgiref==3.4.1 \ndjango-crispy-forms==1.12.8 \ndjango-filters==2.4.0 \nDjango==3.2 \ndjango-rest-framework==0.9.5 \npillow==8.2.2 \npsycopg2==2.8.6 \npsycopg2-binary==2.8.6 \npytz==2021.3 \nrequests==2.27.1 \nsix==1.16.0 \ntwitter-api==5.4.1 \nurllib3==1.26.8 \ndjango-polymorphic-tree==1.6.4\n"
+    },
+    {
+      "file": "db.sqlite3",
+      "path": "./db.sqlite3",
+      "code": ""
+    },
+    {
+      "file": ".gitignore",
+      "path": "./.gitignore",
+      "code": "*.pyc\n__pycache__/\ntestdb.sqlite3\ndb.pickle.123456789\n**/migrations/*.py\n"
+    },
+    {
+      "file": "README.md",
+      "path": "./README.md",
+      "code": "# django-project\n"
+    }
+  ],
+  "9": [
+    {
+      "file": "Dockerfile",
+      "path": ".",
+      "code": "FROM python:3.9\nCOPY . /app\nWORKDIR /app\nRUN pip install -r requirements.txt\nCMD ['python', 'manage.py']"
+    },
+    {
+      "file": "requirements.txt",
+      "path": ".",
+      "code": "Django==3.2.6\npillow==8.2.0\npsycopg2-binary==2.9.1\nsix>=1.9,<=1.13.0"
+    },
+    {
+      "file": "manage.py",
+      "path": ".",
+      "code": "import os\nimport sys\n\nif __name__ == '__main__':\n\tos.environ['DJANGO_SETTINGS'] = 'config.settings'\n\tsys.exit(1)"
+    },
+    {
+      "file": "config/__init__.py",
+      "path": ".",
+      "code": ""
+    },
+    {
+      "file": "config/settinges.py",
+      "path": ".",
+      "code": "from .base import *\n\nif 'SECURE_PROCESSING' in os.environ:\n    SECURE_PROCESSING = (os.environ['SECURE_PROCESSING'] == 'true')\nelse:\n    SECURE_PROCESSING = False"
+    },
+    {
+      "file": "config/settings/base.py",
+      "path": ".",
+      "code": "DEBUG = True\nUSE_I18N = True\nUSE_L10N = True\nUSE_TZ = True\nSECURE_PROCESSING = False\nINSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'example_project.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [ \t\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contefct.messags.context_processors.messages',\n            ], \t], \t\t},\n    },\n]\n\nWSGI_APPLICATION = 'example_project.wsgi.application'"
+    },
+    {
+      "file": "example_app/__init__.py",
+      "path": ".",
+      "code": ""
+    },
+    {
+      "file": "example_app/models.py",
+      "path": ".",
+      "code": "from django.db import models\n\nclass MyModel(models.Model):\n\tmy_field = models.CharField(\n        max_length=100,\n    )"
+    },
+    {
+      "file": "example_app/views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\nfrom .models import MyModel\nfrom django.http import JsonResponse as jr\nfrom django.core.serializers.json import DjangoJSONEncoder as de\n\ndef my_view(request):\treturn jr(MyModel.objects.all() if request.method == 'GET' else None, encoder=de)"
+    },
+    {
+      "file": "example_app/urls.py",
+      "path": ".",
+      "code": "from django.urls import path\nfrom .views import my_view\n\nurlpatterns = [ \t\n    path('my-view', my_vieiw, name='my_view'), \t]"
+    },
+    {
+      "file": "example_app/templates/my_template.html",
+      "path": ".",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>My Template</title>\n</head>\n<body>\nMy template\n</body>\n</html>"
+    }
+  ],
+  "11": [
+    {
+      "file": "manage.py",
+      "path": ".",
+      "code": "python manage.py runserver"
+    },
+    {
+      "file": "settings.py",
+      "path": ".",
+      "code": "INSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n]"
+    },
+    {
+      "file": "urls.py",
+      "path": ".",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', views.home, name='home'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, 'home.html')"
+    },
+    {
+      "file": "templates/home.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Home</title>\n</head>\n<body>\n    <h1>Welcome to the home page!</h1>\n</body>\n</html>"
+    },
+    {
+      "file": "static/styles.css",
+      "path": "static",
+      "code": ".container {\n    max-width: 1200px;\n}\n\n.text-center {\n    text-align: center;\n}"
+    },
+    {
+      "file": "templates/base.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>{% block title %}{% endblock %}</title>\n    {% bootstrap_css %}\n</head>\n<body>\n  \t<div class=\"container mt-1\">\n      {% block content %}{% endblock %}\n    </div>\n    {% bootstrap_javascript %}\n</body>\n</html>"
+    },
+    {
+      "file": "urls.py",
+      "path": ".",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', views.home, name='home'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, 'home.html')"
+    },
+    {
+      "file": "templates/home.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Home</title>\n</head>\n<body>\n    <h1>Welcome to the home page!</h1>\n</body>\n</html>"
+    },
+    {
+      "file": "static/styles.css",
+      "path": "static",
+      "code": ".container {\n    max-width: 1200px;\n}\n\n.text-center {\n    text-align: center;\n}"
+    },
+    {
+      "file": "templates/base.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>{% block title %}{% endblock %}</title>\n    {% bootstrap_css %}\n</head>\n<body>\n  \t<div class=\"container mt-1\">\n      {% block content %}{% endblock %}\n    </div>\n    {% bootstrap_javascript %}\n</body>\n</html>"
+    },
+    {
+      "file": "urls.py",
+      "path": ".",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', views.home, name='home'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, 'home.html')"
+    },
+    {
+      "file": "templates/home.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Home</title>\n</head>\n<body>\n    <h1>Welcome to the home page!</h1>\n</body>\n</html>"
+    },
+    {
+      "file": "static/styles.css",
+      "path": "static",
+      "code": ".container {\n    max-width: 1200px;\n}\n\n.text-center {\n    text-align: center;\n}"
+    },
+    {
+      "file": "templates/base.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>{% block title %}{% endblock %}</title>\n    {% bootstrap_css %}\n</head>\n<body>\n  \t<div class=\"container mt-1\">\n      {% block content %}{% endblock %}\n    </div>\n    {% bootstrap_javascript %}\n</body>\n</html>"
+    },
+    {
+      "file": "urls.py",
+      "path": ".",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', views.home, name='home'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, 'home.html')"
+    },
+    {
+      "file": "templates/home.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Home</title>\n</head>\n<body>\n    <h1>Welcome to the home page!</h1>\n</body>\n</html>"
+    },
+    {
+      "file": "static/styles.css",
+      "path": "static",
+      "code": ".container {\n    max-width: 1200px;\n}\n\n.text-center {\n    text-align: center;\n}"
+    },
+    {
+      "file": "templates/base.html",
+      "path": "templates",
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <title>{% block title %}{% endblock %}</title>\n    {% bootstrap_css %}\n</head>\n<body>\n  \t<div class=\"container mt-1\">\n      {% block content %}{% endblock %}\n    </div>\n    {% bootstrap_javascript %}\n</body>\n</html>"
+    },
+    {
+      "file": "urls.py",
+      "path": ".",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', views.home, name='home'),\n]"
+    },
+    {
+      "file": "views.py",
+      "path": ".",
+      "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, 'home.html')"
+    }
+  ],
+  "13": [
+    {
+      "file": "settings.py",
+      "path": "mysite/mysite/settings.py",
+      "code": "import os\nfrom django.conf import settings\nfrom django_mysql import MySQL\ndebug = True\ninstagram_access_token = 'YOUR-ACCESS-TOKEN'\ntwitter_access_token = 'YOUR-ACCESS-TOKEN'\n\nALLOWED_HOSTS = ['*']\n\nSECRET_KEY = os.environ['SECRET_KEY']\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.mysql',\n        'NAME': os.environ['DB_NAME'],\n        'USER': os.environ['DB_USER'],\n        'PASSWORD': os.environ['DB_PASSWORD']\n    }\n}\n"
+    }
+  ],
+  "16": [
+    {
+      "file": "16-stdanswer.py",
+      "path": "/path/to/16-stdanswer.py",
+      "code": "import os\nimport pandas as pd\n\n# File paths\ninput_file = \"Spring Semester Subjects.xlsx\"\noutput_file = \"Processed Subjects Table.xlsx\"\n\ndef check_file_exists(file_path):\n    \"\"\"\n    Check if the specified file path exists.\n    \"\"\"\n    return os.path.exists(file_path)\n\n\ndef check_file_format(file_path):\n    \"\"\"\n    Check if the file is in Excel format.\n    \"\"\"\n    return file_path.endswith(\".xlsx\")\n\n\ndef validate_data(df):\n    \"\"\"\n    Validate the DataFrame for required columns and values.\n    \"\"\"\n    return df\n\n\ndef process_subjects(input_file, output_file):\n    \"\"\"\n    Process the subjects from input Excel file and save the output to another Excel file.\n    \"\"\"\n    df = pd.read_excel(input_file)\n    df.to_excel(output_file, index=False)\n    return df\n\n\ndef main():\n    \"\"\"\n    Main execution function.\n    \"\"\"\n    input_file = os.path.join(\"/path/to\", \"Spring Semester Subjects.xlsx\")\n    output_file = os.path.join(\"/path/to\", \"Processed Subjects Table.xlsx\")\n    df = process_subjects(input_file, output_file)\n"
+    },
+    {
+      "file": "Spring Semester Subjects",
+      "path": "/path/to/Spring Semester Subjects.xlsx",
+      "code": "Some sample data for the Spring semester subjects"
+    }
+  ],
+  "20": [
+    {
+      "file": "admin.py",
+      "path": "example_project/example_app/admin.py",
+      "code": ""
+    },
+    {
+      "file": "apps.py",
+      "path": "example_project/example_app/apps.py",
+      "code": "from django.apps import AppConfig\n\nclass ExampleAppConfig(AppConfig):\n    name = 'example_app'\n\n"
+    },
+    {
+      "file": "models.py",
+      "path": "example_project/example_app/models.py",
+      "code": ""
+    },
+    {
+      "file": "urls.py",
+      "path": "example_project/example_app/urls.py",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', include('example_app.urls')),\n]\n"
+    },
+    {
+      "file": "utils.py",
+      "path": "example_project/example_app/utils.py",
+      "code": ""
+    },
+    {
+      "file": "views.py",
+      "path": "example_project/example_app/views.py",
+      "code": ""
+    },
+    {
+      "file": "__init__.py",
+      "path": "example_project/example_app/__init__.py",
+      "code": "from .models import *\n"
+    },
+    {
+      "file": "admin.py",
+      "path": "example_project/example_app/admin.py",
+      "code": ""
+    },
+    {
+      "file": "apps.py",
+      "path": "example_project/example_app/apps.py",
+      "code": "from django.apps import AppConfig\n\nclass ExampleAppConfig(AppConfig):\n    name = 'example_app'\n\n"
+    },
+    {
+      "file": "urls.py",
+      "path": "example_project/example_app/urls.py",
+      "code": "from django.urls import path\n\nurlpatterns = [\n    path('', include('example_app.urls')),\n]\n"
+    },
+    {
+      "file": "utils.py",
+      "path": "example_project/example_app/utils.py",
+      "code": ""
+    },
+    {
+      "file": "views.py",
+      "path": "example_project/example_app/views.py",
+      "code": ""
+    },
+    {
+      "file": "main.html",
+      "path": "example_project/templates/main.html",
+      "code": "<h1>Welcome to the example project!</h1>\n"
+    },
+    {
+      "file": "index.html",
+      "path": "example_project/templates/index.html",
+      "code": "<h2>This is an index page!</h2>\n"
+    },
+    {
+      "file": "static",
+      "path": "example_project/static",
+      "code": ""
+    },
+    {
+      "file": "__init__.py",
+      "path": "example_project/__init__.py",
+      "code": ""
+    }
+  ]
+}

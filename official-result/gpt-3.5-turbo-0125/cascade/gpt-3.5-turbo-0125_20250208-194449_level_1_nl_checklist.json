@@ -1,0 +1,933 @@
+{
+  "1": [
+    {
+      "page": "BMI Calculator",
+      "functions": [
+        {
+          "function": "Calculate BMI",
+          "description": "Users can enter their height and weight to calculate their BMI."
+        },
+        {
+          "function": "View BMI Categories",
+          "description": "Display information on different BMI categories (underweight, normal, overweight, obese)."
+        },
+        {
+          "function": "Provide Interpretation",
+          "description": "Give an interpretation of the calculated BMI result (e.g., 'Your BMI is within the normal range')."
+        },
+        {
+          "function": "Clear Inputs",
+          "description": "Allow users to reset the height and weight inputs."
+        },
+        {
+          "function": "Share Results",
+          "description": "Include options to share the BMI result on social media or via email."
+        }
+      ]
+    }
+  ],
+  "2": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "Currency conversion",
+          "description": "Allow users to convert between different currencies"
+        },
+        {
+          "function": "Select currencies",
+          "description": "Provide a drop-down menu to select the source and target currencies"
+        },
+        {
+          "function": "View exchange rates",
+          "description": "Display the current exchange rates for various currencies"
+        }
+      ]
+    },
+    {
+      "page": "Conversion Result Page",
+      "function": [
+        {
+          "function": "Display converted amount",
+          "description": "Show the converted amount based on user input"
+        },
+        {
+          "function": "Conversion history",
+          "description": "Maintain a record of past conversions for reference"
+        },
+        {
+          "function": "Option to perform another conversion",
+          "description": "Allow users to easily perform another currency conversion"
+        }
+      ]
+    },
+    {
+      "page": "Exchange Rates Page",
+      "function": [
+        {
+          "function": "List of exchange rates",
+          "description": "Provide a comprehensive list of exchange rates for different currencies"
+        },
+        {
+          "function": "Search for specific currency rate",
+          "description": "Allow users to search for the exchange rate of a specific currency"
+        },
+        {
+          "function": "Refresh/reload rates",
+          "description": "Option to manually refresh or reload the exchange rate data"
+        }
+      ]
+    }
+  ],
+  "3": [
+    {
+      "page": "Home",
+      "function": [
+        {
+          "function": "Generate a password",
+          "description": "User can generate a secure password with customizable options"
+        },
+        {
+          "function": "Copy password to clipboard",
+          "description": "User can easily copy the generated password to clipboard"
+        },
+        {
+          "function": "View password strength",
+          "description": "User can see the strength of the generated password based on length and complexity"
+        },
+        {
+          "function": "Save password",
+          "description": "User can save generated passwords for future reference"
+        },
+        {
+          "function": "Toggle password options",
+          "description": "User can show/hide additional options for password generation"
+        }
+      ]
+    },
+    {
+      "page": "Settings",
+      "function": [
+        {
+          "function": "Adjust password length",
+          "description": "User can set the desired length of the generated password"
+        },
+        {
+          "function": "Include/exclude uppercase letters",
+          "description": "User can choose whether or not to include uppercase letters in the password"
+        },
+        {
+          "function": "Include/exclude lowercase letters",
+          "description": "User can choose whether or not to include lowercase letters in the password"
+        },
+        {
+          "function": "Include/exclude numbers",
+          "description": "User can choose whether or not to include numbers in the password"
+        },
+        {
+          "function": "Include/exclude special characters",
+          "description": "User can choose whether or not to include special characters in the password"
+        }
+      ]
+    }
+  ],
+  "4": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "Generate QR Code",
+          "description": "Allows users to input data and generate a QR code instantly"
+        },
+        {
+          "function": "Download QR Code",
+          "description": "Enables users to download the generated QR code in various formats"
+        },
+        {
+          "function": "Customize QR Code",
+          "description": "Provides options to customize the design and color of the QR code"
+        },
+        {
+          "function": "Generate QR Code Batch",
+          "description": "Batch generation of multiple QR codes at once for efficiency"
+        }
+      ]
+    },
+    {
+      "page": "Settings",
+      "function": [
+        {
+          "function": "Save QR Code",
+          "description": "Option to save generated QR codes for future access"
+        },
+        {
+          "function": "Language Selection",
+          "description": "Ability to choose preferred language for the website"
+        },
+        {
+          "function": "History",
+          "description": "View past generated QR codes with date/time stamps"
+        }
+      ]
+    },
+    {
+      "page": "Help",
+      "function": [
+        {
+          "function": "FAQ",
+          "description": "Answers to frequently asked questions about the QR code generator"
+        },
+        {
+          "function": "Contact Support",
+          "description": "Reach out to customer support for assistance or inquiries"
+        },
+        {
+          "function": "Tutorials",
+          "description": "Guides on how to use the QR code generator effectively"
+        }
+      ]
+    }
+  ],
+  "5": [
+    {
+      "page": "Home",
+      "function": [
+        {
+          "function": "Convert Markdown to HTML",
+          "description": "Convert user input in Markdown format to HTML"
+        },
+        {
+          "function": "Convert HTML to Markdown",
+          "description": "Convert user input in HTML format to Markdown"
+        }
+      ]
+    },
+    {
+      "page": "Settings",
+      "function": [
+        {
+          "function": "Choose Markdown flavor",
+          "description": "Allow users to select the Markdown syntax they prefer"
+        },
+        {
+          "function": "Toggle auto-formatting",
+          "description": "Enable/disable auto-formatting of the converted text"
+        }
+      ]
+    },
+    {
+      "page": "History",
+      "function": [
+        {
+          "function": "View conversion history",
+          "description": "Display a list of previous conversions made by the user"
+        },
+        {
+          "function": "Clear history",
+          "description": "Allow users to delete their conversion history"
+        }
+      ]
+    }
+  ],
+  "6": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "View overall tasks",
+          "description": "See a list of all tasks on the homepage"
+        },
+        {
+          "function": "Add new task",
+          "description": "Ability to input and add a new task"
+        },
+        {
+          "function": "Mark task as completed",
+          "description": "Option to mark a task as completed"
+        },
+        {
+          "function": "Delete task",
+          "description": "Ability to remove a task from the list"
+        }
+      ]
+    },
+    {
+      "page": "Todo List",
+      "function": [
+        {
+          "function": "Filter tasks",
+          "description": "Filter tasks by status (completed/incomplete)"
+        },
+        {
+          "function": "Edit task details",
+          "description": "Modify task name, due date, or description"
+        },
+        {
+          "function": "Search for task",
+          "description": "Search for a specific task using keywords"
+        },
+        {
+          "function": "Sort tasks",
+          "description": "Organize tasks by date, priority, or status"
+        }
+      ]
+    },
+    {
+      "page": "Analytics",
+      "function": [
+        {
+          "function": "View task completion rate",
+          "description": "Visual representation of completed tasks"
+        },
+        {
+          "function": "Analyze task distribution",
+          "description": "Chart showing distribution of tasks by category"
+        },
+        {
+          "function": "Track productivity trends",
+          "description": "Graphical representation of task completion over time"
+        }
+      ]
+    }
+  ],
+  "7": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "View balance overview",
+          "description": "Users can see an overview of their current balance on the homepage."
+        },
+        {
+          "function": "Access budget control features",
+          "description": "Users can access various tools and features for controlling their budget."
+        }
+      ]
+    },
+    {
+      "page": "Chart Page",
+      "function": [
+        {
+          "function": "View balance chart",
+          "description": "Users can see a chart displaying the changing balance over time."
+        },
+        {
+          "function": "Filter chart data",
+          "description": "Users can filter the data displayed on the chart by date ranges or specific categories."
+        }
+      ]
+    },
+    {
+      "page": "Settings",
+      "function": [
+        {
+          "function": "Set budget goals",
+          "description": "Users can set specific budget goals and track their progress."
+        },
+        {
+          "function": "Customize categories",
+          "description": "Users can create and customize budgeting categories for better organization."
+        }
+      ]
+    }
+  ],
+  "8": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "View current month",
+          "description": "Users can see the current month displayed on the homepage"
+        },
+        {
+          "function": "Navigate to different months",
+          "description": "Users can click on arrows to navigate to previous or next months"
+        }
+      ]
+    },
+    {
+      "page": "Monthly View",
+      "function": [
+        {
+          "function": "Add event",
+          "description": "Users can click on a day to add an event for that day"
+        },
+        {
+          "function": "View events",
+          "description": "Users can see all events for the month displayed in a list or calendar format"
+        }
+      ]
+    },
+    {
+      "page": "Event Details",
+      "function": [
+        {
+          "function": "Edit event",
+          "description": "Users can edit event details such as date, time, or description"
+        },
+        {
+          "function": "Delete event",
+          "description": "Users can delete an event from the calendar"
+        }
+      ]
+    }
+  ],
+  "9": [
+    {
+      "page": "Home",
+      "function": [
+        {
+          "function": "Introduction to AI Chatbot",
+          "description": "Brief overview of the AI chatbot and its capabilities"
+        },
+        {
+          "function": "Sign up for a demo",
+          "description": "Option for users to sign up to request a demo of the AI chatbot"
+        }
+      ]
+    },
+    {
+      "page": "About",
+      "function": [
+        {
+          "function": "Company background",
+          "description": "Information about the company behind the AI chatbot product"
+        },
+        {
+          "function": "Team information",
+          "description": "Details about the team members involved in developing the AI chatbot"
+        }
+      ]
+    },
+    {
+      "page": "Features",
+      "function": [
+        {
+          "function": "Feature list",
+          "description": "Detailed list of features offered by the AI chatbot"
+        },
+        {
+          "function": "Interactive demos",
+          "description": "Access to interactive demos showcasing different features"
+        }
+      ]
+    },
+    {
+      "page": "Pricing",
+      "function": [
+        {
+          "function": "Subscription plans",
+          "description": "Details on different subscription plans available for the AI chatbot"
+        },
+        {
+          "function": "Request a quote",
+          "description": "Option for users to request a customized pricing quote"
+        }
+      ]
+    },
+    {
+      "page": "Contact",
+      "function": [
+        {
+          "function": "Contact form",
+          "description": "Form for users to reach out to the AI chatbot team"
+        },
+        {
+          "function": "Support options",
+          "description": "Information on available support channels for customers"
+        }
+      ]
+    }
+  ],
+  "10": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "View basic information",
+          "description": "See overall summary of daily calorie intake"
+        },
+        {
+          "function": "Log food intake",
+          "description": "Add food items and their respective calories consumed"
+        },
+        {
+          "function": "Log exercise",
+          "description": "Record different types of exercises and calories burned"
+        },
+        {
+          "function": "View daily calorie breakdown",
+          "description": "Check how calories are distributed throughout the day"
+        },
+        {
+          "function": "View progress chart",
+          "description": "Monitor long-term progress with a visual chart"
+        }
+      ]
+    },
+    {
+      "page": "Food Log",
+      "function": [
+        {
+          "function": "Search for food items",
+          "description": "Look up specific food items and their calorie counts"
+        },
+        {
+          "function": "Add custom food item",
+          "description": "Input details of a new food item not in the database"
+        },
+        {
+          "function": "Edit food log entry",
+          "description": "Modify or delete previously logged food items"
+        }
+      ]
+    },
+    {
+      "page": "Exercise Log",
+      "function": [
+        {
+          "function": "Select exercise type",
+          "description": "Choose from a list of exercises with corresponding calorie burn rates"
+        },
+        {
+          "function": "Set duration",
+          "description": "Specify the amount of time spent on the selected exercise"
+        },
+        {
+          "function": "Edit exercise log entry",
+          "description": "Update or remove recorded exercise entries"
+        }
+      ]
+    },
+    {
+      "page": "Reports",
+      "function": [
+        {
+          "function": "View weekly/monthly summary",
+          "description": "See aggregated data for calorie intake and burn over a given period"
+        },
+        {
+          "function": "Analyze trends",
+          "description": "Identify patterns in calorie consumption and expenditure"
+        }
+      ]
+    }
+  ],
+  "11": [
+    {
+      "page": "Home",
+      "function": [
+        {
+          "function": "Display Welcome Message",
+          "description": "Verify that the welcome message is displayed on the home page."
+        },
+        {
+          "function": "Navigation Button",
+          "description": "Ensure that the navigation button to the password generator page is functioning correctly."
+        }
+      ]
+    },
+    {
+      "page": "About",
+      "function": [
+        {
+          "function": "About Link",
+          "description": "Check that the about link on the home page redirects to the about page."
+        },
+        {
+          "function": "Description",
+          "description": "Validate that the description section on the about page is visible."
+        }
+      ]
+    }
+  ],
+  "12": [
+    {
+      "page": "Frontend Submission",
+      "function": [
+        {
+          "function": "Submit Travel Expenses",
+          "description": "Employees submit travel expense claims for reimbursement."
+        },
+        {
+          "function": "Submit Labor Expenses",
+          "description": "Employees submit labor expense claims for reimbursement."
+        },
+        {
+          "function": "Submit Management Expenses",
+          "description": "Employees submit management expense claims for approval."
+        },
+        {
+          "function": "Submit Equipment Expenses",
+          "description": "Employees submit equipment expense claims for reimbursement."
+        }
+      ]
+    },
+    {
+      "page": "Admin Page",
+      "function": [
+        {
+          "function": "Approve Claims",
+          "description": "Administrators can approve submitted claims from employees."
+        },
+        {
+          "function": "Reject Claims",
+          "description": "Administrators can reject submitted claims from employees."
+        },
+        {
+          "function": "View Budget",
+          "description": "Administrators can analyze the balance and budget control."
+        }
+      ]
+    },
+    {
+      "page": "Claim Status",
+      "function": [
+        {
+          "function": "Check Approved Claims",
+          "description": "View all claims that have been approved."
+        },
+        {
+          "function": "Check Rejected Claims",
+          "description": "View all claims that have been rejected."
+        },
+        {
+          "function": "Check Pending Claims",
+          "description": "View all claims that are pending approval."
+        }
+      ]
+    }
+  ],
+  "13": [
+    {
+      "page": "Customer Information",
+      "function": [
+        {
+          "function": "Add new customer",
+          "description": "Ability to add a new customer with name, birthday, age, sex, company and phone number."
+        },
+        {
+          "function": "Update customer information",
+          "description": "Ability to update existing customer information."
+        },
+        {
+          "function": "View customer details",
+          "description": "View detailed information of a specific customer, including preferred products and purchase records."
+        },
+        {
+          "function": "Search customers",
+          "description": "Search for customers based on name, company, or phone number."
+        }
+      ]
+    },
+    {
+      "page": "Product Information",
+      "function": [
+        {
+          "function": "Add new product",
+          "description": "Ability to add a new product with name, category, and recommended price."
+        },
+        {
+          "function": "Update product information",
+          "description": "Ability to update existing product information."
+        },
+        {
+          "function": "View product details",
+          "description": "View detailed information of a specific product."
+        },
+        {
+          "function": "Search products",
+          "description": "Search for products based on name or category."
+        }
+      ]
+    },
+    {
+      "page": "Purchase Records",
+      "function": [
+        {
+          "function": "Add new purchase record",
+          "description": "Ability to add a new purchase record with datetime, product, customer, quantity, and amount."
+        },
+        {
+          "function": "Update purchase record",
+          "description": "Ability to update existing purchase record information."
+        },
+        {
+          "function": "View purchase history",
+          "description": "View the purchase history of a specific customer."
+        }
+      ]
+    },
+    {
+      "page": "Marketing Analysis",
+      "function": [
+        {
+          "function": "Generate sales reports",
+          "description": "Generate reports on sales performance, trends, and insights."
+        },
+        {
+          "function": "Analyze customer preferences",
+          "description": "Analyze customer preferences based on preferred products."
+        },
+        {
+          "function": "Track marketing campaigns",
+          "description": "Track the effectiveness of marketing campaigns and promotions."
+        }
+      ]
+    }
+  ],
+  "14": [
+    {
+      "page": "helloworld",
+      "function": [
+        {
+          "function": "ViewHelloWorld",
+          "description": "View the 'Hello World' message on the page"
+        }
+      ]
+    }
+  ],
+  "15": [
+    {
+      "page": "Homepage",
+      "function": [
+        {
+          "function": "Navigate to 'helloworld' page",
+          "description": "User can click a button to direct to the 'helloworld' page."
+        }
+      ]
+    },
+    {
+      "page": "HelloWorld Page",
+      "function": []
+    }
+  ],
+  "16": [
+    {
+      "page": "Batch Program Development",
+      "function": [
+        {
+          "function": "Read subject list from Excel file",
+          "description": "Read the Spring Semester Subjects.xlsx file"
+        },
+        {
+          "function": "Convert data into a two-dimensional subject table",
+          "description": "Parse the data and create a table structure"
+        },
+        {
+          "function": "Modify the Time column values",
+          "description": "Map the time options to a different format"
+        },
+        {
+          "function": "Output the subject table to a new Excel file",
+          "description": "Export the processed data into a new Excel file"
+        }
+      ]
+    }
+  ],
+  "17": [
+    {
+      "page": "Initial Set Up",
+      "function": [
+        {
+          "function": "Upload Gamedata.xlsx",
+          "description": "Allow user to upload the dataset named Gamedata.xlsx"
+        },
+        {
+          "function": "Run Batch Program",
+          "description": "Execute the batch program to read the dataset and create a logistic model"
+        }
+      ]
+    },
+    {
+      "page": "Model Configuration",
+      "function": [
+        {
+          "function": "Specify Dependence Variable",
+          "description": "Set 'result' as the dependence variable with one-period-lag process"
+        },
+        {
+          "function": "Identify Independence Variables",
+          "description": "Ensure all other columns are set as independence variables"
+        }
+      ]
+    },
+    {
+      "page": "Output",
+      "function": [
+        {
+          "function": "Generate Logistic Model Summary",
+          "description": "Create a summary of the logistic model"
+        },
+        {
+          "function": "Save Output to Logistic.xlsx",
+          "description": "Save the model summary into a file named Logistic.xlsx"
+        }
+      ]
+    }
+  ],
+  "18": [
+    {
+      "page": "Main Menu",
+      "functions": [
+        {
+          "function": "Start Game",
+          "description": "Begin a new game"
+        },
+        {
+          "function": "Instructions",
+          "description": "View game instructions"
+        },
+        {
+          "function": "Quit Game",
+          "description": "Exit the game"
+        }
+      ]
+    },
+    {
+      "page": "Gameplay",
+      "functions": [
+        {
+          "function": "Move Up",
+          "description": "Move character up in the maze"
+        },
+        {
+          "function": "Move Down",
+          "description": "Move character down in the maze"
+        },
+        {
+          "function": "Move Left",
+          "description": "Move character left in the maze"
+        },
+        {
+          "function": "Move Right",
+          "description": "Move character right in the maze"
+        },
+        {
+          "function": "Check Stats",
+          "description": "View character statistics and inventory"
+        },
+        {
+          "function": "Quit Game",
+          "description": "End the current game and return to the main menu"
+        }
+      ]
+    }
+  ],
+  "19": [
+    {
+      "page": "Dataset Reading",
+      "function": [
+        {
+          "function": "Read dataset",
+          "description": "Program reads the dataset named 'Deathlist.csv'"
+        }
+      ]
+    },
+    {
+      "page": "Data Processing",
+      "function": [
+        {
+          "function": "Extract date of death",
+          "description": "Retrieve the date of death from the dataset"
+        },
+        {
+          "function": "Calculate weekly death counts",
+          "description": "Group the deaths by week and count the number of deaths in each week"
+        }
+      ]
+    },
+    {
+      "page": "Histogram Generation",
+      "function": [
+        {
+          "function": "Create histogram",
+          "description": "Generate a histogram depicting weekly deaths"
+        },
+        {
+          "function": "Display histogram",
+          "description": "Print the histogram on the output"
+        }
+      ]
+    }
+  ],
+  "20": [
+    {
+      "page": "Homepage",
+      "functions": [
+        {
+          "function": "View latest blog posts",
+          "description": "Users can see a list of the most recent blog posts on the homepage"
+        },
+        {
+          "function": "Search for blog posts",
+          "description": "Users can search for specific blog posts based on keywords or topics"
+        },
+        {
+          "function": "View categories",
+          "description": "Users can browse blog posts by different categories such as technology, food, travel, etc."
+        },
+        {
+          "function": "Subscribe to newsletter",
+          "description": "Users can sign up to receive newsletters with updates and new blog post alerts"
+        }
+      ]
+    },
+    {
+      "page": "Blog Post Page",
+      "functions": [
+        {
+          "function": "Read full blog post",
+          "description": "Users can view the entire blog post including text, images, and any embedded media"
+        },
+        {
+          "function": "Share on social media",
+          "description": "Users can easily share the blog post on their social media profiles"
+        },
+        {
+          "function": "Leave comments",
+          "description": "Users can share their thoughts and feedback by leaving comments on the blog post"
+        }
+      ]
+    },
+    {
+      "page": "Search Results Page",
+      "functions": [
+        {
+          "function": "View search results",
+          "description": "Users can see a list of blog posts that match their search query"
+        },
+        {
+          "function": "Filter search results",
+          "description": "Users can filter search results by date, relevance, category, etc."
+        }
+      ]
+    },
+    {
+      "page": "Category Page",
+      "functions": [
+        {
+          "function": "View blog posts in category",
+          "description": "Users can see a list of blog posts that belong to a specific category"
+        },
+        {
+          "function": "Sort by popularity",
+          "description": "Users can sort blog posts within a category by popularity or views"
+        }
+      ]
+    },
+    {
+      "page": "Subscribe Page",
+      "functions": [
+        {
+          "function": "Enter email for newsletter",
+          "description": "Users can input their email address to subscribe to the newsletter"
+        },
+        {
+          "function": "Receive confirmation",
+          "description": "Users receive a confirmation message once they have successfully subscribed"
+        }
+      ]
+    }
+  ]
+}

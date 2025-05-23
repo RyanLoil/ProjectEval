@@ -1,0 +1,1 @@
+{"19": {"initiate_commands": [["python", "batch_program.py"], ["manage.py", "run_checks"]], "requirements": ["pandas==1.2.4", "numpy==1.20.0", "matplotlib==3.4.3"]}}

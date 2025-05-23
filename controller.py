@@ -155,15 +155,9 @@ class LLMController(BaseController):
 
                     if level == 1:
                         output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_nl_checklist.json".replace(":","-")
-                        # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        #     self.logger.info("Writing to " + output_file_path)
-                        #     json.dump(nl_checklist_dict, output_file)
                         self._dump_file(nl_checklist_dict, output_file_path)
                     if level <= 2:
                         output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_skeleton.json".replace(":","-")
-                        # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                        #     self.logger.info("Writing to " + output_file_path)
-                        #     json.dump(skeleton_dict, output_file)
                         self._dump_file(skeleton_dict, output_file_path)
 
                 else:
@@ -181,18 +175,12 @@ class LLMController(BaseController):
 
                 answer_dict[project_id] = answer
                 output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}.json".replace(":","-")
-                # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                #     self.logger.info("Writing to " + output_file_path)
-                #     json.dump(answer_dict, output_file)
                 self._dump_file(answer_dict, output_file_path)
 
                 if self.parameter_generate:
                     parameter = self.model.get_parameter(answer, technical_stack, self.requested_parameter[project_id])
                     parameter_dict[project_id] = parameter
                     output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_parameter.json".replace(":","-")
-                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                    #     self.logger.info("Writing to " + output_file_path)
-                    #     json.dump(parameter_dict, output_file)
                     self._dump_file(parameter_dict, output_file_path)
 
                 project_root = PROJECT_EVAL_DEFAULT_TEST_DIR + str(project_id) + "/"
@@ -200,18 +188,12 @@ class LLMController(BaseController):
                     information = self.model.get_information(answer, technical_stack, project_root)
                     information_dict[project_id] = information
                     output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_information.json".replace(":","-")
-                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                    #     self.logger.info("Writing to " + output_file_path)
-                    #     json.dump(information_dict, output_file)
                     self._dump_file(information_dict, output_file_path)
 
                 if self.start_file_generate:
                     start_file = self.model.get_start_file(answer, technical_stack, project_root)
                     start_file_dict[project_id] = start_file
                     output_file_path = f"{self.output_path}{self.model.llm}_{timestamp}_level_{level}_startfile.json".replace(":","-")
-                    # with open(output_file_path, "w", encoding="utf-8") as output_file:
-                    #     self.logger.info("Writing to " + output_file_path)
-                    #     json.dump(start_file_dict, output_file)
                     self._dump_file(start_file_dict, output_file_path)
 
 
@@ -268,8 +250,7 @@ class JudgeController(BaseController):
                  parameter_file_path: str = None, parameter_answer_save: str = "data/parameter_answer_save",
                  llm: str = None, device: str = None):
         '''
-        An
-        :param question_path:
+        :param question_path: the question path.
         :param answer_path:
         :param model_class:
         :param parameter_file_path:
@@ -403,11 +384,11 @@ class JudgeController(BaseController):
                 if project_id not in self.answer_dict:
                     self.logger.warning("Project id {} does not exist, skip. Score 0.".format(project_id))
                     continue
-                # File Writter
+                # File Writer
                 project_root = self.write_answer_to_file(project_id)
                 '''
-                #TODO 列表
-                1.	初始命令和requirements的询问也需要做保存
+                #TODO
+                1.	Initial command and requirements' query also need to be saved.
                 '''
                 # Runner
                 if initiate_command and project_id in initiate_command:
@@ -437,8 +418,6 @@ class JudgeController(BaseController):
                                                                              project_initiate_command,
                                                                              website_home="http://localhost:8000/")
 
-                    # TODO 增加模拟数据载入，这个问题挺棘手的，因为严格意义上它不属于Project的一部分，属于测试工程师的工作，但是我们不能保证所有的框架都有自动化测试，因此可能需要要求LLM提前撰写模拟数据的导入脚本来完成此工作，这似乎是二次询问。
-
                     try:
                         preprocess_result = judge.preprocess(technical_stack[project_id]["website"] if technical_stack else
                                                              self.question_dict[project_id]["framework_technical_stack"][0][
@@ -454,7 +433,7 @@ class JudgeController(BaseController):
                         self.logger.info("{} scored 0.".format(project_id))
                         continue
                 elif project['project_type'] == 'software':
-                    # TODO software适配
+                    # TODO software
                     pass
                 else:
                     # Batch or Console

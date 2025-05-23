@@ -1,0 +1,1 @@
+{"1": {"initiate_commands": [["python", "manage.py", "makemigrations"], ["python", "manage.py", "migrate"], ["python", "manage.py", "runserver"]], "requirements": ["Django"], "homepage_url": "http://127.0.0.1:8000/"}}

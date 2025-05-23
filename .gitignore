@@ -50,9 +50,10 @@
 /data/gpt-4o_20240731-143756-人工修正.json
 /data/gpt-4o_20241113-144554.json
 /data/ProjectEval Data.zip
-/image/full.drawio
-/image/full.png
-/image/procedure.drawio
-/image/procedure.png
-/image/reasoning.png
-/image/reasoning.svg
+/images/full.drawio
+/images/full.png
+/images/procedure.drawio
+/images/procedure.png
+/images/reasoning.png
+/images/reasoning.svg
+/config-backup.ini

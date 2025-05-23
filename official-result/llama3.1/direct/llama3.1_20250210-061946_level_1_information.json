@@ -1,0 +1,1 @@
+{"1": {"initiate_commands": [["python", "manage.py", "runserver"], ["python", "manage.py", "migrations"]], "requirements": {"name": "Django", "version": "3.x"}}, "11": {"initiate_commands": [["python", "manage.py", "makemigrations"], ["python", "manage.py", "migrate"], ["python", "manage.py", "runserver"]], "requirements": ["Django==3.2.9"]}}

@@ -1,0 +1,97 @@
+{
+  "2": [
+    {
+      "file": "settings.py",
+      "path": "django-project/settings.py"
+    },
+    {
+      "file": "urls.py",
+      "path": "django-project/urls.py"
+    },
+    {
+      "file": "wsgi.py",
+      "path": "django-project/wsgi.py"
+    },
+    {
+      "file": "migrations",
+      "path": "example_app/migrations"
+    },
+    {
+      "file": "admin.py",
+      "path": "example_app/admin.py"
+    },
+    {
+      "file": "apps.py",
+      "path": "example_app/apps.py"
+    },
+    {
+      "file": "models.py",
+      "path": "example_app/models.py"
+    },
+    {
+      "file": "views.py",
+      "path": "example_app/views.py"
+    }
+  ],
+  "7": [
+    {
+      "file": "manage.py",
+      "path": "/example_project/manage.py"
+    },
+    {
+      "file": "__init__.py",
+      "path": "/example_project/__init__.py"
+    },
+    {
+      "file": "settings.py",
+      "path": "/example_project/settings.py"
+    },
+    {
+      "file": "urls.py",
+      "path": "/example_project/urls.py"
+    },
+    {
+      "file": ".gitignore",
+      "path": "/example_project/.gitignore"
+    },
+    {
+      "file": "README.md",
+      "path": "/example_project/README.md"
+    }
+  ],
+  "10": [
+    {
+      "file": "manage.py",
+      "path": "src/manage.py",
+      "code": "python manage.py runserver"
+    },
+    {
+      "file": "requirements.txt",
+      "path": "src/requirements.txt"
+    },
+    {
+      "file": "settings.py",
+      "path": "src/example_project/settings.py"
+    },
+    {
+      "file": "urls.py",
+      "path": "src/example_project/urls.py"
+    },
+    {
+      "file": "wsgi.py",
+      "path": "src/example_project/wsgi.py"
+    },
+    {
+      "file": "base.html",
+      "path": "templates/base.html"
+    },
+    {
+      "file": "index.html",
+      "path": "templates/index.html"
+    },
+    {
+      "file": "login.html",
+      "path": "templates/login.html"
+    }
+  ]
+}

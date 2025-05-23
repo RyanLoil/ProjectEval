@@ -1,0 +1,1 @@
+{"10": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["django>=1.11,<1.12", "python-dateutil>=2.7.3", "django-simple-history>=0.9.3"]}}

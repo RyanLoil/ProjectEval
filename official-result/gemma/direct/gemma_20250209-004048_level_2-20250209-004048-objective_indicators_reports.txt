@@ -1,0 +1,3 @@
+Sum:{"checklist": null, "skeleton": null, "code": 0.516, "parameter": 0.0}
+Average:{"checklist": null, "skeleton": null, "code": "2.58%", "parameter": "0.0%"}
+{'assignment': {'checklist': {}, 'skeleton': {}, 'code': {'16': [(np.int64(0), np.int64(0))], '19': [(np.int64(0), np.int64(0))]}, 'parameter': {'16': {}, '19': {}}}}

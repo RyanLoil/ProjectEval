@@ -1,0 +1,1 @@
+{"19": {"initiate_commands": [["./manage.py", "makemigrations"], ["./manage.py", "migrate"], ["node ./dist/app-bundle", "--port=3001"]], "requirements": ["flask", "redis", "@react-admin/lab"]}}

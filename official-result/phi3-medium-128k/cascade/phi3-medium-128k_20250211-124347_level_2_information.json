@@ -1,0 +1,1 @@
+{"1": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"], ["python manage.py runserver"], ["python manage.py test"]], "requirements": ["Django==3.2"]}}

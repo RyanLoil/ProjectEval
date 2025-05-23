@@ -1,0 +1,1 @@
+{"16": "{\n  \"initiate_commands\": [\n    [\"manage.py\", \"makemigrations\"],\n    [\"manage.py\", \"migrate\"]\n  ],\n  \"requirements\": [\n    \"none\".readlines().split() # Assumes NONE is a requirements file named 'NONE' in the given directory structure \n  ]\n}"}

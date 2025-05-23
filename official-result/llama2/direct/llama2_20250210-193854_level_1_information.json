@@ -1,0 +1,1 @@
+{"19": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["pip", "django", "django-histogram", "matplotlib"]}}

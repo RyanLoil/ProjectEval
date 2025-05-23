@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background: #fafafa;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 3em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+thead tr:nth-child(1) th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+thead tr:nth-child(2) th {
+  background-color: #f7f7f7;
+}
+
+thead tr:nth-child(3) th {
+  background-color: #fcfcfc;
+}
+
+th.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+th.sortable::after {
+  content: "⇅"; /* 双箭头，表示可排序 */
+  font-size: 0.7em;
+  color: #aaa;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+th.sortable.sorted-asc::after {
+  content: "▲"; /* 升序箭头 */
+  color: #333;
+}
+th.sortable.sorted-desc::after {
+  content: "▼"; /* 降序箭头 */
+  color: #333;
+}

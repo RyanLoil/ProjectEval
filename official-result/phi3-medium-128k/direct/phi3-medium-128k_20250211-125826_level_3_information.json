@@ -1,0 +1,1 @@
+{"6": {"initiate_commands": [["manage.py", "makemigrations"], ["manage.py", "migrate"]], "requirements": ["Django==3.2.9"], "homepage_url": "/dashboard/"}, "7": {"initiate_commands": [["python3", "manage.py", "makemigrations"], ["python3", "manage.py", "migrate"]], "requirements": ["django", "asyncio"]}}

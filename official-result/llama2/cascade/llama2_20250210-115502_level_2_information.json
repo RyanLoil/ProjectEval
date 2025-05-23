@@ -1,0 +1,1 @@
+{"15": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["django==2.2.6", "python-decouple==4.0.5", "pytest==7.1.1", "mockk==3.0.0"]}}

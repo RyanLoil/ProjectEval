@@ -1,0 +1,1 @@
+{"19": {"initiate_commands": [["python", "-m", "pytest"], ["python", "-m", "runserver"], ["python", "script/batch_program.sh"]], "requirements": ["matplotlib==3.5.1", "pandas==1.4.2", "csv==1.0"]}}

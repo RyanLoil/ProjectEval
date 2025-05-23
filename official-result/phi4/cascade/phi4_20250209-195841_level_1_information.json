@@ -1,0 +1,1 @@
+{"19": {"initiate_commands": [["python", "project_root/main.py"]], "requirements": ["pandas", "matplotlib"]}}

@@ -12,7 +12,7 @@ PROJECT_EVAL_DEFAULT_DATA_PATH = "data/project_eval_project.json"
 PROJECT_EVAL_DEFAULT_ANSWER_PATH = "data/project_eval_answer.json"
 PROJECT_EVAL_DEFAULT_PARAMETER_PATH = "data/project_eval_parameter.json"
 
-OPEN_AI_KEY = configs["Default"]['OPEN_AI_KEY']
+OPENAI_KEY = configs["Default"]['OPENAI_KEY']
 GOOGLE_AI_KEY = configs["Default"]['GOOGLE_AI_KEY']
 DEFAULT_BROWSER_TYPE = configs["Default"]['DEFAULT_BROWSER_TYPE']
 ENCODE_FORMAT = configs["Default"]['ENCODE_FORMAT']

@@ -7,7 +7,7 @@ from datetime import datetime
 
 from openai import OpenAI
 from google import genai
-from config import OPEN_AI_KEY, GOOGLE_AI_KEY
+from config import OPENAI_KEY, GOOGLE_AI_KEY
 from prompt import prompt
 
 
@@ -94,7 +94,7 @@ class LLMTest:
 class GPTTest(LLMTest):
     def __init__(self, llm="gpt-4o", *args, **kwargs):
         super(GPTTest, self).__init__(llm, *args, **kwargs)
-        self.client = OpenAI(api_key=OPEN_AI_KEY)
+        self.client = OpenAI(api_key=OPENAI_KEY)
 
     def send_message(self, message, role_message):
         self.logger.debug("Sending:" + message)

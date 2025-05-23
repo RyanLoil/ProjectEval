@@ -1,0 +1,1 @@
+{"1": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["django==2.2", "django- Britannic==", "django-bmi-calculator=="]}, "16": {"initiate_commands": ["manage.py", "makemigrations", "manage.py", "migrate"], "requirements": ["python-3.8", " django-3.2.15", "javascript-3.3.15", "nginx-stable", "postgresql-12.6"]}}

@@ -1,0 +1,1 @@
+{"16": [{"file": "check_file_exists.py", "path": "somepath/somedir/check_file_exists.py", "code": "import os\nfrom typing import Optional\ndef check_file_exists(file_path: str) -> Optional[str]:\n    return file_path if os.path.isfile(file_path) else None\n"}]}

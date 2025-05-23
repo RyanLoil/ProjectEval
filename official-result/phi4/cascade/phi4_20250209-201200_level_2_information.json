@@ -1,0 +1,1 @@
+{"13": {"initiate_commands": [["python3", "manage.py", "makemigrations"], ["python3", "manage.py", "migrate"], ["python3", "manage.py", "createsuperuser"], ["python3", "-m", "http.server"]], "homepage_url": "http://localhost:8000/", "requirements": ["Django>=3.2,<4"]}}

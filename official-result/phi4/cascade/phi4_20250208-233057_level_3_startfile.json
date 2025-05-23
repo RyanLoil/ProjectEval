@@ -1,0 +1,10 @@
+{
+  "4": "```\n/path/to/project/manage.py\n```",
+  "5": "`manage.py`",
+  "8": "```plaintext\nmanage.py\n```",
+  "10": "```\nrun_tests.sh\n```",
+  "16": "```plaintext\nproject/main/16-stdanswer.py\n```",
+  "17": "`src/17-stdanswer.py`",
+  "18": "`/BashCrawl/main.py`",
+  "19": "src/main.py"
+}

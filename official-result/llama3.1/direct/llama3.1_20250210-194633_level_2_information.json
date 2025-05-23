@@ -1,0 +1,1 @@
+{"15": {"initiate_commands": [["python", "my_django_project/manage.py", "runserver"], ["python", "my_django_project/manage.py", "migrations", "--list"], ["pip freeze > requirements.txt"], ["pip install -r requirements.txt"]], "requirements": ["django==3.2.5"], "homepage_url": "/"}}
