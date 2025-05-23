@@ -22,6 +22,8 @@ th, td {
   padding: 10px;
   text-align: center;
   font-size: 14px;
+    vertical-align: middle;
+  position: relative;
 }
 
 thead tr:nth-child(1) th {
@@ -35,6 +37,10 @@ thead tr:nth-child(2) th {
 
 thead tr:nth-child(3) th {
   background-color: #fcfcfc;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
 th.sortable {
@@ -58,4 +64,39 @@ th.sortable.sorted-asc::after {
 th.sortable.sorted-desc::after {
   content: "▼"; /* 降序箭头 */
   color: #333;
+}
+
+td[data-progress] {
+  position: relative;
+  background-color: transparent;
+  color: #004085;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+/*td[data-progress]::before {*/
+/*  content: "";*/
+/*  position: absolute;*/
+/*  top: 0; left: 0; bottom: 0;*/
+/*  width: attr(data-progress '%'); !* 不兼容，但后面用JS设置宽度 *!*/
+/*  background: linear-gradient(90deg, #409EFF, #66b1ff);*/
+/*  opacity: 0.4;*/
+/*  z-index: 0;*/
+/*  transition: width 0.3s ease;*/
+/*}*/
+
+td[data-progress] > * {
+  position: relative;
+  z-index: 1;
+}
+td[data-progress]::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: var(--progress-width, 0%);
+  background: var(--progress-color);
+  opacity: 0.4;
+  z-index: 0; /* 伪元素放最底层 */
+  border-radius: 2px 0 0 2px; /* 圆角小美化 */
+  pointer-events: none; /* 不阻止点击 */
 }
