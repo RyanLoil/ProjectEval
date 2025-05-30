@@ -7,19 +7,21 @@ from datetime import datetime
 
 from openai import OpenAI
 from google import genai
-from config import OPENAI_KEY, GOOGLE_AI_KEY
+
+import config
+from config import OPENAI_KEY, GOOGLE_AI_KEY, LOG_PATH, RUN_DATE
 from prompt import prompt
 
 
 class LLMTest:
     def __init__(self, llm: str, *args, **kwargs):
         self.llm = llm
-
         # logger
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
-            handler = logging.FileHandler("log/{0}-LLM.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")),encoding="utf-8")
+            os.makedirs(os.path.dirname(f"{LOG_PATH}/{RUN_DATE}/"), exist_ok=True)
+            handler = logging.FileHandler(f"{LOG_PATH}/{RUN_DATE}/{datetime.now().strftime('%Y%m%d-%H%M%S')}-LLM.log",encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -204,20 +206,33 @@ class GPTTest(LLMTest):
         return self.completion_to_dict(completion)
 
 
-class LlamaTest(GPTTest):
+class OllamaTest(GPTTest):
     def __init__(self, llm="llama3.2", device: str = "", *args, **kwargs):
         '''
         This llama test class is created base on Ollama. Ollama supports OpenAI pattern.
         :param llm: any model that Ollama supports can use in this class.
         :param device: If you want to use other GPU rather than GPU:0, set the UUID in this param. Check the UUID by using "nvidia-smi -L".
         '''
-        super(LlamaTest, self).__init__(llm)
+        super(OllamaTest, self).__init__(llm)
+        OLLAMA_HOST = config.OLLAMA_HOST
+        if os.environ.get('DOCKER', '0') == '1':
+            if not OLLAMA_HOST:
+                self.logger.info("Docker set. Ollama is using host.docker.internal:11434/v1/. If you wish to use your remote server, change OLLAMA_HOST in config.ini.")
+                OLLAMA_HOST = "http://host.docker.internal:11434/v1/"
+            else:
+                self.logger.info(f"Docker set. Ollama is using {OLLAMA_HOST}.")
+        else:
+            if not OLLAMA_HOST:
+                self.logger.info("Ollama is using localhost:11434/v1/. If you wish to use your remote server, change OLLAMA_HOST in config.ini.")
+                OLLAMA_HOST = "http://localhost:11434/v1/"
+            else:
+                self.logger.info(f"Docker set. Ollama is using {OLLAMA_HOST}.")
+
         if device:
             os.environ['CUDA_VISIBLE_DEVICES'] = device
-        os.environ[
-            'NO_PROXY'] = "localhost,127.0.0.1"  # Ollama didn't fit the proxy settings which will lead to 502 error.
+        os.environ['NO_PROXY'] = "localhost,127.0.0.1"  # Ollama didn't fit the proxy settings which will lead to 502 error.
         self.client = OpenAI(
-            base_url='http://localhost:11434/v1/',
+            base_url=OLLAMA_HOST,
             api_key="llama"  # Required but ignored
         )
         del os.environ['NO_PROXY']

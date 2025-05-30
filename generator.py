@@ -3,7 +3,7 @@ import os, json
 from datetime import datetime
 
 from openai import OpenAI
-from config import OPENAI_KEY
+from config import OPENAI_KEY, LOG_PATH, RUN_DATE
 import logging
 
 prompt = {
@@ -35,7 +35,9 @@ class DataGenerator:
         # logger
         self.logger = logging.getLogger('DataGenerator')
         self.logger.setLevel(level=logging.DEBUG)
-        handler = logging.FileHandler("log/{0}-DataGenerator.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
+        self.logger.start_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        os.makedirs(os.path.dirname(f"{LOG_PATH}/{RUN_DATE}/"), exist_ok=True)
+        handler = logging.FileHandler(f"{LOG_PATH}/{RUN_DATE}/{0}-DataGenerator.log".format(datetime.now().strftime("%Y%m%d-%H%M%S")))
         handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)

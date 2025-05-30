@@ -8,7 +8,10 @@
 
 🎉ProjectEval is accepted by ACL 2025 Findings.
 
-📫Contact: [Kaiyuan Liu](1171000408@stu.hit.edu.cn)
+🏆Leaderboard: [ProjectEval LeaderBoard](https://ryanloil.github.io/ProjectEval/)
+
+📫Contact: [Kaiyuan Liu](mailto:1171000408@stu.hit.edu.cn)
+
 
 ## 👋Overview
 
@@ -28,10 +31,16 @@
 
 ## Evaluation
 
+### Execution
+
+If you trust your LLM that it won't do harm to your device, you can run the execution evaluation process by just using `python run_judge.py`
+
+### Objective Indicators
+
 ## Reasoning
 
 ProjectEval is an offline evaluation benchmark and its evalutaion phase is complicated and time-costy. So the reasoning phase is separated from the evaluation phase. 
-The reasoning phase only produces 
+The reasoning phase only produces JSON or files.
 
 ## Generation
 
@@ -48,3 +57,7 @@ The reasoning phase only produces
       url={https://arxiv.org/abs/2503.07010}, 
 }
 ```
+
+# Known Issues
+
+- [ ] There are a request making during execution evaluation. We are working on remove it.

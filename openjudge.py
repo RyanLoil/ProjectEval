@@ -1,21 +1,20 @@
-import logging, os, signal, subprocess, time, threading, traceback
+import logging, os, signal, subprocess, time, traceback
 import calendar, csv, string, openpyxl
+import platform
 import runpy
 import shutil
-import sys
 from time import sleep
 
 import pandas
 import pyperclip
-import select
 from selenium.webdriver.support import ui
 from selenium.webdriver.common.by import By
 from datetime import datetime
 from selenium import webdriver
-from func_timeout import func_set_timeout, FunctionTimedOut, func_timeout
+from func_timeout import FunctionTimedOut, func_timeout
 
 import utils
-from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT, IO_WAIT, LOG_PATH
+from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT, IO_WAIT, LOG_PATH, RUN_DATE
 from llm import LLMTest
 
 DRIVER_DICT = {
@@ -24,6 +23,11 @@ DRIVER_DICT = {
     'firefox': 'webdriver.Firefox()',
 }
 
+DRIVER_BIG_NAME = {
+    'chrome': 'Chrome',
+    'edge': 'Edge',
+    'firefox': 'Firefox',
+}
 
 class BasePythonManager:
     def __init__(self, project_id, project_path, logger):
@@ -40,16 +44,20 @@ class BasePythonManager:
         self.logger = logger
         self.start_command: list[str] = []
 
-        self.stdout_file = open(f"{LOG_PATH}/{self.logger.start_time}-Project-Normal.log", "a", encoding="utf-8")
-        self.stderr_file = open(f"{LOG_PATH}/{self.logger.start_time}-Project-Error.log", "a", encoding="utf-8")
+        self.stdout_file = open(f"{LOG_PATH}/{RUN_DATE}/{self.logger.start_time}-Project-Normal.log", "a", encoding="utf-8")
+        self.stderr_file = open(f"{LOG_PATH}/{RUN_DATE}/{self.logger.start_time}-Project-Error.log", "a", encoding="utf-8")
         self.project_id = project_id
         self.stdout_file.write("=============Project {}===============\n".format(self.project_id))
         self.stderr_file.write("=============Project {}===============\n".format(self.project_id))
 
     def get_activate_script(self):
-        activate_script = os.path.join(self.venv_path, 'Scripts', 'python.exe')
-        if not os.path.exists(activate_script):
-            raise FileNotFoundError(f"Virtual environment activation script not found: {activate_script}")
+        if os.environ.get('DOCKER', '0') == '1':
+            self.logger.info("Docker set. Using docker mode.")
+            activate_script = os.path.join(self.venv_path, 'Scripts', 'python.exe')
+            if not os.path.exists(activate_script):
+                raise FileNotFoundError(f"Virtual environment activation script not found: {activate_script}")
+        else:
+            activate_script = "python"
         return activate_script
 
     def initiate_command(self, initiate_command_list: [[]]):
@@ -60,9 +68,8 @@ class BasePythonManager:
         '''
         for initiate_command in initiate_command_list:
             process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
-                                       shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
-
+                                       shell=True if utils.iswindows() else False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                       creationflags=BaseJudge.get_creationflags())
             process.wait(10)
             process.terminate()
             if process.poll() is not None:
@@ -71,10 +78,10 @@ class BasePythonManager:
     def start(self):
         self.process = subprocess.Popen([self.get_activate_script(), *self.start_command],
                                         cwd=self.project_path,
-                                        shell=True,
-                                        stdout=self.stdout_file,  # PIPE会被阻塞如果日志太多
-                                        stderr=self.stderr_file,  # PIPE会被阻塞如果日志太多
-                                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)  # 必须要提供CREATE_NEW_PROCESS_GROUP，否则会杀掉所有进程
+                                        shell=True if utils.iswindows() else False,
+                                        stdout=self.stdout_file,  # PIPE will be stuck if there are too many logs
+                                        stderr=self.stderr_file,  # PIPE will be stuck if there are too many logs
+                                        creationflags=BaseJudge.get_creationflags())  # Windows must provide CREATE_NEW_PROCESS_GROUP or will kill all groups.
         # err = self.process.stderr.read().decode(ENCODE_FORMAT)
         # if err:
         #     self.logger.warning(err)
@@ -82,7 +89,7 @@ class BasePythonManager:
 
     def stop(self):
         if self.process and self.process.poll() is None:
-            self.process.send_signal(signal.CTRL_BREAK_EVENT)  # 唯一的办法解决所有问题
+            self.process.send_signal(signal.CTRL_BREAK_EVENT)  # Only solution right now to prevent stuck in Windows
         else:
             self.logger.info(f"{self.__class__.__name__} is not running.")
         self.stdout_file.close()
@@ -90,6 +97,15 @@ class BasePythonManager:
 
 
 class BaseJudge:
+
+    @staticmethod
+    def get_creationflags():
+        if platform.system().lower() == "windows":
+            creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
+        else:
+            creationflags = 0
+        return creationflags
+
     def __init__(self, project_id, requirements: list[str]):
         '''
 
@@ -102,7 +118,8 @@ class BaseJudge:
         self.logger.setLevel(level=logging.DEBUG)
         if not self.logger.handlers:
             self.logger.start_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-            handler = logging.FileHandler(f"{LOG_PATH}/{self.logger.start_time}-Judge.log", encoding="utf-8")
+            os.makedirs(os.path.dirname(f"{LOG_PATH}/{RUN_DATE}/"), exist_ok=True)
+            handler = logging.FileHandler(f"{LOG_PATH}/{RUN_DATE}/{self.logger.start_time}-Judge.log", encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
@@ -179,8 +196,22 @@ class WebsiteJudge(BaseJudge):
         if browser_type not in ['chrome', 'firefox', 'edge']:
             raise Exception('Not a valid browser type')
         try:
-            self.logger.info(f"Webdriver {browser_type} Initializing")
-            self.driver = eval(DRIVER_DICT[browser_type])
+            self.logger.info(f"Webdriver {browser_type} initializing.")
+            driver_text = DRIVER_DICT[browser_type]
+            if platform.system().lower() == "linux":
+                import tempfile
+                self.logger.info("Linux mode.")
+                options = getattr(webdriver,DRIVER_BIG_NAME[browser_type]+"Options")()
+                options.add_argument("--headless=new")  # 使用新版headless模式
+                options.add_argument("--no-sandbox")
+                options.add_argument("--disable-dev-shm-usage")
+                options.add_argument("--disable-gpu")
+                # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+                service = getattr(webdriver,DRIVER_BIG_NAME[browser_type]+"Service")()
+                driver_text = driver_text.replace("()", f"(options=options, service=service)")
+            else:
+                self.logger.info("Windows mode.")
+            self.driver = eval(driver_text)
             self.driver.set_page_load_timeout(3)
         except Exception as e:
             self.logger.critical(f"WebsiteJudge initiate exception: {e}")
@@ -209,10 +240,10 @@ class WebsiteJudge(BaseJudge):
                 # Create Superuser
                 process = subprocess.Popen([self.get_activate_script(), "manage.py", "shell"], cwd=self.project_path,
                                            text=True,
-                                           shell=True, stdin=subprocess.PIPE,
+                                           shell=True if utils.iswindows() else False, stdin=subprocess.PIPE,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE,
-                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+                                           creationflags=BaseJudge.get_creationflags()
                                            )
                 process.communicate(input="\n".join([
                     "from django.contrib.auth.models import User",
@@ -358,32 +389,6 @@ class BatchJudge(BaseJudge):
             self.stdout_file_path = "output.txt"
             self.stdout_tell = 0
 
-        # class ReaderWithTimeout: # Failed, as readline will get one more line when it is timeout.
-        #     """Helper class for threaded reading with timeout."""
-        #     def __init__(self, pipe):
-        #         self.pipe = pipe
-        #         self.line = None
-        #         self.done = threading.Event()
-        #
-        #     def read_line(self):
-        #         try:
-        #             temp = self.pipe.readline()
-        #             self.line = temp if temp.strip() is None else temp.strip()
-        #         finally:
-        #             self.done.set()
-        #
-        # def read_with_timeout(self, pipe, timeout=1):
-        #     """Read a line from process.stdout with timeout."""
-        #     reader = self.ReaderWithTimeout(pipe)
-        #     thread = threading.Thread(target=reader.read_line)
-        #     thread.start()
-        #     thread.join(timeout=timeout)
-        #     if reader.done.is_set():
-        #         return reader.line
-        #     else:
-        #         self.logger.debug(f"Timeout of {timeout} seconds exceeded while waiting for output.")
-        #         return "EOF"
-
         def start(self):
             self.process = subprocess.Popen(
                 [self.get_activate_script(), *self.start_command],
@@ -392,8 +397,8 @@ class BatchJudge(BaseJudge):
                 stdout=open(self.project_path + self.stdout_file_path, "a", encoding="utf-8"),
                 stderr=subprocess.PIPE,
                 text=True,
-                shell=True,
-                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+                shell=True if utils.iswindows() else False,
+                creationflags=BaseJudge.get_creationflags(),
             )
             if not self.process:
                 raise RuntimeError("Failed to start the BashCrawl script.")
@@ -402,27 +407,6 @@ class BatchJudge(BaseJudge):
             # self.logger.debug(f"Empty output at first:{self.read_with_timeout(self.process.stdout)}") #
 
         def read_output(self):
-            # output_lines = []
-            # counter = 0
-            # while counter < 100:  # Prevent infinite loops
-            #     try:
-            #         line = self.read_with_timeout()
-            #         if line == "EOF":
-            #             # End of output
-            #             break
-            #         if not line:
-            #             line = ""
-            #         self.logger.debug("Got line: " + line)  # Log to logger
-            #         self.stdout_file.write("Got line: " + line + "\n")  # Write to stdout log
-            #         self.stdout_file.flush()
-            #         output_lines.append(line)
-            #         if ">>>" in line or "$ " in line:  # Adjust based on your script's prompt
-            #             break
-            #     except Exception as e:
-            #         self.logger.warning(f"Read output exception: {e}")
-            #         break
-            #     counter += 1
-            # return output_lines # Failed, as readline will get one more line when it is timeout.
             output_lines = []
             time.sleep(0.1)
             with open(self.stdout_file_path, "r", encoding="utf-8") as f:

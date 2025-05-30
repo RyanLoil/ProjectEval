@@ -7,11 +7,25 @@ import time
 import traceback
 from datetime import datetime
 
-from indicator import sentence_transformer_calc, codebleu_calc, levenshtein_calc
 from llm import GPTTest, LLMTest
 from openjudge import WebsiteJudge, BatchJudge, BaseJudge
 from config import DEFAULT_BROWSER_TYPE, IO_WAIT, PROJECT_EVAL_DEFAULT_TEST_CASE, LOG_PATH, \
-    PROJECT_EVAL_DEFAULT_TEST_DIR, PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR
+    PROJECT_EVAL_DEFAULT_TEST_DIR, PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR, RUN_DATE
+
+
+# from indicator import sentence_transformer_calc, codebleu_calc, levenshtein_calc
+
+def sentence_transformer_calc(*args, **kwargs):
+    from indicator import sentence_transformer_calc
+    return sentence_transformer_calc(*args, **kwargs)
+
+def codebleu_calc(*args, **kwargs):
+    from indicator import codebleu_calc
+    return codebleu_calc(*args, **kwargs)
+
+def levenshtein_calc(*args, **kwargs):
+    from indicator import levenshtein_calc
+    return levenshtein_calc(*args, **kwargs)
 
 PROJECT_TYPE = {
     'website': WebsiteJudge,
@@ -27,7 +41,8 @@ class BaseController:
         self.logger.setLevel(level=logging.DEBUG)
         self.initiate_time = datetime.now().strftime("%Y%m%d-%H%M%S")
         if not self.logger.handlers:
-            handler = logging.FileHandler(f"{LOG_PATH}/{self.initiate_time}-{self.__class__.__name__}.log",
+            os.makedirs(os.path.dirname(f"{LOG_PATH}/{RUN_DATE}/"), exist_ok=True)
+            handler = logging.FileHandler(f"{LOG_PATH}/{RUN_DATE}/{self.initiate_time}-{self.__class__.__name__}.log",
                                           encoding="utf-8")
             handler.setLevel(logging.DEBUG)
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

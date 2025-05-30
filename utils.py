@@ -1,3 +1,4 @@
+import platform
 import shutil
 import os
 from collections import defaultdict
@@ -179,3 +180,7 @@ def extract_json_files_from_folder(folder_path, mode=False):
 
 
     return dict(file_groups)
+
+
+def iswindows():
+    return platform.system().lower() == "windows"

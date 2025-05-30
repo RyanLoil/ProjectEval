@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  execution:
+    image: projecteval-execution:latest
+#    build:
+#      context: ..                 # ProjectEval's root
+#      dockerfile: docker/Dockerfile
+
+    environment:
+      - HTTP_PROXY=http://host.docker.internal:7897 # Proxy Settings
+      - HTTPS_PROXY=http://host.docker.internal:7897
+    volumes:
+      - ../experiments:/app/experiments    # Input and Output path
+      - ../log:/log # If you change the log path in config.ini, change here too.
+    working_dir: /app
+
+    # If you only want to test a subset of the json files, put them into a dolist and set dolist_para
+    command: >
+      bash -c "
+      python run_judge.py --dirlist '[\"docker-test\"]';
+      echo 'Press enter to exit...';
+      tail -f /dev/null
+      "
+    #  --dolist "[\"gemma3-27b_20250523-173849_level_1.json\",]"
+    #  --dolist_para

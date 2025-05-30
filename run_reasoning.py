@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 from controller import LLMController
-from llm import GPTTest, LlamaTest, GeminiTest
+from llm import GPTTest, OllamaTest, GeminiTest
 
 # 1.Add any model you like using mode_dict. The boolean value means that it is [True/False] that the model is a coding model.
 model_dict = {
@@ -31,19 +31,21 @@ cascade_settings = [True, False]
 GPU_UUID = "GPU-e64683ee-8e58-13f4-b2aa-e88128cc3ef9"
 
 # Enjoy it. It will default save in experiments/<today>-<times>/<model_name>/.
+
 if __name__ == '__main__':
+    start_date = datetime.now().strftime('%Y%m%d')
     for counter in range(test_times):
         for cascade in cascade_settings:
 
             for model in model_dict:
-                save_path = f"experiments/{datetime.now().strftime('%Y%m%d')}-{counter+1}/{model.replace(":","-")}/{'cascade' if cascade else 'direct'}/"
+                save_path = f"experiments/{start_date}-{counter+1}/{model.replace(":","-")}/{'cascade' if cascade else 'direct'}/"
 
                 if not os.path.exists(save_path):
                     os.makedirs(save_path)
 
                 tester = LLMController(
                     question_path=file_path,
-                    model_class=start_with_dict[model.split("-")[0]] if model.split("-")[0] in start_with_dict else LlamaTest,
+                    model_class=start_with_dict[model.split("-")[0]] if model.split("-")[0] in start_with_dict else OllamaTest,
                     llm=model,
                     device=GPU_UUID,
                     language={"website": "python", "software": "python", "batch": "python", "console": "python"},

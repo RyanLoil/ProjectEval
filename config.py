@@ -5,9 +5,10 @@ from datetime import datetime
 configs = configparser.ConfigParser()
 configs.read("config.ini")
 
+RUN_DATE = datetime.now().strftime("%Y%m%d")
 PROJECT_EVAL_DEFAULT_TEST_CASE = 284
-PROJECT_EVAL_DEFAULT_TEST_DIR = "test/" + datetime.now().strftime("%Y%m%d") + "/"
-PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR = "experiments/" + datetime.now().strftime("%Y%m%d") + "/"
+PROJECT_EVAL_DEFAULT_TEST_DIR = "test/" + RUN_DATE + "/"
+PROJECT_EVAL_DEFAULT_EXPERIMENT_DIR = "experiments/" + RUN_DATE + "/"
 PROJECT_EVAL_DEFAULT_DATA_PATH = "data/project_eval_project.json"
 PROJECT_EVAL_DEFAULT_ANSWER_PATH = "data/project_eval_answer.json"
 PROJECT_EVAL_DEFAULT_PARAMETER_PATH = "data/project_eval_parameter.json"
@@ -22,3 +23,8 @@ IMAGE_SIMILARITY_THRESHOLD = float(configs["Default"]['IMAGE_SIMILARITY_THRESHOL
 TIMEOUT_LIMIT = float(configs["Default"]['TIMEOUT_LIMIT'])
 IO_WAIT = float(configs["Default"]['IO_WAIT'])
 LOG_PATH = configs["Default"]["LOG_PATH"]
+OLLAMA_HOST = configs["Default"]["OLLAMA_HOST"]
+
+os.makedirs(LOG_PATH, exist_ok=True)
+os.makedirs("test", exist_ok=True)
+os.makedirs("experiments", exist_ok=True)

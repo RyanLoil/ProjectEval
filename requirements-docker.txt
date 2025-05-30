@@ -6,7 +6,7 @@ selenium>=4.0.0
 func-timeout >= 4.3.5
 
 # API
-torch # Sentence Transformers required torch. If you need objective indicators, install it.
+# torch # Sentence Transformers required torch. If you need objective indicators, install it.
 ollama
 openai
 google-genai
@@ -22,9 +22,9 @@ openpyxl~=3.1.5
 pandas~=2.2.3
 
 # Objective Indicators
-numpy
-scipy
-sentence-transformers
+# numpy
+# scipy
+# sentence-transformers
 # codebleu[all]>=0.7.1 # Not release on PyPI
-git+https://github.com/k4black/codebleu.git
-tree-sitter-python >=0.23.0,<0.24.0
+# git+https://github.com/k4black/codebleu.git
+# tree-sitter-python >=0.23.0,<0.24.0
