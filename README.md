@@ -19,7 +19,7 @@
 [issues-url]: https://github.com/RyanLoil/ProjectEval/issues
 
 [license-shield]: https://img.shields.io/github/license/RyanLoil/ProjectEval.svg?style=for-the-badge&label=License
-[license-url]: https://github.com/RyanLoil/ProjectEval/blob/main/LICENSE
+[license-url]: https://github.com/RyanLoil/ProjectEval/blob/master/LICENSE
 
 🏆Leaderboard: [ProjectEval LeaderBoard](https://ryanloil.github.io/ProjectEval/)
 
