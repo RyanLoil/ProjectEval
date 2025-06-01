@@ -26,7 +26,7 @@ CLOSE_SOURCE = {
 prompt = {
     "GPTTest": CLOSE_SOURCE,
     "GeminiTest": CLOSE_SOURCE,
-    "LlamaTest": {
+    "OllamaTest": {
         "generate_checklist": '{nl_prompt}.Give a natural language function checklist from the users\' views. '
                               'Only return as a JSON object which template is [{{"page":"XXX", "function":[{{"function":"XXX", "description"; "YYYY"}}, {{...}}, ...]}}, {{...}}, ...}} with NO other content. '
                               'Respond only with natural language valid JSON. Do not write an introduction or summary.',
