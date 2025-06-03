@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 from datetime import datetime
 from selenium import webdriver
 from func_timeout import FunctionTimedOut, func_timeout
+from sklearn.utils.estimator_checks import check_get_feature_names_out_error
 
 import utils
 from config import VENV_PATH, STRING_SIMILARITY_THRESHOLD, TIMEOUT_LIMIT, IO_WAIT, LOG_PATH, RUN_DATE
@@ -67,15 +68,31 @@ class BasePythonManager:
         :return: None
         '''
         for initiate_command in initiate_command_list:
-            process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
-                                       shell=True if utils.iswindows() else False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                       creationflags=BaseJudge.get_creationflags())
-            process.wait(10)
-            process.terminate()
-            if process.poll() is not None:
-                process.kill()
+            self.logger.debug("Initiating command: {}".format(initiate_command))
+            counter = 0
+            while counter < 5:
+                try:
+                    process = subprocess.Popen([self.get_activate_script(), *initiate_command], cwd=self.project_path,
+                                               shell=True if utils.iswindows() else False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                               creationflags=BaseJudge.get_creationflags())
+                    process.wait(10)
+                    process.terminate()
+                    if process.poll() is not None:
+                        process.kill()
+                        break
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    self.logger.error(f"Command {initiate_command} timed out after 10 seconds.")
+                    break
+                except Exception as e:
+                    self.logger.error(f"Failed to initiate command: {initiate_command}. Error: {e}. Retrying.")
+                    counter += 1
+            if counter == 5:
+                raise RuntimeError(f"Failed to initiate command: {initiate_command}.")
+
 
     def start(self):
+        self.logger.debug("Starting project.")
         self.process = subprocess.Popen([self.get_activate_script(), *self.start_command],
                                         cwd=self.project_path,
                                         shell=True if utils.iswindows() else False,
@@ -211,6 +228,9 @@ class WebsiteJudge(BaseJudge):
                 driver_text = driver_text.replace("()", f"(options=options, service=service)")
             else:
                 self.logger.info("Windows mode.")
+                options = getattr(webdriver,DRIVER_BIG_NAME[browser_type]+"Options")()
+                options.add_argument("--headless=new")  # 使用新版headless模式
+                driver_text = driver_text.replace("()", f"(options=options)")
             self.driver = eval(driver_text)
             self.driver.set_page_load_timeout(3)
         except Exception as e:
@@ -373,8 +393,18 @@ class BatchJudge(BaseJudge):
             self.logger.info(f"Copy material files from {material_path} to {self.project_path}.")
             for file_name in os.listdir(material_path):
                 if file_name.startswith(f"{self.project_id}-"):
-                    shutil.copyfile(os.path.join(material_path, file_name), os.path.join(self.project_path, file_name))
-                    self.logger.debug(f"{file_name} copied.")
+                    self.logger.debug(f"Processing: {file_name}")
+                    full_src = os.path.join(material_path, file_name)
+                    full_dst = os.path.join(self.project_path, file_name)
+                    if not os.path.isfile(full_src):
+                        self.logger.warning(f"Skipping non-file: {file_name}")
+                        continue
+                    try:
+                        shutil.copyfile(full_src, full_dst)
+                        self.logger.debug(f"{file_name} copied.")
+                    except Exception as e:
+                        self.logger.error(f"Error copying {file_name}: {e}")
+
             time.sleep(IO_WAIT)
 
         def start(self):
@@ -472,11 +502,17 @@ class BatchJudge(BaseJudge):
 
             return "".join(output_lines)
 
+    class MatplotlibManager(BasePythonManager):
+        def initiate_command(self, initiate_command_list: [[]]):
+            super().initiate_command(initiate_command_list)
+            import matplotlib
+            matplotlib.use('Agg')
+
     BATCH_MANAGER = {
         'None': ConsoleManager,
         'Openpyxl': FileManager,
         'Statsmodels': FileManager,
-        'Matplotlib': FileManager,
+        'Matplotlib': MatplotlibManager,
     }
 
     def preprocess(self, technical_stack, initiate_command_list, *args, **kwargs):

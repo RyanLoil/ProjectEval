@@ -9,6 +9,9 @@ from config import PROJECT_EVAL_DEFAULT_TEST_CASE
 from utils import extract_json_files_from_folder
 
 if __name__ == "__main__":
+    current_pid = os.getpid()
+    print(f"ProjectEval Main PID: {current_pid}")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--dirlist",type=str,required=True, help="The directories that you want to evaluate. The directories must obey the rule of /directory_name/model_name/cascade(direct)/<model>_<timestamp>_level_<level>.json. Official-result is a good example.")
     parser.add_argument("-d", "--dolist",type=str,required=False,default="[]",)
@@ -16,8 +19,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     dirlist = json.loads(args.dirlist)
-    dolist = set(json.loads(args.dolist))
+    dolist = set([_.replace(".json","") for _ in json.loads(args.dolist)])
     dolist_para = args.dolist_para
+    print(f"Dolist set. {dolist}.")
 
     # If you are using a NON-ollama model, add your model prefix with its own LLMTestClass in start_with_dict{}, else skip this step.
     start_with_dict = {
@@ -47,17 +51,26 @@ if __name__ == "__main__":
                 file_group = extract_json_files_from_folder(dirpath, mode=True)
                 for group in file_group:
                     if dolist_para and str(group) not in dolist:
+                        print(f"Skip {group}.")
                         continue
                     try:
                         level = int(str(group).split("_")[3])
-                        if mode == "cascade" and level == "3":
+                        if mode == "cascade" and level == 3:
                             print("Skip cascade level 3")
                             continue
+
+                        if model.split("-")[0] in start_with_dict:
+                            model_class = start_with_dict[model.split("-")[0]]
+                            model_name = model
+                        else:
+                            model_class = OllamaTest
+                            model_name = model.replace("-", ":")
+
                         tester = JudgeController(question_path="data/project_eval_project.json",
                                                  answer_path=file_group[group]["answer_code_path"],
-                                                 model_class=start_with_dict[model.split("-")[0]] if model.split("-")[0] in start_with_dict else OllamaTest,
+                                                 model_class= model_class,
                                                  parameter_file_path=file_group[group]["answer_parameter_path"],
-                                                 llm=model,
+                                                 llm=model_name,
                                                  device="GPU-e64683ee-8e58-13f4-b2aa-e88128cc3ef9",
                                                  )
 
