@@ -33,53 +33,6 @@
 
 - 2025/05/16 🎉ProjectEval is accepted by ACL 2025 Findings.
 
-# 👋Overview
-
-- **ProjectEval** is a multi-level benchmark designed to evaluate LLMs and agents on *project-level code generation* through realistic user interactions. It aims to bridge the gap of lacking the ability to automatically evaluate code from users’ perspective, and also lacking the explainability of the results of LLM agents’ code generation capabilities. 
-
-## Structure
-
-- ProjectEval integrates **natural language**, **structured checklists**, and **code skeletons** as 3 different level inputs to simulate diverse development scenarios and support explainable evaluations. And it contains its standard Test Suite and Canonical Answer.
-
-![ProjectEval Structure](./assets/structure.png)
-
-### Inputs
-
-- **Level 1 - Natural Language Prompt (NL Prompt)**: the agent will receive one or several natural language sentences to describe the target of the project.
-
-- **Level 2 - Natural Language Checklist (NL Checklist)**: the agent will receive a standard natural language checklist describing the project through the abilities and
-  functions that the project should have.
-
-- **Level 3 - Skeleton**: the agent will receive a skeleton of the standard answer which contains doc-strings and comments to describe the project inside.
-
-### Test Suites
-
-A mission test suite will contain two parts:
-
-- **Testcodes**: a mission contains several automated evaluation Python functions similar to HumanEval testcases.
-
-- **Parameter Description (PD)**: PD is used for a special kind of parameter alignment. These parameters are required by the matching testcode to achieve the established test goal(s).
-
-### Canonical Answer
-
-For every mission we constructed has a canonical solution, beside the canonical code, we also build every PD’s standard answer matching to the canonical code called canonical parameter values.
-
-## Construction
-
-Testcode is aligned with Checklist. Parameter Description is aligned with Testcode and Canonical Parameter Values. Canonical Parameter Values is aligned with Canonical Code and use for testcode to get passed.
-
-![ProjectEval Generation](./assets/generation.png)
-
-## Evaluation
-
-![ProjectEval Reasoning](./assets/reasoning.png)
-
-The evaluation process begins by selecting a specific level from the input and presenting it to the agent. The agent generates solution code. The solution code is then fed back into the same agent along with the parameter description. The agent is tasked with answering the parameter description based on its own solution to produce parameter values (PV). The code is then converted into an executable file, creating a tangible project. PV is a substitute to testcode, and testcode is integrated into the ProjectEval evaluation machine to obtain the evaluation results.
-
-## Summary
-
-Projecteval introduces automated evaluation tools and heterogeneous software verification systems, enabling fine-grained comparison of model outputs across semantically equivalent input formats. This provides deeper insight into a model understanding of end-to-end software development.
-
 # 🚀Quickstart
 
 ## Requirements
@@ -167,6 +120,54 @@ This part is for some common issues that have been noticed by authors, check thi
 - [ ] `config.ini` is set correctly.
 
 - [ ] Docker runs properly.
+
+# 👋Overview
+
+- **ProjectEval** is a multi-level benchmark designed to evaluate LLMs and agents on *project-level code generation* through realistic user interactions. It aims to bridge the gap of lacking the ability to automatically evaluate code from users’ perspective, and also lacking the explainability of the results of LLM agents’ code generation capabilities. 
+
+## Structure
+
+- ProjectEval integrates **natural language**, **structured checklists**, and **code skeletons** as 3 different level inputs to simulate diverse development scenarios and support explainable evaluations. And it contains its standard Test Suite and Canonical Answer.
+
+![ProjectEval Structure](./assets/structure.png)
+
+### Inputs
+
+- **Level 1 - Natural Language Prompt (NL Prompt)**: the agent will receive one or several natural language sentences to describe the target of the project.
+
+- **Level 2 - Natural Language Checklist (NL Checklist)**: the agent will receive a standard natural language checklist describing the project through the abilities and
+  functions that the project should have.
+
+- **Level 3 - Skeleton**: the agent will receive a skeleton of the standard answer which contains doc-strings and comments to describe the project inside.
+
+### Test Suites
+
+A mission test suite will contain two parts:
+
+- **Testcodes**: a mission contains several automated evaluation Python functions similar to HumanEval testcases.
+
+- **Parameter Description (PD)**: PD is used for a special kind of parameter alignment. These parameters are required by the matching testcode to achieve the established test goal(s).
+
+### Canonical Answer
+
+For every mission we constructed has a canonical solution, beside the canonical code, we also build every PD’s standard answer matching to the canonical code called canonical parameter values.
+
+## Construction
+
+Testcode is aligned with Checklist. Parameter Description is aligned with Testcode and Canonical Parameter Values. Canonical Parameter Values is aligned with Canonical Code and use for testcode to get passed.
+
+![ProjectEval Generation](./assets/generation.png)
+
+## Evaluation
+
+![ProjectEval Reasoning](./assets/reasoning.png)
+
+The evaluation process begins by selecting a specific level from the input and presenting it to the agent. The agent generates solution code. The solution code is then fed back into the same agent along with the parameter description. The agent is tasked with answering the parameter description based on its own solution to produce parameter values (PV). The code is then converted into an executable file, creating a tangible project. PV is a substitute to testcode, and testcode is integrated into the ProjectEval evaluation machine to obtain the evaluation results.
+
+## Summary
+
+Projecteval introduces automated evaluation tools and heterogeneous software verification systems, enabling fine-grained comparison of model outputs across semantically equivalent input formats. This provides deeper insight into a model understanding of end-to-end software development.
+
 
 # 🖊Citation
 
