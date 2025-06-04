@@ -21,6 +21,8 @@
 [license-shield]: https://img.shields.io/github/license/RyanLoil/ProjectEval.svg?style=for-the-badge&label=License
 [license-url]: https://github.com/RyanLoil/ProjectEval/blob/master/LICENSE
 
+📄Paper：[https://arxiv.org/abs/2503.07010](https://arxiv.org/abs/2503.07010)
+
 🏆Leaderboard: [ProjectEval LeaderBoard](https://ryanloil.github.io/ProjectEval/)
 
 📫Contact: [Kaiyuan Liu](mailto:1171000408@stu.hit.edu.cn)
