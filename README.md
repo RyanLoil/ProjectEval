@@ -1,4 +1,4 @@
-# ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
+# [ACL 2025 Findings] ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
