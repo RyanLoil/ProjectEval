@@ -1,4 +1,4 @@
-# ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
+# [ACL 2025 Findings] ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -20,6 +20,8 @@
 
 [license-shield]: https://img.shields.io/github/license/RyanLoil/ProjectEval.svg?style=for-the-badge&label=License
 [license-url]: https://github.com/RyanLoil/ProjectEval/blob/master/LICENSE
+
+📄Paper：[https://arxiv.org/abs/2503.07010](https://arxiv.org/abs/2503.07010)
 
 🏆Leaderboard: [ProjectEval LeaderBoard](https://ryanloil.github.io/ProjectEval/)
 
@@ -174,7 +176,7 @@ Projecteval introduces automated evaluation tools and heterogeneous software ver
 ```
 @misc{liu2025projectevalbenchmarkprogrammingagents,
       title={ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation}, 
-      author={Kaiyuan Liu and Youcheng Pan and Jing Li and Daojing He and Yang Xiang and Yexing Du and Tianrun Gao},
+      author={Kaiyuan Liu and Youcheng Pan and Yang Xiang and Daojing He and Jing Li and Yexing Du and Tianrun Gao},
       year={2025},
       eprint={2503.07010},
       archivePrefix={arXiv},
