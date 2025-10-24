@@ -4,7 +4,7 @@ import csv
 import datetime
 import os
 from controller import JudgeController
-from llm import GPTTest, OllamaTest, GeminiTest
+from llm import GPTTest, OllamaTest, GeminiTest, DeepSeekTest
 from config import PROJECT_EVAL_DEFAULT_TEST_CASE
 from utils import extract_json_files_from_folder
 
@@ -27,6 +27,7 @@ if __name__ == "__main__":
     start_with_dict = {
         "gpt": GPTTest,
         "gemini": GeminiTest,
+        "deepseek": DeepSeekTest,
     }
 
     project_id_list = [str(_) for _ in range(1,21)]
@@ -91,8 +92,8 @@ if __name__ == "__main__":
                                 initiate_command[project_id] = []
                                 requirements[project_id] = ["openpyxl", "pandas"]
 
-                        if "startfile" in group:
-                            start_file_list = json.load(open(group["startfile"]))
+                        if "startfile" in file_group[group]:
+                            start_file_list = json.load(open(file_group[group]["startfile"]))
                         else:
                             start_file_list = None
                         score, score_table = tester.evaluate(initiate_command, requirements, project_id_list=project_id_list,

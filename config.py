@@ -15,6 +15,7 @@ PROJECT_EVAL_DEFAULT_PARAMETER_PATH = "data/project_eval_parameter.json"
 
 OPENAI_KEY = configs["Default"]['OPENAI_KEY']
 GOOGLE_AI_KEY = configs["Default"]['GOOGLE_AI_KEY']
+DEEPSEEK_KEY = configs["Default"]['DEEPSEEK_KEY']
 DEFAULT_BROWSER_TYPE = configs["Default"]['DEFAULT_BROWSER_TYPE']
 ENCODE_FORMAT = configs["Default"]['ENCODE_FORMAT']
 VENV_PATH = eval(configs["Default"]['VENV_PATH'])
@@ -24,6 +25,7 @@ TIMEOUT_LIMIT = float(configs["Default"]['TIMEOUT_LIMIT'])
 IO_WAIT = float(configs["Default"]['IO_WAIT'])
 LOG_PATH = configs["Default"]["LOG_PATH"]
 OLLAMA_HOST = configs["Default"]["OLLAMA_HOST"]
+DEEPSEEK_HOST = "https://api.deepseek.com"
 
 os.makedirs(LOG_PATH, exist_ok=True)
 os.makedirs("test", exist_ok=True)

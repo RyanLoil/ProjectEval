@@ -5,8 +5,9 @@ import re
 import time
 from datetime import datetime
 
-from openai import OpenAI
+from openai import OpenAI, NOT_GIVEN
 from google import genai
+from sympy.physics.units import temperature
 
 import config
 from config import OPENAI_KEY, GOOGLE_AI_KEY, LOG_PATH, RUN_DATE
@@ -107,7 +108,9 @@ class GPTTest(LLMTest):
                  "content": role_message},
                 {"role": "user",
                  "content": message}
-            ]
+            ],
+            temperature=0,
+            max_tokens=getattr(self,"max_tokens") if hasattr(self,"max_tokens") else NOT_GIVEN
         )
         self.logger.debug("Received:" + completion.choices[0].message.content)
         return completion
@@ -238,6 +241,25 @@ class OllamaTest(GPTTest):
         del os.environ['NO_PROXY']
         if device:
             del os.environ['CUDA_VISIBLE_DEVICES']
+
+class DeepSeekTest(GPTTest):
+    DEEPSEEK_MAX_TOKENS = {
+        "deepseek-chat": 8000,
+        "deepseek-reason": 64000,
+    }
+    def __init__(self, llm="deepseek-chat", device: str = "", *args, **kwargs):
+        '''
+        This deepseek test class is created base on DeepSeek.
+        :param llm:
+        :param device:
+        :param args:
+        :param kwargs:
+        '''
+        super(DeepSeekTest, self).__init__(llm)
+        DEEPSEEK_HOST = config.DEEPSEEK_HOST
+        self.client = OpenAI(api_key=config.DEEPSEEK_KEY, base_url=DEEPSEEK_HOST)
+        self.max_tokens = self.DEEPSEEK_MAX_TOKENS.get(llm, NOT_GIVEN)
+
 
 class GeminiTest(GPTTest):
     def __init__(self, llm="gemini-1.5-flash",  *args, **kwargs):

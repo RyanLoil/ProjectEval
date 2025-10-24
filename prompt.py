@@ -2,6 +2,7 @@
 This is all the prompt that is using in ProjectEval.
 We are welcome that you edit any of them to get higher scores.
 """
+import copy
 
 CLOSE_SOURCE = {
     "generate_checklist": '{nl_prompt}.Give a natural language function checklist from the users\' views '
@@ -51,5 +52,6 @@ prompt = {
                                 'ONLY return the path such as "example/run.py" with NO other content. Do NOT add root path into the answer, but only the relative path.'
                                 'Do NOT write an introduction or summary.'
     },
-
 }
+
+prompt["DeepSeekTest"] = copy.deepcopy(prompt["OllamaTest"])

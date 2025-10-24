@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 from controller import LLMController
-from llm import GPTTest, OllamaTest, GeminiTest
+from llm import GPTTest, OllamaTest, GeminiTest, DeepSeekTest
 
 # 1.Add any model you like using mode_dict. The boolean value means that it is [True/False] that the model is a coding model.
 model_dict = {
@@ -9,7 +9,9 @@ model_dict = {
     # "gemma2": False,
     # "codegemma": True,
     # "gemma3": False,
-    "gemma3:27b": False,
+    # "gemma3:27b": False,
+    # "qwen3"
+    "deepseek-chat": False,
 }
 
 # 2. Set the input file path. Default is "data/project_eval_project.json"
@@ -18,11 +20,12 @@ file_path = "data/project_eval_project.json"
 # 3. If you are using a NON-ollama model, add your model prefix with its own LLMTestClass in start_with_dict{}, else skip this step.
 start_with_dict = {
     "gpt": GPTTest,
-    "gemini": GeminiTest
+    "gemini": GeminiTest,
+    "deepseek": DeepSeekTest
 }
 
 # 4.Set your test times.
-test_times = 5
+test_times = 4
 
 # 5.Set if you want to test cascade or direct. [True] means only cascade, [False] means only direct, [True, False] means both.
 cascade_settings = [True, False]

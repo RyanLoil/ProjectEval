@@ -185,7 +185,7 @@ Projecteval introduces automated evaluation tools and heterogeneous software ver
 
 # ❗Known Issues
 
-- [ ] There is a request made during the execution evaluation. We are working on removing it.
+- [x] ~~There is a request made during the execution evaluation. We are working on removing it.~~
 
 # ☘Feature in Future
 
