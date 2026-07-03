@@ -1,4 +1,4 @@
-# [ACL 2025 Findings] ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
+# [ACM TOSEM / ACL 2025 Findings] ProjectEval: A Benchmark for Programming Agents Automated Evaluation on Project-Level Code Generation
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -21,13 +21,17 @@
 [license-shield]: https://img.shields.io/github/license/RyanLoil/ProjectEval.svg?style=for-the-badge&label=License
 [license-url]: https://github.com/RyanLoil/ProjectEval/blob/master/LICENSE
 
-📄Paper：[https://arxiv.org/abs/2503.07010](https://arxiv.org/abs/2503.07010)
+📄Paper：[https://aclanthology.org/2025.findings-acl.1036/](https://aclanthology.org/2025.findings-acl.1036/)
 
 🏆Leaderboard: [ProjectEval LeaderBoard](https://ryanloil.github.io/ProjectEval/)
 
 📫Contact: [Kaiyuan Liu](mailto:1171000408@stu.hit.edu.cn)
 
 # 📰News
+
+- 2026/07/01 🎉**ProjectEvalPLus** is accepted by [_ACM Transactions on Software Engineering and Methodology (TOSEM)_](https://dl.acm.org/doi/10.1145/3817119).
+
+- 2025/11/01 🚀**ProjectEvalPlus** Repository opensource.  [![GitHub](https://img.shields.io/badge/Github-181717?style=flat&logo=github&logoColor=white)](https://github.com/RyanLoil/ProjectEvalPlus)
 
 - 2025/05/30 🚀ProjectEval Repository opensource.
 
