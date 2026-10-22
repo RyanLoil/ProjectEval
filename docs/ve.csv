@@ -21,6 +21,8 @@ Qwen3-Omni-30B-A3B-Instruct,Text,Open-Source,Point,0.004,0.015,0.008,0.011,0.148
 Qwen3-Omni-30B-A3B-Instruct,Text,Open-Source,Project,0.5,0.25,0.333,0.25,0.6,0.3866,0.5,0.25,0.267,0.25,0.459,0.3452,ProjectEvalM,2026/10/11
 Qwen3-VL-30B-A3B-Instruct,Text,Open-Source,Point,0.0,0.004,0.015,0.008,0.159,0.0372,0.008,0.027,0.038,0.011,0.121,0.041,ProjectEvalM,2026/10/11
 Qwen3-VL-30B-A3B-Instruct,Text,Open-Source,Project,0.55,0.6,0.125,0.333,0.712,0.464,0.425,0.525,0.125,0.333,0.525,0.3866,ProjectEvalM,2026/10/11
+Qwen3.8-27B,Text,Open-Source,Point,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,ProjectEvalM,2026/10/11
+Qwen3.8-27B,Text,Open-Source,Project,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,ProjectEvalM,2026/10/11
 Voxtral-Small-24B-2507,Text,Open-Source,Point,0.042,0.068,0.03,0.087,0.095,0.0644,0.015,0.008,0.053,0.038,0.049,0.0326,ProjectEvalM,2026/10/11
 Voxtral-Small-24B-2507,Text,Open-Source,Project,0.34,0.214,0.243,0.435,0.377,0.3218,0.19,0.379,0.221,0.335,0.338,0.2926,ProjectEvalM,2026/10/11
 Gemma-4-12B-it,Text,Open-Source,Point,0.034,0.015,0.023,0.011,0.095,0.0356,0.027,0.023,0.015,0.053,0.091,0.0418,ProjectEvalM,2026/10/11
@@ -39,5 +41,7 @@ Ministral-3-14B-Instruct-2512,Vision,Open-Source,Point,0.008,0.0,0.008,0.049,-,0
 Ministral-3-14B-Instruct-2512,Vision,Open-Source,Project,0.6,0.0,0.0,0.3,-,0.225,0.533,0.0,0.0,0.283,-,0.204,ProjectEvalM,2026/10/11
 Qwen3-VL-30B-A3B-Instruct,Vision,Open-Source,Point,0.042,0.027,0.0,0.03,-,0.0248,0.0,0.027,0.004,0.049,-,0.02,ProjectEvalM,2026/10/11
 Qwen3-VL-30B-A3B-Instruct,Vision,Open-Source,Project,0.62,0.925,1.0,0.1,-,0.6613,0.4,0.9,1.0,0.2,-,0.625,ProjectEvalM,2026/10/11
+Qwen3.8-27B,Vision,Open-Source,Point,0.0,0.0,0.0,0.0,-,0.0,0.0,0.0,0.0,0.0,-,0.0,ProjectEvalM,2026/10/11
+Qwen3.8-27B,Vision,Open-Source,Project,0.0,0.0,0.0,0.0,-,0.0,0.0,0.0,0.0,0.0,-,0.0,ProjectEvalM,2026/10/11
 Gemma-4-26B-A4B-it,Vision,Open-Source,Point,0.049,0.167,0.004,0.004,-,0.056,0.034,0.129,0.004,0.011,-,0.0445,ProjectEvalM,2026/10/11
 Gemma-4-26B-A4B-it,Vision,Open-Source,Project,0.475,0.488,0.367,0.167,-,0.3742,0.362,0.427,0.333,0.15,-,0.318,ProjectEvalM,2026/10/11

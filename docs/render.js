@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261022c";
+const SITE_VERSION = "20261022e";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -265,6 +265,8 @@ function loadTable(cfg) {
 
             tbody.appendChild(frag);
 
+            applyDefaultSort(cfg.id);
+
             if (cfg.mode === "raw") {
                 applyHeatMap(tbody);
             }
@@ -429,6 +431,57 @@ function initializeSorting() {
             th.addEventListener("click", () => sortTable(table, th));
         });
     });
+}
+
+// ---------- Default sort on load ----------
+// Sort keys are CSV column names (each table's tbody cell order matches the CSV
+// field order), so we can read precise values straight from tr._row.
+const LANG_ORDER = { py: 0, ja: 1, js: 2 };
+
+const DEFAULT_SORT = {
+    "execution-table":     [["All-Avg", "desc"]],
+    "objective-table":     [["Direct-Level1-Code", "desc"]],
+    "ve-table":            [["Scope", "asc"], ["Function-Avg", "desc"]],
+    "multilang-exe-table": [["Direct-Level1-py", "desc"]],
+    "multilang-obj-table": [["Language", "asc"], ["Direct-Level1-Code", "desc"]],
+};
+
+function sortKeyFor(row, col) {
+    const raw = row[col];
+    if (raw == null) return null;
+    const s = String(raw).trim();
+    if (s === "" || s === "-" || s === "None" || s === "none") return null;
+    if (col === "Language") {
+        const k = LANG_ORDER[s.toLowerCase()];
+        return k != null ? k : 99;
+    }
+    const num = parseFloat(s);
+    return isNaN(num) ? s.toLowerCase() : num;
+}
+
+function applyDefaultSort(tableId) {
+    const spec = DEFAULT_SORT[tableId];
+    if (!spec || spec.length === 0) return;
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+        for (const [col, dir] of spec) {
+            const av = sortKeyFor(a._row, col);
+            const bv = sortKeyFor(b._row, col);
+            let cmp = 0;
+            if (av === null && bv === null) cmp = 0;
+            else if (av === null) cmp = 1;   // missing ("-") sinks to the bottom
+            else if (bv === null) cmp = -1;
+            else if (typeof av === "number" && typeof bv === "number") cmp = av - bv;
+            else cmp = String(av).localeCompare(String(bv));
+            if (cmp !== 0) return dir === "desc" ? -cmp : cmp;
+        }
+        return 0;
+    });
+
+    rows.forEach((r) => tbody.appendChild(r));
 }
 
 // ---------- Boot ----------
