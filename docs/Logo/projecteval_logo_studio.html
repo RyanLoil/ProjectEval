@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProjectEval Logo Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--line:#334155;--text:#e2e8f0;--muted:#94a3b8;--blue:#3b82f6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:18px 24px;border-bottom:1px solid #263449;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}h1{font-size:18px;margin:0}header p{color:var(--muted);margin:3px 0 0;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}button{border:1px solid #475569;border-radius:9px;padding:9px 12px;background:#334155;color:white;cursor:pointer;font:inherit}button:hover{filter:brightness(1.12)}button.primary{background:#2563eb;border-color:#2563eb}button.green{background:#059669;border-color:#059669}
+main{max-width:1100px;margin:0 auto;padding:24px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px}.panel{background:#172235;border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}.panel h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#cbd5e1;margin:0 0 14px}.preview{min-height:540px;border:1px solid #475569;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:16px;background-color:#e2e8f0;background-image:linear-gradient(45deg,#cbd5e1 25%,transparent 25%),linear-gradient(-45deg,#cbd5e1 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cbd5e1 75%),linear-gradient(-45deg,transparent 75%,#cbd5e1 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0}
+svg{width:100%;height:auto;max-height:540px;overflow:visible}.control{padding:12px 0;border-bottom:1px solid #334155}.control:last-child{border:0}.control label{display:flex;justify-content:space-between;gap:10px;color:#cbd5e1;font-size:12px;margin-bottom:8px}.control input[type=color]{width:100%;height:38px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:3px}.control input[type=range]{width:100%}.note{font-size:12px;color:var(--muted);margin:8px 0 0}.swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.status{min-height:20px;color:#86efac;font-size:12px;margin-top:10px}@media(max-width:760px){main{grid-template-columns:1fr;padding:14px}.preview{min-height:360px}header{padding:14px}}
+</style>
+</head>
+<body>
+<header><div><h1>ProjectEval Logo Studio</h1><p>修正版矢量标志 · Ribbon 使用纯色 · 透明 SVG/PNG 导出</p></div><div class="actions"><button id="copySvg">复制 SVG</button><button id="saveSvg" class="primary">下载 SVG</button><button id="savePng" class="green">导出透明 PNG</button></div></header>
+<main><section class="panel"><h2>SVG 预览</h2><div class="preview" id="preview">
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" role="img" aria-label="ProjectEval logo">
+<defs>
+<linearGradient id="pGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3275c4" id="p1"/><stop offset="100%" stop-color="#225394" id="p2"/></linearGradient>
+<linearGradient id="eGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#245ca3" id="e1"/><stop offset="100%" stop-color="#193f73" id="e2"/></linearGradient>
+<filter id="shadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="3" dy="8" stdDeviation="6" flood-color="#0b1e38" flood-opacity=".30"/></filter>
+<filter id="ribbonShadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="-2" dy="5" stdDeviation="4" flood-color="#0a1d36" flood-opacity=".30"/></filter>
+<filter id="eShadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="-3" dy="5" stdDeviation="5" flood-color="#0a1d36" flood-opacity=".30"/></filter>
+</defs>
+<g id="master" filter="url(#shadow)">
+<path id="letterP" fill="url(#pGrad)" fill-rule="evenodd" d="M158 100 H255 C291 100 320 129 320 165 C320 201 291 230 255 230 H202 V338 C202 350.15 192.15 360 180 360 C167.85 360 158 350.15 158 338 Z M202 144 H250 C261.6 144 276 153.4 276 165 C276 176.6 261.6 186 250 186 H202 Z"/>
+<!-- Three ribbon pieces use one flat color. The middle piece extends to the shared corner at (310,330); the end piece's lower corner is y=371, aligned with the left segment's bottom edge. -->
+<g id="ribbon" fill="#8dc5f8" filter="url(#ribbonShadow)">
+<path id="ribbonStart" d="M50 330 L180 200 L221 241 L91 371 Z"/>
+<path id="ribbonMiddle" d="M180 200 L310 330 L351 371 L310 412 L139 241 Z"/>
+<path id="ribbonEnd" d="M310 330 L535 105 L576 146 L351 371 Z"/>
+</g>
+<path id="letterE" fill="url(#eGrad)" filter="url(#eShadow)" d="M300 100 H430 C438.28 100 445 106.72 445 115 C445 123.28 438.28 130 430 130 H329 V208 H415 C423.28 208 430 214.72 430 223 C430 231.28 423.28 238 415 238 H329 V330 H430 C438.28 330 445 336.72 445 345 C445 353.28 438.28 360 430 360 H300 C291.72 360 285 353.28 285 345 V115 C285 106.72 291.72 100 300 100 Z"/>
+</g></svg></div></section>
+<aside class="panel"><h2>颜色与阴影</h2>
+<div class="control"><label for="pLight">P 渐变 · 浅色</label><input type="color" id="pLight" value="#3275c4"></div>
+<div class="control"><label for="pDark">P 渐变 · 深色</label><input type="color" id="pDark" value="#225394"></div>
+<div class="control"><label for="eLight">E 渐变 · 浅色</label><input type="color" id="eLight" value="#245ca3"></div>
+<div class="control"><label for="eDark">E 渐变 · 深色</label><input type="color" id="eDark" value="#193f73"></div>
+<div class="control"><label for="ribbonColor">折线 Ribbon（纯色）</label><input type="color" id="ribbonColor" value="#8dc5f8"></div>
+<div class="control"><label for="shadowOpacity">阴影强度 <span id="shadowValue">0.30</span></label><input type="range" id="shadowOpacity" min="0" max="0.7" step="0.02" value="0.30"></div>
+<div class="control"><button id="reset">恢复默认颜色</button><p class="note">Ribbon 三个折线部分均为纯色，不使用渐变。P、E 保留渐变。导出的 PNG 背景透明。</p><div id="status" class="status" role="status"></div></div>
+</aside></main>
+<script>
+const $=id=>document.getElementById(id);const defaults={pLight:'#3275c4',pDark:'#225394',eLight:'#245ca3',eDark:'#193f73',ribbonColor:'#8dc5f8',shadowOpacity:'0.30'};
+function sync(){[['pLight','p1'],['pDark','p2'],['eLight','e1'],['eDark','e2']].forEach(([input,stop])=>$(stop).setAttribute('stop-color',$(input).value));$('ribbon').setAttribute('fill',$('ribbonColor').value);$('shadowValue').textContent=Number($('shadowOpacity').value).toFixed(2);document.querySelector('#shadow feDropShadow').setAttribute('flood-opacity',$('shadowOpacity').value);$('status').textContent='';}
+['pLight','pDark','eLight','eDark','ribbonColor','shadowOpacity'].forEach(id=>$(id).addEventListener('input',sync));
+function svgText(){const clone=$('logo').cloneNode(true);clone.setAttribute('width','1200');clone.setAttribute('height','1000');clone.setAttribute('xmlns','http://www.w3.org/2000/svg');return new XMLSerializer().serializeToString(clone)}
+$('reset').addEventListener('click',()=>{Object.entries(defaults).forEach(([id,v])=>$(id).value=v);sync();$('status').textContent='已恢复默认设置。'});
+$('copySvg').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(svgText());$('status').textContent='SVG 代码已复制。'}catch(e){const t=document.createElement('textarea');t.value=svgText();document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();$('status').textContent='SVG 代码已复制。'}});
+$('saveSvg').addEventListener('click',()=>{const blob=new Blob([svgText()],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ProjectEval_Logo_Transparent.svg';a.click();URL.revokeObjectURL(url);$('status').textContent='SVG 已导出。'});
+$('savePng').addEventListener('click',()=>{const blob=new Blob([svgText()],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob);const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');canvas.width=2400;canvas.height=2000;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);canvas.toBlob(png=>{const pngUrl=URL.createObjectURL(png);const a=document.createElement('a');a.href=pngUrl;a.download='ProjectEval_Logo_Transparent.png';a.click();URL.revokeObjectURL(pngUrl);$('status').textContent='透明 PNG 已导出。'},'image/png')};img.onerror=()=>{URL.revokeObjectURL(url);$('status').textContent='导出失败，请重试。'};img.src=url});sync();
+</script></body></html>

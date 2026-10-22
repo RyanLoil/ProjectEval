@@ -1,0 +1,18 @@
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" role="img" aria-label="ProjectEval logo" width="1200" height="1000">
+<defs>
+<linearGradient id="pGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3275c4" id="p1"/><stop offset="100%" stop-color="#225394" id="p2"/></linearGradient>
+<linearGradient id="eGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#245ca3" id="e1"/><stop offset="100%" stop-color="#193f73" id="e2"/></linearGradient>
+<filter id="shadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="3" dy="8" stdDeviation="6" flood-color="#0b1e38" flood-opacity="0.3"/></filter>
+<filter id="ribbonShadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="-2" dy="5" stdDeviation="4" flood-color="#0a1d36" flood-opacity=".30"/></filter>
+<filter id="eShadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="-3" dy="5" stdDeviation="5" flood-color="#0a1d36" flood-opacity=".30"/></filter>
+</defs>
+<g id="master" filter="url(#shadow)">
+<path id="letterP" fill="url(#pGrad)" fill-rule="evenodd" d="M158 100 H255 C291 100 320 129 320 165 C320 201 291 230 255 230 H202 V338 C202 350.15 192.15 360 180 360 C167.85 360 158 350.15 158 338 Z M202 144 H250 C261.6 144 276 153.4 276 165 C276 176.6 261.6 186 250 186 H202 Z"/>
+<!-- Three ribbon pieces use one flat color. The middle piece extends to the shared corner at (310,330); the end piece's lower corner is y=371, aligned with the left segment's bottom edge. -->
+<g id="ribbon" fill="#8dc5f8" filter="url(#ribbonShadow)">
+<path id="ribbonStart" d="M50 330 L180 200 L221 241 L91 371 Z"/>
+<path id="ribbonMiddle" d="M180 200 L310 330 L351 371 L310 412 L139 241 Z"/>
+<path id="ribbonEnd" d="M310 330 L535 105 L576 146 L351 371 Z"/>
+</g>
+<path id="letterE" fill="url(#eGrad)" filter="url(#eShadow)" d="M300 100 H430 C438.28 100 445 106.72 445 115 C445 123.28 438.28 130 430 130 H329 V208 H415 C423.28 208 430 214.72 430 223 C430 231.28 423.28 238 415 238 H329 V330 H430 C438.28 330 445 336.72 445 345 C445 353.28 438.28 360 430 360 H300 C291.72 360 285 353.28 285 345 V115 C285 106.72 291.72 100 300 100 Z"/>
+</g></svg>

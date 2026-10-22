@@ -9,6 +9,11 @@ const TABLE_CONFIG = [
     { csv: "multilang-obj.csv", id: "multilang-obj-table", mode: "percent" },
 ];
 
+// Non-result (categorical) columns get a static filter dropdown.
+const NON_RESULT_COLS = new Set([
+    "Model", "Modality", "Source", "Output Format", "Language", "Scope", "Report By", "Report Date",
+]);
+
 // Green (high) → red (low) on the HSL wheel.
 function getColorByPercent(pct) {
     const h = Math.max(0, Math.min(1, pct)) * 120;
@@ -54,6 +59,21 @@ function prependLogo(td, file, cls) {
     img.className = cls;
     img.loading = "lazy";
     td.prepend(img);
+}
+
+// UTF-8 icons for the Modality column values.
+function modalityIcon(val) {
+    const v = String(val).toLowerCase();
+    if (v === "text") return "📝 ";
+    if (v === "audio") return "🔊 ";
+    if (v === "vision") return "👁️ ";
+    return "";
+}
+
+// Model family (used for same-color row tinting): derived from the logo family.
+function familyForModel(name) {
+    const logo = logoForModel(name);
+    return logo ? logo.split(".")[0] : null;
 }
 
 function renderPercentCell(td, raw) {
@@ -108,6 +128,9 @@ function loadTable(cfg) {
 
             parsed.data.forEach((row) => {
                 const tr = document.createElement("tr");
+                tr._row = row; // keep raw values for static filtering
+                const family = familyForModel(row["Model"]);
+                if (family) tr.classList.add("family-" + family);
                 cols.forEach((col) => {
                     const td = document.createElement("td");
                     if (cfg.mode === "percent") {
@@ -123,13 +146,15 @@ function loadTable(cfg) {
                         td.appendChild(document.createTextNode(" "));
                         td.appendChild(sup);
                     }
-                    // Add model / language icons before the text.
+                    // Add model / language icons and modality icons before the text.
                     if (col === "Model") {
                         const logo = logoForModel(row[col]);
                         if (logo) prependLogo(td, logo, "model-logo");
                     } else if (col === "Language") {
                         const logo = logoForLang(row[col]);
                         if (logo) prependLogo(td, logo, "lang-logo");
+                    } else if (col === "Modality") {
+                        td.prepend(document.createTextNode(modalityIcon(row[col])));
                     }
                     tr.appendChild(td);
                 });
@@ -141,13 +166,14 @@ function loadTable(cfg) {
             if (cfg.mode === "raw") {
                 applyHeatMap(tbody);
             }
+
+            buildFilters(table, cols, parsed.data);
         });
 }
 
 // For raw-mode tables, colour each numeric cell by its magnitude relative to
 // the column maximum (green = highest, red = lowest).
-function applyHeatMap(tbody, numericColStart) {
-    const start = numericColStart == null ? 4 : numericColStart;
+function applyHeatMap(tbody) {
     const rows = Array.from(tbody.querySelectorAll("tr"));
     if (rows.length === 0) return;
 
@@ -156,15 +182,17 @@ function applyHeatMap(tbody, numericColStart) {
 
     rows.forEach((tr) => {
         const tds = tr.querySelectorAll("td");
-        for (let i = start; i < tds.length; i++) {
-            const v = parseFloat(tds[i].textContent);
+        for (let i = 0; i < tds.length; i++) {
+            const td = tds[i];
+            if (!td.hasAttribute("data-heat")) continue;
+            const v = parseFloat(td.textContent);
             if (!isNaN(v) && v > maxes[i]) maxes[i] = v;
         }
     });
 
     rows.forEach((tr) => {
         const tds = tr.querySelectorAll("td");
-        for (let i = start; i < tds.length; i++) {
+        for (let i = 0; i < tds.length; i++) {
             const td = tds[i];
             if (!td.hasAttribute("data-heat")) continue;
             const v = parseFloat(td.textContent);
@@ -173,6 +201,55 @@ function applyHeatMap(tbody, numericColStart) {
             td.style.setProperty("--heat-color", getColorByPercent(norm));
             td.style.setProperty("--heat-width", (norm * 100).toFixed(1) + "%");
         }
+    });
+}
+
+// ---------- Static filtering (non-result columns) ----------
+
+function buildFilters(table, cols, data) {
+    const nonResult = cols.filter((c) => NON_RESULT_COLS.has(c));
+    if (nonResult.length === 0) return;
+
+    const bar = document.createElement("div");
+    bar.className = "filters";
+
+    nonResult.forEach((col) => {
+        const values = [...new Set(
+            data.map((r) => String(r[col] == null ? "" : r[col]).trim()).filter(Boolean)
+        )].sort();
+        const select = document.createElement("select");
+        select.dataset.col = col;
+        select.setAttribute("aria-label", col);
+        const all = document.createElement("option");
+        all.value = "";
+        all.textContent = col + ": All";
+        select.appendChild(all);
+        values.forEach((v) => {
+            const opt = document.createElement("option");
+            opt.value = v;
+            opt.textContent = v;
+            select.appendChild(opt);
+        });
+        select.addEventListener("change", () => applyFilters(table));
+        bar.appendChild(select);
+    });
+
+    table.parentElement.insertBefore(bar, table);
+}
+
+function applyFilters(table) {
+    const selects = Array.from(table.parentElement.querySelectorAll(".filters select"));
+    const tbody = table.querySelector("tbody");
+    tbody.querySelectorAll("tr").forEach((tr) => {
+        const row = tr._row || {};
+        let show = true;
+        selects.forEach((sel) => {
+            if (show && sel.value !== "") {
+                const raw = String(row[sel.dataset.col] == null ? "" : row[sel.dataset.col]).trim();
+                if (raw !== sel.value) show = false;
+            }
+        });
+        tr.style.display = show ? "" : "none";
     });
 }
 
