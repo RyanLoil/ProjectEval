@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261022";
+const SITE_VERSION = "20261022b";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -8,7 +8,7 @@ const SITE_VERSION = "20261022";
 const TABLE_CONFIG = [
     { csv: "execution.csv",    id: "execution-table",     mode: "percent", pass5Note: true },
     { csv: "objective.csv",    id: "objective-table",     mode: "percent", pass5Note: true },
-    { csv: "ve.csv",           id: "ve-table",            mode: "raw" },
+    { csv: "ve.csv",           id: "ve-table",            mode: "percent" },
     { csv: "multilang-exe.csv", id: "multilang-exe-table", mode: "percent" },
     { csv: "multilang-obj.csv", id: "multilang-obj-table", mode: "percent" },
 ];
@@ -159,6 +159,32 @@ function loadTable(cfg) {
                         if (logo) prependLogo(td, logo, "lang-logo");
                     } else if (col === "Modality") {
                         td.prepend(document.createTextNode(modalityIcon(row[col])));
+                    } else if (col === "Report By") {
+                        const rb = String(row[col] || "").trim();
+                        if (rb === "ProjectEvalM") {
+                            const b = document.createElement("span");
+                            b.className = "rb-badge rb-m";
+                            b.textContent = "M";
+                            td.prepend(b);
+                        } else if (rb === "ProjectEvalPlus") {
+                            const b = document.createElement("span");
+                            b.className = "rb-badge rb-p";
+                            b.textContent = "P";
+                            td.prepend(b);
+                        } else if (rb.startsWith("ProjectEval")) {
+                            const img = document.createElement("img");
+                            img.src = "Logo/projecteval.svg";
+                            img.alt = "";
+                            img.className = "rb-logo";
+                            td.prepend(img);
+                        }
+                    }
+                    // Wrap categorical (non-result) columns in a small pill tag.
+                    if (col !== "Model" && NON_RESULT_COLS.has(col)) {
+                        const tag = document.createElement("span");
+                        tag.className = "tag";
+                        while (td.firstChild) tag.appendChild(td.firstChild);
+                        td.appendChild(tag);
                     }
                     tr.appendChild(td);
                 });

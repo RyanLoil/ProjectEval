@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectEval Leaderboard</title>
-    <link rel="stylesheet" href="style.css?v=20261022">
+    <link rel="stylesheet" href="style.css?v=20261022b">
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -152,7 +152,7 @@
     <h2>VE Metrics <span class="badge">ProjectEvalM</span></h2>
     <p class="section-note">
         Visual-Evaluation scores from ProjectEvalM — <em>function</em> and <em>aesthetics</em> quality at both
-        <em>point</em> level and <em>project</em> level. Higher is better; values are raw scores (not percentages).
+        <em>point</em> level and <em>project</em> level. Higher is better; values are percentages.
     </p>
     <div class="table-scroll">
     <table id="ve-table">
@@ -170,10 +170,10 @@
         <tr>
             <th colspan="2">Cascade</th>
             <th colspan="3">Direct</th>
-            <th rowspan="2" class="sortable">Total</th>
+            <th rowspan="2" class="sortable">Avg.</th>
             <th colspan="2">Cascade</th>
             <th colspan="3">Direct</th>
-            <th rowspan="2" class="sortable">Total</th>
+            <th rowspan="2" class="sortable">Avg.</th>
         </tr>
         <tr>
             <th class="sortable">Level 1</th>
@@ -192,7 +192,8 @@
         <caption>
             <span class="cap-title">Metrics</span>
             Each model has two rows: <strong>Point</strong> (per-function) and <strong>Project</strong> (whole-project),
-            with <em>Function</em> and <em>Aesthetics</em> quality as columns. Higher is better; values are raw scores.
+            with <em>Function</em> and <em>Aesthetics</em> quality as columns. <strong>Avg.</strong> is the mean of the
+            available levels. Higher is better; values are percentages.
         </caption>
     </table>
     </div>
@@ -298,6 +299,6 @@
     <p>ProjectEval · project-level code generation benchmark · data last updated 2026-10</p>
 </footer>
 
-<script src="render.js?v=20261022"></script>
+<script src="render.js?v=20261022b"></script>
 </body>
 </html>

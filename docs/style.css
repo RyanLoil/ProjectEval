@@ -374,6 +374,40 @@ td.dim { color: var(--text-dim); }
 }
 .filters select:hover { border-color: var(--accent); }
 
+/* ---------- Tag pills for categorical (non-result) columns ---------- */
+tbody td .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+/* ---------- Report By badges (M / P / logo) ---------- */
+.rb-badge {
+    display: inline-block;
+    font-weight: 700;
+    font-size: .66rem;
+    line-height: 1.1;
+    padding: 2px 6px;
+    border-radius: 5px;
+    margin-right: 6px;
+    color: #fff;
+    vertical-align: middle;
+}
+.rb-m { background: #7c3aed; }
+.rb-p { background: #0891b2; }
+.rb-logo {
+    width: 13px;
+    height: 11px;
+    object-fit: contain;
+    margin-right: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
 /* ---------- Same-logo model rows share one color family ---------- */
 tbody tr.family-gemini:not(:hover) td { background: var(--fam-gemini); }
 tbody tr.family-gpt:not(:hover) td { background: var(--fam-gpt); }
@@ -384,34 +418,24 @@ tbody tr.family-llama:not(:hover) td { background: var(--fam-llama); }
 tbody tr.family-phi:not(:hover) td { background: var(--fam-phi); }
 tbody tr.family-deepseek:not(:hover) td { background: var(--fam-deepseek); }
 
-/* ---------- Progress bar cells (percent mode) ---------- */
+/* ---------- Progress cells (percent mode): full-cell data bar, number centred ---------- */
 td[data-progress] {
     position: relative;
-    text-align: right;
+    text-align: center;
     font-variant-numeric: tabular-nums;
+    isolation: isolate;
 }
 td[data-progress]::before {
     content: "";
     position: absolute;
-    left: 3px;
-    right: 3px;
-    bottom: 5px;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--surface-2);
-    overflow: hidden;
-}
-td[data-progress]::after {
-    content: "";
-    position: absolute;
-    left: 3px;
-    bottom: 5px;
-    height: 4px;
+    top: 0;
+    bottom: 0;
+    left: 0;
     width: var(--progress-width, 0%);
-    max-width: calc(100% - 6px);
-    border-radius: 2px;
     background: var(--progress-color, var(--accent));
-    opacity: .85;
+    opacity: .3;
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* ---------- Heat cells (raw mode) ---------- */
