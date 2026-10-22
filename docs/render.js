@@ -25,6 +25,37 @@ function isEmpty(val) {
     return val === "" || val === "-" || val === "None" || val == null;
 }
 
+// Logo family mapping: model name -> icon file in Logo/.
+function logoForModel(name) {
+    const n = String(name).toLowerCase();
+    if (n.includes("gemini")) return "gemini.svg";
+    if (n.includes("deepseek")) return "deepseek.png";
+    if (n.includes("gpt") || n.includes("openhands")) return "gpt.svg";
+    if (n.includes("gemma") || n.includes("codegemma")) return "gemma.png";
+    if (n.includes("voxtral") || n.includes("mistral") || n.includes("ministral")) return "mistral.svg";
+    if (n.includes("qwen")) return "qwen.svg";
+    if (n.includes("llama") || n.includes("codellama")) return "llama.svg";
+    if (n.includes("phi")) return "phi.svg";
+    return null; // e.g. StarCoder2-7B — no logo available
+}
+
+function logoForLang(lang) {
+    const l = String(lang).toLowerCase();
+    if (l === "py" || l === "python") return "python.png";
+    if (l === "ja" || l === "java") return "java.png";
+    if (l === "js" || l === "javascript") return "javascript.svg";
+    return null;
+}
+
+function prependLogo(td, file, cls) {
+    const img = document.createElement("img");
+    img.src = "Logo/" + file;
+    img.alt = "";
+    img.className = cls;
+    img.loading = "lazy";
+    td.prepend(img);
+}
+
 function renderPercentCell(td, raw) {
     const val = raw == null ? "" : String(raw).trim();
     if (isEmpty(val)) {
@@ -91,6 +122,14 @@ function loadTable(cfg) {
                         sup.title = "Pass@5";
                         td.appendChild(document.createTextNode(" "));
                         td.appendChild(sup);
+                    }
+                    // Add model / language icons before the text.
+                    if (col === "Model") {
+                        const logo = logoForModel(row[col]);
+                        if (logo) prependLogo(td, logo, "model-logo");
+                    } else if (col === "Language") {
+                        const logo = logoForLang(row[col]);
+                        if (logo) prependLogo(td, logo, "lang-logo");
                     }
                     tr.appendChild(td);
                 });

@@ -124,9 +124,9 @@ body {
 
 /* ---------- Layout ---------- */
 main {
-    max-width: 1280px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 30px 24px 60px;
+    padding: 26px 18px 60px;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -181,7 +181,7 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    font-size: .86rem;
+    font-size: .8rem;
     min-width: max-content;
 }
 
@@ -213,7 +213,7 @@ thead th {
     background: var(--surface-2);
     color: var(--text);
     font-weight: 600;
-    padding: 9px 12px;
+    padding: 8px 10px;
     text-align: left;
     white-space: nowrap;
     border-bottom: 1px solid var(--border);
@@ -241,7 +241,7 @@ th.sortable.desc::after { content: "▼"; opacity: 1; color: var(--accent); }
 
 /* ---------- Body cells ---------- */
 tbody td {
-    padding: 8px 12px;
+    padding: 6px 10px;
     white-space: nowrap;
     text-align: left;
     border-bottom: 1px solid var(--border);
@@ -265,6 +265,16 @@ tbody tr:nth-child(even) td:first-child { background: var(--stripe); }
 tbody tr:hover td:first-child { background: var(--row-hover); }
 
 td.dim { color: var(--text-dim); }
+
+/* ---------- Model / language logos ---------- */
+.model-logo, .lang-logo {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    margin-right: 5px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
 
 /* ---------- Progress bar cells (percent mode) ---------- */
 td[data-progress] {
