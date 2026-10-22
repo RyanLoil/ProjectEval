@@ -1,3 +1,7 @@
+// Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
+// browsers stop serving stale files (the cause of the VE / Execution column-shift).
+const SITE_VERSION = "20261022";
+
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
 //   raw     — values are raw scores, shown as-is with a heat-map background (VE metrics)
@@ -119,7 +123,7 @@ function loadTable(cfg) {
     const table = document.getElementById(cfg.id);
     const tbody = table.querySelector("tbody");
 
-    return fetch(cfg.csv)
+    return fetch(cfg.csv + "?v=" + SITE_VERSION)
         .then((r) => r.text())
         .then((csv) => {
             const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
