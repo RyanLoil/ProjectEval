@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261022b";
+const SITE_VERSION = "20261022c";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -80,6 +80,63 @@ function familyForModel(name) {
     return logo ? logo.split(".")[0] : null;
 }
 
+// Version-based darkness within a logo family: higher version → darker shade (0 = lightest).
+const FAMILY_VERSION_RANGE = {
+    gemini: [1.5, 3.8],
+    gpt: [0, 6],
+    gemma: [0, 4],
+    mistral: [0, 3],
+    qwen: [2.5, 3.8],
+    llama: [0, 3.3],
+    phi: [3, 4],
+    deepseek: [0, 4],
+};
+
+function versionRank(name) {
+    const n = String(name).toLowerCase();
+    // Model lines whose first number is a parameter size, not a version.
+    if (n.includes("codellama") || n.includes("deepseek-coder") ||
+        n.includes("gpt-oss") || n.includes("voxtral") || n.includes("codegemma")) {
+        return 0;
+    }
+    // Bare "Gemma-7B" (only a size) and "Mistral-7B-v0.x" (size, no generation).
+    if (/^gemma-?\d+b/.test(n)) return 1;   // Gemma-7B → original Gemma (v1)
+    if (/^mistral-?\d+b/.test(n)) return 0; // Mistral-7B-v0.3 → base Mistral
+    const m = n.match(/(\d+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1]) : 0;
+}
+
+function shadeForModel(name) {
+    const family = familyForModel(name);
+    const range = family && FAMILY_VERSION_RANGE[family];
+    if (!range || range[1] <= range[0]) return 0;
+    const shade = (versionRank(name) - range[0]) / (range[1] - range[0]);
+    return Math.max(0, Math.min(1, shade));
+}
+
+// Themed hues for categorical tag pills; unknown values (e.g. Report Date) stay neutral.
+const TAG_HUE = {
+    "api": 217,
+    "open-source": 152,
+    "text": 205,
+    "audio": 262,
+    "vision": 326,
+    "point": 24,
+    "project": 250,
+    "json": 210,
+    "py": 210,
+    "ja": 24,
+    "js": 45,
+    "projecteval": 230,
+    "projectevalm": 262,
+    "projectevalplus": 170,
+};
+
+function tagHue(value) {
+    const key = String(value).trim().toLowerCase();
+    return (key in TAG_HUE) ? TAG_HUE[key] : null;
+}
+
 function renderPercentCell(td, raw) {
     const val = raw == null ? "" : String(raw).trim();
     if (isEmpty(val)) {
@@ -134,7 +191,10 @@ function loadTable(cfg) {
                 const tr = document.createElement("tr");
                 tr._row = row; // keep raw values for static filtering
                 const family = familyForModel(row["Model"]);
-                if (family) tr.classList.add("family-" + family);
+                if (family) {
+                    tr.classList.add("family-" + family);
+                    tr.style.setProperty("--fam-shade", shadeForModel(row["Model"]).toFixed(2));
+                }
                 cols.forEach((col) => {
                     const td = document.createElement("td");
                     if (cfg.mode === "percent") {
@@ -161,17 +221,24 @@ function loadTable(cfg) {
                         td.prepend(document.createTextNode(modalityIcon(row[col])));
                     } else if (col === "Report By") {
                         const rb = String(row[col] || "").trim();
-                        if (rb === "ProjectEvalM") {
-                            const b = document.createElement("span");
-                            b.className = "rb-badge rb-m";
-                            b.textContent = "M";
-                            td.prepend(b);
-                        } else if (rb === "ProjectEvalPlus") {
-                            const b = document.createElement("span");
-                            b.className = "rb-badge rb-p";
-                            b.textContent = "P";
-                            td.prepend(b);
-                        } else if (rb.startsWith("ProjectEval")) {
+                        if (rb.startsWith("ProjectEval")) {
+                            // Distinguishing mark first (so the logo ends up in front after the next prepend).
+                            if (rb === "ProjectEval") {
+                                const ck = document.createElement("span");
+                                ck.className = "rb-badge rb-check";
+                                ck.textContent = "✓";
+                                td.prepend(ck);
+                            } else if (rb === "ProjectEvalM") {
+                                const b = document.createElement("span");
+                                b.className = "rb-badge rb-m";
+                                b.textContent = "M";
+                                td.prepend(b);
+                            } else if (rb === "ProjectEvalPlus") {
+                                const b = document.createElement("span");
+                                b.className = "rb-badge rb-p";
+                                b.textContent = "P";
+                                td.prepend(b);
+                            }
                             const img = document.createElement("img");
                             img.src = "Logo/projecteval.svg";
                             img.alt = "";
@@ -183,6 +250,11 @@ function loadTable(cfg) {
                     if (col !== "Model" && NON_RESULT_COLS.has(col)) {
                         const tag = document.createElement("span");
                         tag.className = "tag";
+                        const hue = tagHue(row[col]);
+                        if (hue != null) {
+                            tag.classList.add("tag-colored");
+                            tag.style.setProperty("--tag-hue", hue);
+                        }
                         while (td.firstChild) tag.appendChild(td.firstChild);
                         td.appendChild(tag);
                     }

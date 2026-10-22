@@ -201,7 +201,7 @@ body {
 
 /* ---------- Layout ---------- */
 main {
-    max-width: 1600px;
+    max-width: 1760px;
     margin: 0 auto;
     padding: 26px 18px 60px;
     display: flex;
@@ -290,7 +290,7 @@ thead th {
     background: var(--surface-2);
     color: var(--text);
     font-weight: 600;
-    padding: 8px 10px;
+    padding: 8px 7px;
     text-align: left;
     white-space: nowrap;
     border-bottom: 1px solid var(--border);
@@ -318,7 +318,7 @@ th.sortable.desc::after { content: "▼"; opacity: 1; color: var(--accent); }
 
 /* ---------- Body cells ---------- */
 tbody td {
-    padding: 6px 10px;
+    padding: 6px 7px;
     white-space: nowrap;
     text-align: left;
     border-bottom: 1px solid var(--border);
@@ -377,12 +377,24 @@ td.dim { color: var(--text-dim); }
 /* ---------- Tag pills for categorical (non-result) columns ---------- */
 tbody td .tag {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 3px 8px;
     border-radius: 999px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     line-height: 1.35;
     white-space: nowrap;
+}
+tbody td .tag.tag-colored {
+    background: hsl(var(--tag-hue, 210), 70%, 92%);
+    border-color: hsl(var(--tag-hue, 210), 55%, 82%);
+    color: hsl(var(--tag-hue, 210), 55%, 28%);
+}
+@media (prefers-color-scheme: dark) {
+    tbody td .tag.tag-colored {
+        background: hsl(var(--tag-hue, 210), 40%, 22%);
+        border-color: hsl(var(--tag-hue, 210), 35%, 34%);
+        color: hsl(var(--tag-hue, 210), 70%, 82%);
+    }
 }
 
 /* ---------- Report By badges (M / P / logo) ---------- */
@@ -399,6 +411,7 @@ tbody td .tag {
 }
 .rb-m { background: #7c3aed; }
 .rb-p { background: #0891b2; }
+.rb-check { background: #16a34a; }
 .rb-logo {
     width: 13px;
     height: 11px;
@@ -408,15 +421,15 @@ tbody td .tag {
     flex-shrink: 0;
 }
 
-/* ---------- Same-logo model rows share one color family ---------- */
-tbody tr.family-gemini:not(:hover) td { background: var(--fam-gemini); }
-tbody tr.family-gpt:not(:hover) td { background: var(--fam-gpt); }
-tbody tr.family-gemma:not(:hover) td { background: var(--fam-gemma); }
-tbody tr.family-mistral:not(:hover) td { background: var(--fam-mistral); }
-tbody tr.family-qwen:not(:hover) td { background: var(--fam-qwen); }
-tbody tr.family-llama:not(:hover) td { background: var(--fam-llama); }
-tbody tr.family-phi:not(:hover) td { background: var(--fam-phi); }
-tbody tr.family-deepseek:not(:hover) td { background: var(--fam-deepseek); }
+/* ---------- Same-logo model rows share one color family (higher version → darker) ---------- */
+tbody tr.family-gemini:not(:hover) td { background: color-mix(in srgb, var(--fam-gemini), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-gpt:not(:hover) td { background: color-mix(in srgb, var(--fam-gpt), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-gemma:not(:hover) td { background: color-mix(in srgb, var(--fam-gemma), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-mistral:not(:hover) td { background: color-mix(in srgb, var(--fam-mistral), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-qwen:not(:hover) td { background: color-mix(in srgb, var(--fam-qwen), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-llama:not(:hover) td { background: color-mix(in srgb, var(--fam-llama), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-phi:not(:hover) td { background: color-mix(in srgb, var(--fam-phi), #000 calc(var(--fam-shade, 0) * 38%)); }
+tbody tr.family-deepseek:not(:hover) td { background: color-mix(in srgb, var(--fam-deepseek), #000 calc(var(--fam-shade, 0) * 38%)); }
 
 /* ---------- Progress cells (percent mode): full-cell data bar, number centred ---------- */
 td[data-progress] {
