@@ -1,170 +1,217 @@
+// Table registry: which CSV feeds which table, and how values are rendered.
+//   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
+//   raw     — values are raw scores, shown as-is with a heat-map background (VE metrics)
+const TABLE_CONFIG = [
+    { csv: "execution.csv",    id: "execution-table",     mode: "percent", pass5Note: true },
+    { csv: "objective.csv",    id: "objective-table",     mode: "percent", pass5Note: true },
+    { csv: "ve.csv",           id: "ve-table",            mode: "raw" },
+    { csv: "multilang-exe.csv", id: "multilang-exe-table", mode: "percent" },
+    { csv: "multilang-obj.csv", id: "multilang-obj-table", mode: "percent" },
+];
 
-function loadTable(csvPath, tableId) {
-  fetch(csvPath)
-    .then(res => res.text())
-    .then(text => {
-      const parsed = Papa.parse(text.trim(), { header: true });
-      const tbody = document.querySelector(`#${tableId} tbody`);
+// Green (high) → red (low) on the HSL wheel.
+function getColorByPercent(pct) {
+    const h = Math.max(0, Math.min(1, pct)) * 120;
+    return `hsl(${h}, 80%, 46%)`;
+}
 
-      // 获取表头列顺序
-      const headerRows = document.querySelectorAll(`#${tableId} thead tr`);
+// Compact number formatting: keep integers whole, otherwise up to 2 decimals.
+function fmtNum(num) {
+    if (Number.isInteger(num)) return String(num);
+    return num.toFixed(2).replace(/\.?0+$/, "");
+}
 
-      parsed.data.forEach(row => {
-        const tr = document.createElement("tr");
-        Object.values(row).forEach(cell => {
-          const td = document.createElement("td");
-          let val = cell;
-          // 检查是否为纯数字（支持小数），并转换为百分比形式
-          if (!isNaN(val) && val !== "" && val !== null) {
-            const num = parseFloat(val);
-            // 仅对小于等于1的浮点数执行 ×100 转换
-            if (num <= 1 && num >= 0) {
+function isEmpty(val) {
+    return val === "" || val === "-" || val === "None" || val == null;
+}
 
-              val = (num * 100).toFixed(2);
-              // 添加进度条属性和样式
-              const color = getColorByPercent(num);
-              td.setAttribute("data-progress", val);
-              td.style.setProperty("--progress-color", color)
-              // 兼容设置伪元素宽度用的style变量
-              td.style.setProperty("--progress-width", val+"%");
+function renderPercentCell(td, raw) {
+    const val = raw == null ? "" : String(raw).trim();
+    if (isEmpty(val)) {
+        td.textContent = "-";
+        td.classList.add("dim");
+        return;
+    }
+    const num = parseFloat(val);
+    if (isNaN(num)) {
+        td.textContent = val;
+        return;
+    }
+    if (num >= 0 && num <= 1) {
+        const pct = num * 100;
+        td.textContent = pct.toFixed(2) + "%";
+        td.setAttribute("data-progress", "");
+        td.style.setProperty("--progress-color", getColorByPercent(num));
+        td.style.setProperty("--progress-width", pct.toFixed(2) + "%");
+    } else {
+        td.textContent = val;
+    }
+}
+
+function renderRawCell(td, raw) {
+    const val = raw == null ? "" : String(raw).trim();
+    if (isEmpty(val)) {
+        td.textContent = "-";
+        td.classList.add("dim");
+        return;
+    }
+    const num = parseFloat(val);
+    if (isNaN(num)) {
+        td.textContent = val;
+        return;
+    }
+    td.textContent = fmtNum(num);
+    td.setAttribute("data-heat", "");
+}
+
+function loadTable(cfg) {
+    const table = document.getElementById(cfg.id);
+    const tbody = table.querySelector("tbody");
+
+    return fetch(cfg.csv)
+        .then((r) => r.text())
+        .then((csv) => {
+            const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
+            const cols = parsed.meta.fields;
+            const frag = document.createDocumentFragment();
+
+            parsed.data.forEach((row) => {
+                const tr = document.createElement("tr");
+                cols.forEach((col) => {
+                    const td = document.createElement("td");
+                    if (cfg.mode === "percent") {
+                        renderPercentCell(td, row[col]);
+                    } else {
+                        renderRawCell(td, row[col]);
+                    }
+                    // Original ProjectEval rows are Pass@5 — mark them with a dagger.
+                    if (cfg.pass5Note && col === "Report By" && String(row[col]).trim() === "ProjectEval") {
+                        const sup = document.createElement("sup");
+                        sup.textContent = "†";
+                        sup.title = "Pass@5";
+                        td.appendChild(document.createTextNode(" "));
+                        td.appendChild(sup);
+                    }
+                    tr.appendChild(td);
+                });
+                frag.appendChild(tr);
+            });
+
+            tbody.appendChild(frag);
+
+            if (cfg.mode === "raw") {
+                applyHeatMap(tbody);
             }
-          }
-
-          td.textContent = val;
-          tr.appendChild(td);
         });
-        tbody.appendChild(tr);
-      });
+}
+
+// For raw-mode tables, colour each numeric cell by its magnitude relative to
+// the column maximum (green = highest, red = lowest).
+function applyHeatMap(tbody, numericColStart) {
+    const start = numericColStart == null ? 4 : numericColStart;
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    if (rows.length === 0) return;
+
+    const colCount = rows[0].querySelectorAll("td").length;
+    const maxes = new Array(colCount).fill(0);
+
+    rows.forEach((tr) => {
+        const tds = tr.querySelectorAll("td");
+        for (let i = start; i < tds.length; i++) {
+            const v = parseFloat(tds[i].textContent);
+            if (!isNaN(v) && v > maxes[i]) maxes[i] = v;
+        }
+    });
+
+    rows.forEach((tr) => {
+        const tds = tr.querySelectorAll("td");
+        for (let i = start; i < tds.length; i++) {
+            const td = tds[i];
+            if (!td.hasAttribute("data-heat")) continue;
+            const v = parseFloat(td.textContent);
+            if (isNaN(v) || maxes[i] === 0) continue;
+            const norm = v / maxes[i];
+            td.style.setProperty("--heat-color", getColorByPercent(norm));
+            td.style.setProperty("--heat-width", (norm * 100).toFixed(1) + "%");
+        }
     });
 }
 
+// ---------- Sorting ----------
+
+// Resolve a header cell to its real column index, accounting for the
+// rowspan/colspan structure of the multi-row thead.
 function getRealColumnIndex(th) {
-  const table = th.closest("table");
-  const headerRows = table.querySelectorAll("thead tr");
-  const targetRow = th.parentNode; // 最后一行
-  const targetRowIndex = Array.from(headerRows).indexOf(targetRow);
+    const table = th.closest("table");
+    const headerRows = Array.from(table.querySelectorAll("thead tr"));
+    const targetRowIndex = headerRows.indexOf(th.parentElement);
+    const matrix = [];
 
-  let colIndex = 0;
+    headerRows.forEach((tr, rowIdx) => {
+        if (!matrix[rowIdx]) matrix[rowIdx] = [];
+        let colCursor = 0;
+        tr.querySelectorAll("th").forEach((cell) => {
+            while (matrix[rowIdx][colCursor]) colCursor++;
+            const rowspan = parseInt(cell.getAttribute("rowspan")) || 1;
+            const colspan = parseInt(cell.getAttribute("colspan")) || 1;
+            for (let r = 0; r < rowspan; r++) {
+                if (!matrix[rowIdx + r]) matrix[rowIdx + r] = [];
+                for (let c = 0; c < colspan; c++) {
+                    matrix[rowIdx + r][colCursor + c] = cell;
+                }
+            }
+            colCursor += colspan;
+        });
+    });
 
-  // 用一个二维数组模拟表头格子占用情况
-  // 行数为headerRows.length，列数未知，先用100足够大
-  const matrix = [];
-
-  for(let i=0; i<headerRows.length; i++) {
-    matrix[i] = [];
-  }
-
-  // 填充matrix，标记每个单元格被哪些th占用
-  for(let i=0; i<headerRows.length; i++) {
-    let colCursor = 0;
-    const cells = headerRows[i].children;
-    for(let cell of cells) {
-      // 找下一个空位填充
-      while(matrix[i][colCursor]) colCursor++;
-
-      const rowspan = parseInt(cell.getAttribute("rowspan")||"1", 10);
-      const colspan = parseInt(cell.getAttribute("colspan")||"1", 10);
-
-      // 标记占用区域
-      for(let r=0; r<rowspan; r++) {
-        for(let c=0; c<colspan; c++) {
-          matrix[i+r][colCursor+c] = cell;
-        }
-      }
-
-      colCursor += colspan;
+    for (let c = 0; c < matrix[targetRowIndex].length; c++) {
+        if (matrix[targetRowIndex][c] === th) return c;
     }
-  }
-
-  // 找到目标th在最后一行的哪个位置（即它是matrix[targetRowIndex][colIndex]中哪个列）
-  for(let c=0; c<matrix[targetRowIndex].length; c++) {
-    if(matrix[targetRowIndex][c] === th) {
-      colIndex = c;
-      break;
-    }
-  }
-
-  return colIndex;
+    return -1;
 }
 
+function getSortValue(tr, col) {
+    const td = tr.querySelectorAll("td")[col];
+    if (!td) return "";
+    const text = td.textContent.trim();
+    const num = parseFloat(text.replace(/%/g, "").replace(/,/g, ""));
+    if (!isNaN(num)) return num;
+    return text.toLowerCase();
+}
+
+function sortTable(table, th) {
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const col = getRealColumnIndex(th);
+    if (col < 0) return;
+
+    const asc = !th.classList.contains("asc");
+    table.querySelectorAll("th.sortable").forEach((h) => h.classList.remove("asc", "desc"));
+    th.classList.add(asc ? "asc" : "desc");
+
+    rows.sort((a, b) => {
+        const av = getSortValue(a, col);
+        const bv = getSortValue(b, col);
+        let cmp;
+        if (typeof av === "number" && typeof bv === "number") {
+            cmp = av - bv;
+        } else {
+            cmp = String(av).localeCompare(String(bv));
+        }
+        return asc ? cmp : -cmp;
+    });
+
+    rows.forEach((r) => tbody.appendChild(r));
+}
 
 function initializeSorting() {
-  const tables = [document.querySelector("#execution-table"), document.querySelector("#objective-table")];
-  tables.forEach(table => {
-    if (!table) return;
-    // 取最后一行表头的可排序th
-    const lastHeaderRow = table.querySelector("thead tr:last-child");
-    const headers = table.querySelectorAll("thead th.sortable");
-
-
-    // 保存当前排序状态：哪个列，升降序
-    let sortState = { index: null, asc: true };
-
-    headers.forEach((th, i) => {
-      th.style.cursor = "pointer"; // 增加提示
-
-      th.addEventListener("click", () => {
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.querySelectorAll("tr"));
-
-        // 确定实际列索引
-        // 这里注意：由于多行表头，有些列跨列，必须找到th在整行中的真实位置
-        // 但这里简化：因为是最后一行，th的index即对应列索引
-        // 若你的表格复杂colspan，要额外计算真实索引
-        const colIndex = getRealColumnIndex(th);
-        console.log(colIndex);
-        // 判断升降序切换
-        if (sortState.index === colIndex) {
-          sortState.asc = !sortState.asc;
-        } else {
-          sortState.index = colIndex;
-          sortState.asc = true;
-        }
-
-        // 排序函数
-        rows.sort((a, b) => {
-          let aText = a.children[colIndex]?.textContent.trim() ?? "";
-          let bText = b.children[colIndex]?.textContent.trim() ?? "";
-          // 尝试转数字
-          const aNum = parseFloat(aText.replace('%', ''));
-          const bNum = parseFloat(bText.replace('%', ''));
-
-          let aVal, bVal;
-
-          // 判断是否为有效数字且非NaN
-          if (!isNaN(aNum) && !isNaN(bNum)) {
-            aVal = aNum;
-            bVal = bNum;
-          } else {
-            aVal = aText.toLowerCase();
-            bVal = bText.toLowerCase();
-          }
-
-          if (aVal < bVal) return sortState.asc ? -1 : 1;
-          if (aVal > bVal) return sortState.asc ? 1 : -1;
-          return 0;
+    TABLE_CONFIG.forEach((cfg) => {
+        const table = document.getElementById(cfg.id);
+        table.querySelectorAll("th.sortable").forEach((th) => {
+            th.addEventListener("click", () => sortTable(table, th));
         });
-
-        // 清空tbody并重新插入排序后行
-        tbody.innerHTML = "";
-        rows.forEach(row => tbody.appendChild(row));
-
-        // 更新排序状态指示（简单用类名）
-        headers.forEach(h => h.classList.remove("asc", "desc"));
-        th.classList.add(sortState.asc ? "asc" : "desc");
-      });
     });
-  });
 }
 
-
-
-loadTable("objective.csv", "objective-table");
-loadTable("execution.csv", "execution-table");
-
-initializeSorting();
-
-function getColorByPercent(pct) {
-  const hue = pct * 120;
-  return `hsl(${hue}, 100%, 50%)`;
-}
+// ---------- Boot ----------
+Promise.all(TABLE_CONFIG.map(loadTable)).then(initializeSorting);
