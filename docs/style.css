@@ -233,7 +233,7 @@ section h2 {
 .section-note {
     margin: 0 0 16px;
     color: var(--text-dim);
-    max-width: 900px;
+    max-width: 1920px;
     font-size: .95rem;
 }
 .section-note code {
