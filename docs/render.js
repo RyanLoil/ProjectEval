@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261026f";
+const SITE_VERSION = "20261026g";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -525,16 +525,30 @@ function chartThemeColors() {
 // Bright family palette for chart bars. Theme-independent — readable on both light
 // and dark backgrounds — unlike the table rows, which switch to dark tints at night.
 const CHART_FAMILY_COLORS = {
-    gemini: "#d5e6ff",
-    gpt: "#d2f2dd",
-    gemma: "#ecd8ff",
-    mistral: "#ffe2ca",
-    qwen: "#c8f1e9",
-    llama: "#ffedbe",
-    phi: "#ffd8e6",
-    deepseek: "#e0d3ff",
+    gemini: "#eaf2ff",
+    gpt: "#e8f8ee",
+    gemma: "#f5ebff",
+    mistral: "#fff0e4",
+    qwen: "#e3f8f4",
+    llama: "#fff6de",
+    phi: "#ffebf2",
+    deepseek: "#f0e9ff",
 };
 const CHART_NEUTRAL_COLOR = "#cbd5e1";
+
+// Night palette for bars — kept clearly lighter than the (also lightened) dark
+// rows so bars still read on the dark canvas, but far less jarring than the day hues.
+const CHART_FAMILY_COLORS_DARK = {
+    gemini: "#5a71b0",
+    gpt: "#4f9e6a",
+    gemma: "#8d6fc8",
+    mistral: "#d08a52",
+    qwen: "#46a396",
+    llama: "#c2a054",
+    phi: "#c8789a",
+    deepseek: "#8a70c8",
+};
+const CHART_NEUTRAL_COLOR_DARK = "#6b7280";
 
 function parseHex(color) {
     let s = String(color).trim().replace(/^#/, "");
@@ -557,12 +571,105 @@ function towardBlack(color, amount) {
     return toHex(rgb[0] * f, rgb[1] * f, rgb[2] * f);
 }
 
+function isDarkTheme() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+
 function familyBarColor(row) {
     const family = familyForModel(row["Model"]);
-    const base = (family && CHART_FAMILY_COLORS[family]) || CHART_NEUTRAL_COLOR;
-    // Gentle version gradient (15%) toward black, matching the table's light-mode tint.
-    return towardBlack(base, family ? shadeForModel(row["Model"]) * 0.15 : 0);
+    const dark = isDarkTheme();
+    const palette = dark ? CHART_FAMILY_COLORS_DARK : CHART_FAMILY_COLORS;
+    const base = (family && palette[family]) || (dark ? CHART_NEUTRAL_COLOR_DARK : CHART_NEUTRAL_COLOR);
+    // Gentle version gradient toward black, mirroring the table's family shading.
+    return towardBlack(base, family ? shadeForModel(row["Model"]) * (dark ? 0.2 : 0.15) : 0);
 }
+
+// ---------- Chart tick labels: model logo image + modality emoji ----------
+// Chart.js draws canvas text (no <img>), so the model logo is painted by the
+// chartLabelsPlugin below; the modality emoji lives in the label text itself.
+const CHART_LABEL_FONT_STACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+const CHART_LOGO_SIZE = 12;
+const CHART_LOGO_GAP = 3;
+
+const CHART_LOGO_CACHE = {};
+function chartLogoImage(file) {
+    if (!file) return null;
+    if (!CHART_LOGO_CACHE[file]) {
+        const img = new Image();
+        img.src = "Logo/" + file;
+        img.onload = () => { if (chartRegistry.main) chartRegistry.main.render(); };
+        CHART_LOGO_CACHE[file] = img;
+    }
+    return CHART_LOGO_CACHE[file];
+}
+
+let measureCtx = null;
+function measureTextWidth(text, font) {
+    if (!measureCtx) measureCtx = document.createElement("canvas").getContext("2d");
+    measureCtx.font = font;
+    return measureCtx.measureText(text).width;
+}
+
+// Set before each render so the plugin's first afterDraw (inside the Chart
+// constructor) already has this chart's logos.
+let chartLogosForDraw = null;
+
+const chartLabelsPlugin = {
+    id: "chartLabels",
+    afterDraw(chart) {
+        const meta = chart.getDatasetMeta(0);
+        const logos = chartLogosForDraw;
+        if (!meta || !meta.data || !logos) return;
+        const labels = chart.data.labels || [];
+        const mobile = chart.options.indexAxis === "y";
+        const ctx = chart.ctx;
+        const fontSize = mobile ? 11 : 10;
+        const color = chartThemeColors().text;
+        const font = fontSize + "px " + CHART_LABEL_FONT_STACK;
+
+        ctx.save();
+        ctx.font = font;
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = color;
+
+        if (mobile) {
+            ctx.textAlign = "right";
+            const rightX = chart.scales.y.left - 8;
+            for (let i = 0; i < labels.length; i++) {
+                const bar = meta.data[i];
+                if (!bar) continue;
+                const text = labels[i];
+                const textW = ctx.measureText(text).width;
+                const img = chartLogoImage(logos[i]);
+                if (img && img.complete && img.naturalWidth) {
+                    ctx.drawImage(img, rightX - textW - CHART_LOGO_SIZE - CHART_LOGO_GAP, bar.y - CHART_LOGO_SIZE / 2, CHART_LOGO_SIZE, CHART_LOGO_SIZE);
+                }
+                ctx.fillText(text, rightX, bar.y);
+            }
+        } else {
+            ctx.textAlign = "center";
+            const labelY = chart.scales.x.bottom + 12;
+            const unitGap = CHART_LOGO_SIZE + CHART_LOGO_GAP;
+            let lastRight = -Infinity;
+            for (let i = 0; i < labels.length; i++) {
+                const bar = meta.data[i];
+                if (!bar) continue;
+                const text = labels[i];
+                const textW = ctx.measureText(text).width;
+                const totalW = textW + unitGap;
+                const left = bar.x - totalW / 2;
+                if (left < lastRight) continue; // greedy skip — avoid overlapping labels
+                const img = chartLogoImage(logos[i]);
+                if (img && img.complete && img.naturalWidth) {
+                    ctx.drawImage(img, left, labelY - CHART_LOGO_SIZE / 2, CHART_LOGO_SIZE, CHART_LOGO_SIZE);
+                }
+                ctx.fillText(text, bar.x + unitGap / 2, labelY);
+                lastRight = bar.x + totalW / 2;
+            }
+        }
+        ctx.restore();
+    },
+};
 
 function buildChart() {
     if (typeof Chart === "undefined") return; // Chart.js CDN unavailable — skip chart
@@ -621,6 +728,7 @@ function buildChart() {
                 label: chartLabel(r),
                 val: parseFloat(String(r[metric] == null ? "" : r[metric]).trim()),
                 color: familyBarColor(r),
+                logo: logoForModel(r["Model"]),
             }))
             .filter((r) => !isNaN(r.val))
             .sort((a, b) => b.val - a.val);
@@ -631,6 +739,18 @@ function buildChart() {
         const labels = rows.map((r) => r.label);
         const values = rows.map((r) => r.val);
         const colors = rows.map((r) => r.color);
+        const logos = rows.map((r) => r.logo);
+
+        // Reserve space for the custom category labels (model logo + text) we draw ourselves.
+        const layoutPadding = {};
+        if (mobile) {
+            const font = "11px " + CHART_LABEL_FONT_STACK;
+            let maxW = 0;
+            labels.forEach((l) => { maxW = Math.max(maxW, measureTextWidth(l, font)); });
+            layoutPadding.left = Math.ceil(maxW) + CHART_LOGO_SIZE + CHART_LOGO_GAP + 14;
+        } else {
+            layoutPadding.bottom = 22;
+        }
 
         wrap.style.height = mobile
             ? Math.max(rows.length * 24 + 34, 240) + "px"
@@ -639,6 +759,7 @@ function buildChart() {
         const catAxis = mobile ? "y" : "x";
         const valAxis = mobile ? "x" : "y";
 
+        chartLogosForDraw = logos;
         if (chart) chart.destroy();
         chart = new Chart(canvas, {
             type: "bar",
@@ -653,11 +774,13 @@ function buildChart() {
                     maxBarThickness: mobile ? 20 : 42,
                 }],
             },
+            plugins: [chartLabelsPlugin],
             options: {
                 indexAxis: mobile ? "y" : "x",
                 responsive: true,
                 maintainAspectRatio: false,
                 animation: { duration: 220 },
+                layout: { padding: layoutPadding },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -671,12 +794,7 @@ function buildChart() {
                 scales: {
                     [catAxis]: {
                         grid: { display: false },
-                        ticks: {
-                            autoSkip: !mobile,
-                            maxRotation: 0,
-                            color: theme.text,
-                            font: { size: mobile ? 11 : 10 },
-                        },
+                        ticks: { display: false },
                     },
                     [valAxis]: {
                         beginAtZero: true,
