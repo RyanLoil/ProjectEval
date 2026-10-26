@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261026c";
+const SITE_VERSION = "20261026d";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -560,7 +560,8 @@ function familyBarColor(row) {
     const varName = family && FAMILY_COLOR_VAR[family];
     const cs = getComputedStyle(document.documentElement);
     const base = (varName ? cs.getPropertyValue(varName) : cs.getPropertyValue("--surface-2")).trim();
-    return towardBlack(base, family ? shadeForModel(row["Model"]) * 0.38 : 0);
+    const darkenPct = parseFloat(cs.getPropertyValue("--fam-darken")) || 0; // "15%" / "38%" → 15 / 38
+    return towardBlack(base, family ? shadeForModel(row["Model"]) * (darkenPct / 100) : 0);
 }
 
 function buildChart() {
