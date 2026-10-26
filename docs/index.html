@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectEval Leaderboard</title>
-    <link rel="stylesheet" href="style.css?v=20261022c">
+    <link rel="stylesheet" href="style.css?v=20261026b">
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -50,6 +50,22 @@
 </nav>
 
 <main>
+
+<div class="chart-card" id="chart-card">
+    <div class="chart-toolbar">
+        <span class="chart-title">📊 模型对比</span>
+        <div class="chart-controls">
+            <label class="chart-metric-label">数据集
+                <select class="chart-dataset" aria-label="选择数据集"></select>
+            </label>
+            <label class="chart-metric-label">纵轴指标
+                <select class="chart-metric" aria-label="选择图表指标"></select>
+            </label>
+        </div>
+    </div>
+    <div class="chart-wrap"><canvas></canvas></div>
+    <div class="chart-hint">先选数据集，再选纵轴指标 · 按所选指标从高到低排序 · 移动端自动切换为横向条形图</div>
+</div>
 
 <section id="execution">
     <h2>Execution Metrics <span class="badge">Pass@1</span></h2>
@@ -299,6 +315,7 @@
     <p>ProjectEval · project-level code generation benchmark · data last updated 2026-10</p>
 </footer>
 
-<script src="render.js?v=20261022e"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="render.js?v=20261026b"></script>
 </body>
 </html>

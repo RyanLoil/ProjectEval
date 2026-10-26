@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261022e";
+const SITE_VERSION = "20261026b";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -272,6 +272,7 @@ function loadTable(cfg) {
             }
 
             buildFilters(table, cols, parsed.data);
+            chartData[cfg.id] = { cols, data: parsed.data };
         });
 }
 
@@ -484,5 +485,197 @@ function applyDefaultSort(tableId) {
     rows.forEach((r) => tbody.appendChild(r));
 }
 
+// ---------- Bar chart (single, dataset + metric selectable) ----------
+// Each loaded dataset's raw rows and columns are stashed here by loadTable(),
+// then one combined chart is built once every table has finished loading.
+const chartData = {}; // tableId -> { cols, data }
+
+const CHART_DATASETS = {
+    "execution-table":     { label: "Execution (Pass@1)",       defaultMetric: "All-Avg" },
+    "objective-table":     { label: "Objective Metrics",         defaultMetric: "Direct-Level1-Code" },
+    "ve-table":            { label: "Visual Evaluation",         defaultMetric: "Function-Avg" },
+    "multilang-exe-table": { label: "Multi-language Execution",  defaultMetric: "Direct-Level1-py" },
+    "multilang-obj-table": { label: "Multi-language Objective",  defaultMetric: "Direct-Level1-Code" },
+};
+
+// One bar per data row; prepend the modality icon and append Scope / Language so
+// each (model, modality, scope, language) combination gets a unique label.
+function chartLabel(row) {
+    let lbl = "";
+    const mod = row["Modality"];
+    if (mod != null && String(mod).trim()) lbl += modalityIcon(mod);
+    lbl += String(row["Model"] == null ? "" : row["Model"]).trim();
+    const scope = String(row["Scope"] == null ? "" : row["Scope"]).trim();
+    if (scope) lbl += " · " + scope;
+    const lang = String(row["Language"] == null ? "" : row["Language"]).trim();
+    if (lang) lbl += " · " + lang;
+    return lbl;
+}
+
+const chartRegistry = {}; // tableId -> render()
+
+function chartThemeColors() {
+    const cs = getComputedStyle(document.documentElement);
+    return {
+        text: cs.getPropertyValue("--text-dim").trim() || "#5b6474",
+        grid: cs.getPropertyValue("--border").trim() || "#e3e8f0",
+    };
+}
+
+function buildChart() {
+    if (typeof Chart === "undefined") return; // Chart.js CDN unavailable — skip chart
+    const card = document.getElementById("chart-card");
+    if (!card) return;
+    const datasetSelect = card.querySelector(".chart-dataset");
+    const metricSelect = card.querySelector(".chart-metric");
+    const wrap = card.querySelector(".chart-wrap");
+    const canvas = card.querySelector("canvas");
+    if (!datasetSelect || !metricSelect || !wrap || !canvas) return;
+
+    // Only offer datasets that actually loaded and expose numeric columns.
+    const ids = TABLE_CONFIG
+        .map((c) => c.id)
+        .filter((id) => chartData[id] && chartData[id].cols.some((c) => !NON_RESULT_COLS.has(c)));
+
+    datasetSelect.innerHTML = "";
+    ids.forEach((id) => {
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = CHART_DATASETS[id].label;
+        datasetSelect.appendChild(opt);
+    });
+    if (ids.length === 0) return;
+    datasetSelect.value = ids[0];
+
+    function numericColsFor(id) {
+        return chartData[id].cols.filter((c) => !NON_RESULT_COLS.has(c));
+    }
+
+    function populateMetrics(id) {
+        const numericCols = numericColsFor(id);
+        metricSelect.innerHTML = "";
+        numericCols.forEach((c) => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            if (c === CHART_DATASETS[id].defaultMetric) opt.selected = true;
+            metricSelect.appendChild(opt);
+        });
+    }
+
+    let chart = null;
+    function render() {
+        const id = datasetSelect.value;
+        const meta = CHART_DATASETS[id];
+        const numericCols = numericColsFor(id);
+        if (!meta || numericCols.length === 0) return;
+        const metric = metricSelect.value || numericCols[0];
+        const data = chartData[id].data;
+        const mobile = window.innerWidth < 768;
+        const theme = chartThemeColors();
+
+        const rows = data
+            .map((r) => ({
+                label: chartLabel(r),
+                val: parseFloat(String(r[metric] == null ? "" : r[metric]).trim()),
+            }))
+            .filter((r) => !isNaN(r.val))
+            .sort((a, b) => b.val - a.val);
+
+        // Horizontal bars render the first item at the bottom, so reverse to put the best at the top.
+        if (mobile) rows.reverse();
+
+        const labels = rows.map((r) => r.label);
+        const values = rows.map((r) => r.val);
+        const colors = values.map((v) => getColorByPercent(v));
+
+        wrap.style.height = mobile
+            ? Math.max(rows.length * 24 + 34, 240) + "px"
+            : "320px";
+
+        const catAxis = mobile ? "y" : "x";
+        const valAxis = mobile ? "x" : "y";
+
+        if (chart) chart.destroy();
+        chart = new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                    borderColor: "rgba(0,0,0,0.10)",
+                    borderWidth: 1,
+                    borderRadius: mobile ? 4 : 2,
+                    maxBarThickness: mobile ? 20 : 42,
+                }],
+            },
+            options: {
+                indexAxis: mobile ? "y" : "x",
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 220 },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        displayColors: false,
+                        callbacks: {
+                            title: (items) => (items.length ? items[0].label : ""),
+                            label: (ctx) => " " + (ctx.raw * 100).toFixed(2) + "%",
+                        },
+                    },
+                },
+                scales: {
+                    [catAxis]: {
+                        grid: { display: false },
+                        ticks: {
+                            autoSkip: !mobile,
+                            maxRotation: 0,
+                            color: theme.text,
+                            font: { size: mobile ? 11 : 10 },
+                        },
+                    },
+                    [valAxis]: {
+                        beginAtZero: true,
+                        grid: { color: theme.grid },
+                        ticks: {
+                            callback: (v) => Math.round(v * 100) + "%",
+                            color: theme.text,
+                            font: { size: 10 },
+                        },
+                    },
+                },
+            },
+        });
+    }
+
+    datasetSelect.addEventListener("change", () => {
+        populateMetrics(datasetSelect.value);
+        render();
+    });
+    metricSelect.addEventListener("change", render);
+
+    chartRegistry.main = { render };
+    populateMetrics(datasetSelect.value);
+    render();
+}
+
+// Re-render charts when crossing the mobile breakpoint or switching colour scheme.
+let chartWasMobile = null;
+window.addEventListener("resize", () => {
+    const mobile = window.innerWidth < 768;
+    if (mobile === chartWasMobile) return;
+    chartWasMobile = mobile;
+    Object.keys(chartRegistry).forEach((id) => chartRegistry[id].render());
+});
+if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        Object.keys(chartRegistry).forEach((id) => chartRegistry[id].render());
+    });
+}
+
 // ---------- Boot ----------
-Promise.all(TABLE_CONFIG.map(loadTable)).then(initializeSorting);
+Promise.all(TABLE_CONFIG.map(loadTable)).then(() => {
+    initializeSorting();
+    buildChart();
+});
