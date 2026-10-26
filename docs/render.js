@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261026d";
+const SITE_VERSION = "20261026e";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -522,17 +522,19 @@ function chartThemeColors() {
     };
 }
 
-// Family colours for chart bars — the same tint each model row gets in the table.
-const FAMILY_COLOR_VAR = {
-    gemini: "--fam-gemini",
-    gpt: "--fam-gpt",
-    gemma: "--fam-gemma",
-    mistral: "--fam-mistral",
-    qwen: "--fam-qwen",
-    llama: "--fam-llama",
-    phi: "--fam-phi",
-    deepseek: "--fam-deepseek",
+// Bright family palette for chart bars. Theme-independent — readable on both light
+// and dark backgrounds — unlike the table rows, which switch to dark tints at night.
+const CHART_FAMILY_COLORS = {
+    gemini: "#d5e6ff",
+    gpt: "#d2f2dd",
+    gemma: "#ecd8ff",
+    mistral: "#ffe2ca",
+    qwen: "#c8f1e9",
+    llama: "#ffedbe",
+    phi: "#ffd8e6",
+    deepseek: "#e0d3ff",
 };
+const CHART_NEUTRAL_COLOR = "#cbd5e1";
 
 function parseHex(color) {
     let s = String(color).trim().replace(/^#/, "");
@@ -557,11 +559,9 @@ function towardBlack(color, amount) {
 
 function familyBarColor(row) {
     const family = familyForModel(row["Model"]);
-    const varName = family && FAMILY_COLOR_VAR[family];
-    const cs = getComputedStyle(document.documentElement);
-    const base = (varName ? cs.getPropertyValue(varName) : cs.getPropertyValue("--surface-2")).trim();
-    const darkenPct = parseFloat(cs.getPropertyValue("--fam-darken")) || 0; // "15%" / "38%" → 15 / 38
-    return towardBlack(base, family ? shadeForModel(row["Model"]) * (darkenPct / 100) : 0);
+    const base = (family && CHART_FAMILY_COLORS[family]) || CHART_NEUTRAL_COLOR;
+    // Gentle version gradient (15%) toward black, matching the table's light-mode tint.
+    return towardBlack(base, family ? shadeForModel(row["Model"]) * 0.15 : 0);
 }
 
 function buildChart() {
