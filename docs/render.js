@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261026e";
+const SITE_VERSION = "20261026f";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -153,7 +153,7 @@ function renderPercentCell(td, raw) {
         const pct = num * 100;
         td.textContent = pct.toFixed(2) + "%";
         td.setAttribute("data-progress", "");
-        td.style.setProperty("--progress-color", getColorByPercent(num));
+        td.style.setProperty("--progress-hue", Math.round(Math.max(0, Math.min(1, num)) * 120));
         td.style.setProperty("--progress-width", pct.toFixed(2) + "%");
     } else {
         td.textContent = val;

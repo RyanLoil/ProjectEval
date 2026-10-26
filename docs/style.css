@@ -25,6 +25,9 @@
     --fam-phi: #ffd8e6;
     --fam-deepseek: #e0d3ff;
     --fam-darken: 15%;
+    --progress-sat: 72%;
+    --progress-light: 86%;
+    --progress-alpha: 0.8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -54,6 +57,7 @@
         --fam-phi: #291518;
         --fam-deepseek: #1c1c30;
         --fam-darken: 38%;
+        --progress-light: 34%;
     }
 }
 
@@ -424,14 +428,14 @@ tbody td .tag.tag-colored {
 }
 
 /* ---------- Same-logo model rows share one color family (higher version → darker) ---------- */
-tbody tr.family-gemini:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-gemini), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-gpt:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-gpt), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-gemma:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-gemma), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-mistral:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-mistral), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-qwen:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-qwen), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-llama:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-llama), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-phi:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-phi), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
-tbody tr.family-deepseek:not(:hover) td:not([data-progress]):not([data-heat]) { background: color-mix(in srgb, var(--fam-deepseek), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-gemini:not(:hover) td { background: color-mix(in srgb, var(--fam-gemini), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-gpt:not(:hover) td { background: color-mix(in srgb, var(--fam-gpt), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-gemma:not(:hover) td { background: color-mix(in srgb, var(--fam-gemma), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-mistral:not(:hover) td { background: color-mix(in srgb, var(--fam-mistral), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-qwen:not(:hover) td { background: color-mix(in srgb, var(--fam-qwen), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-llama:not(:hover) td { background: color-mix(in srgb, var(--fam-llama), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-phi:not(:hover) td { background: color-mix(in srgb, var(--fam-phi), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
+tbody tr.family-deepseek:not(:hover) td { background: color-mix(in srgb, var(--fam-deepseek), #000 calc(var(--fam-shade, 0) * var(--fam-darken))); }
 
 /* ---------- Progress cells (percent mode): full-cell data bar, number centred ---------- */
 td[data-progress] {
@@ -447,8 +451,8 @@ td[data-progress]::before {
     bottom: 0;
     left: 0;
     width: var(--progress-width, 0%);
-    background: var(--progress-color, var(--accent));
-    opacity: .3;
+    background: hsl(var(--progress-hue, 210), var(--progress-sat, 72%), var(--progress-light, 86%));
+    opacity: var(--progress-alpha, 0.8);
     z-index: -1;
     pointer-events: none;
 }
