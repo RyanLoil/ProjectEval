@@ -1,6 +1,6 @@
 // Cache-busting version — bump this whenever the CSVs, CSS, or JS change, so
 // browsers stop serving stale files (the cause of the VE / Execution column-shift).
-const SITE_VERSION = "20261026b";
+const SITE_VERSION = "20261026c";
 
 // Table registry: which CSV feeds which table, and how values are rendered.
 //   percent — values in [0,1] are shown as % with a progress bar (execution / objective / multilingual)
@@ -522,6 +522,47 @@ function chartThemeColors() {
     };
 }
 
+// Family colours for chart bars — the same tint each model row gets in the table.
+const FAMILY_COLOR_VAR = {
+    gemini: "--fam-gemini",
+    gpt: "--fam-gpt",
+    gemma: "--fam-gemma",
+    mistral: "--fam-mistral",
+    qwen: "--fam-qwen",
+    llama: "--fam-llama",
+    phi: "--fam-phi",
+    deepseek: "--fam-deepseek",
+};
+
+function parseHex(color) {
+    let s = String(color).trim().replace(/^#/, "");
+    if (s.length === 3) s = s.replace(/./g, (c) => c + c);
+    if (!/^[0-9a-f]{6}$/i.test(s)) return null;
+    return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
+}
+
+function toHex(r, g, b) {
+    const h = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0");
+    return "#" + h(r) + h(g) + h(b);
+}
+
+// Mix a colour toward black by `amount` (0..1) — mirrors the table rows'
+// `color-mix(in srgb, var(--fam-X), #000 calc(shade * 38%))`.
+function towardBlack(color, amount) {
+    const rgb = parseHex(color);
+    if (!rgb) return color;
+    const f = 1 - Math.max(0, Math.min(1, amount));
+    return toHex(rgb[0] * f, rgb[1] * f, rgb[2] * f);
+}
+
+function familyBarColor(row) {
+    const family = familyForModel(row["Model"]);
+    const varName = family && FAMILY_COLOR_VAR[family];
+    const cs = getComputedStyle(document.documentElement);
+    const base = (varName ? cs.getPropertyValue(varName) : cs.getPropertyValue("--surface-2")).trim();
+    return towardBlack(base, family ? shadeForModel(row["Model"]) * 0.38 : 0);
+}
+
 function buildChart() {
     if (typeof Chart === "undefined") return; // Chart.js CDN unavailable — skip chart
     const card = document.getElementById("chart-card");
@@ -578,6 +619,7 @@ function buildChart() {
             .map((r) => ({
                 label: chartLabel(r),
                 val: parseFloat(String(r[metric] == null ? "" : r[metric]).trim()),
+                color: familyBarColor(r),
             }))
             .filter((r) => !isNaN(r.val))
             .sort((a, b) => b.val - a.val);
@@ -587,7 +629,7 @@ function buildChart() {
 
         const labels = rows.map((r) => r.label);
         const values = rows.map((r) => r.val);
-        const colors = values.map((v) => getColorByPercent(v));
+        const colors = rows.map((r) => r.color);
 
         wrap.style.height = mobile
             ? Math.max(rows.length * 24 + 34, 240) + "px"
